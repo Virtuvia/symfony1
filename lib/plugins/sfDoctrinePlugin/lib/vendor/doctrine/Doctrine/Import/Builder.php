@@ -609,31 +609,76 @@ class Doctrine_Import_Builder extends Doctrine_Builder
      */
     public function buildAccessors(array $definition)
     {
-        $accessors = array();
-        foreach (array_keys($definition['columns']) as $name) {
-            $accessors[] = $name;
-        }
-
-        foreach ($definition['relations'] as $relation) {
-            $accessors[] = $relation['alias'];
-        }
-
-        $ret = '';
-        foreach ($accessors as $name) {
+        $accessorTemplate = function ($accessorName, $returnType) {
             // getters
-            $ret .= PHP_EOL . '    public function get' . Doctrine_Inflector::classify(Doctrine_Inflector::tableize($name)) . "(\$load = true)" . PHP_EOL;
+            $ret = '';
+            $ret .= '    /**' . PHP_EOL;
+            $ret .= '     * @param bool $load' . PHP_EOL;
+            $ret .= '     *' . PHP_EOL;
+            $ret .= '     * @return ' . $returnType . PHP_EOL;
+            $ret .= '     */' . PHP_EOL;
+            $ret .= '    public function get' . Doctrine_Inflector::classify(Doctrine_Inflector::tableize($accessorName)) . "(\$load = true)" . PHP_EOL;
             $ret .= "    {" . PHP_EOL;
-            $ret .= "        return \$this->_get('{$name}', \$load);" . PHP_EOL;
-            $ret .= "    }" . PHP_EOL;
+            $ret .= "        return \$this->_get('{$accessorName}', \$load);" . PHP_EOL;
+            $ret .= "    }" . PHP_EOL . PHP_EOL;
 
             // setters
-            $ret .= PHP_EOL . '    public function set' . Doctrine_Inflector::classify(Doctrine_Inflector::tableize($name)) . "(\${$name}, \$load = true)" . PHP_EOL;
+            $ret .= '    /**' . PHP_EOL;
+            $ret .= "     * @param mixed \${$accessorName}" . PHP_EOL;
+            $ret .= '     * @param bool $load' . PHP_EOL;
+            $ret .= '     *' . PHP_EOL;
+            $ret .= '     * @return self' . PHP_EOL;
+            $ret .= '     */' . PHP_EOL;
+            $ret .= '    public function set' . Doctrine_Inflector::classify(Doctrine_Inflector::tableize($accessorName)) . "(\${$accessorName}, \$load = true)" . PHP_EOL;
             $ret .= "    {" . PHP_EOL;
-            $ret .= "        return \$this->_set('{$name}', \${$name}, \$load);" . PHP_EOL;
+            $ret .= "        return \$this->_set('{$accessorName}', \${$accessorName}, \$load);" . PHP_EOL;
             $ret .= "    }" . PHP_EOL;
+
+            return $ret;
+        };
+
+        $definedPrimary = false;
+
+        $ret = '';
+        foreach ($definition['columns'] as $name => $column) {
+            $ret .= PHP_EOL . $accessorTemplate($name, $this->getPhpTypeForColumn($column));
+
+            // check for primary
+            if (isset($column['primary']) && $column['primary']) {
+                $definedPrimary = true;
+            }
+        }
+
+        if (isset($definition['relations']) && !empty($definition['relations'])) {
+            foreach ($definition['relations'] as $relation) {
+                $ret .= PHP_EOL . $accessorTemplate($relation['alias'], $this->getPhpTypeForRelation($relation));
+            }
+        }
+
+        if (!$definedPrimary) {
+            // @todo Should probably check the default identifier information rather than assuming integer and id
+            $ret .= PHP_EOL . $accessorTemplate('id', 'integer');
         }
 
         return $ret;
+    }
+
+    /**
+     * @param array $column
+     * @return string
+     */
+    protected function getPhpTypeForColumn(array $column)
+    {
+        return Doctrine_Lib::convertDoctrineTypeToPhpType($column['type']);
+    }
+
+    /**
+     * @param array $relation
+     * @return string
+     */
+    protected function getPhpTypeForRelation(array $relation)
+    {
+        return (isset($relation['type']) && $relation['type'] == Doctrine_Relation::MANY) ? 'Doctrine_Collection' : $this->_classPrefix . $relation['class'];
     }
 
     /*
@@ -683,12 +728,12 @@ class Doctrine_Import_Builder extends Doctrine_Builder
                     $definedPrimary = true;
                 }
 
-                $ret[] = '@property ' . Doctrine_Lib::convertDoctrineTypeToPhpType($column['type']) . ' $' . $fieldName;
+                $ret[] = '@property ' . $this->getPhpTypeForColumn($column) . ' $' . $fieldName;
             }
 
             if (isset($definition['relations']) && ! empty($definition['relations'])) {
                 foreach ($definition['relations'] as $relation) {
-                    $type = (isset($relation['type']) && $relation['type'] == Doctrine_Relation::MANY) ? 'Doctrine_Collection' : $this->_classPrefix . $relation['class'];
+                    $type = $this->getPhpTypeForRelation($relation);
                     $ret[] = '@property ' . $type . ' $' . $relation['alias'];
                 }
             }
