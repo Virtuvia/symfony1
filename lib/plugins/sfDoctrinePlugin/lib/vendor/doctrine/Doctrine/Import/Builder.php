@@ -609,13 +609,13 @@ class Doctrine_Import_Builder extends Doctrine_Builder
      */
     public function buildAccessors(array $definition)
     {
-        $accessorTemplate = function ($accessorName, $returnType) {
+        $accessorTemplate = function ($accessorName, $valueType) {
             // getters
             $ret = '';
             $ret .= '    /**' . PHP_EOL;
             $ret .= '     * @param bool $load' . PHP_EOL;
             $ret .= '     *' . PHP_EOL;
-            $ret .= '     * @return ' . $returnType . PHP_EOL;
+            $ret .= '     * @return ' . $valueType . PHP_EOL;
             $ret .= '     */' . PHP_EOL;
             $ret .= '    public function get' . Doctrine_Inflector::classify(Doctrine_Inflector::tableize($accessorName)) . "(\$load = true)" . PHP_EOL;
             $ret .= "    {" . PHP_EOL;
@@ -624,7 +624,7 @@ class Doctrine_Import_Builder extends Doctrine_Builder
 
             // setters
             $ret .= '    /**' . PHP_EOL;
-            $ret .= "     * @param mixed \${$accessorName}" . PHP_EOL;
+            $ret .= "     * @param $valueType \${$accessorName}" . PHP_EOL;
             $ret .= '     * @param bool $load' . PHP_EOL;
             $ret .= '     *' . PHP_EOL;
             $ret .= '     * @return self' . PHP_EOL;
