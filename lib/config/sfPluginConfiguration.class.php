@@ -43,7 +43,6 @@ abstract class sfPluginConfiguration
 
     if (!$this->configuration instanceof sfApplicationConfiguration)
     {
-      $this->initializeAutoload();
       $this->initialize();
     }
   }
@@ -95,118 +94,6 @@ abstract class sfPluginConfiguration
   public function getName()
   {
     return $this->name;
-  }
-
-  /**
-   * Initializes autoloading for the plugin.
-   * 
-   * This method is called when a plugin is initialized in a project
-   * configuration. Otherwise, autoload is handled in
-   * {@link sfApplicationConfiguration} using {@link sfAutoload}.
-   * 
-   * @see sfSimpleAutoload
-   */
-  public function initializeAutoload()
-  {
-    $autoload = sfSimpleAutoload::getInstance(sfConfig::get('sf_cache_dir').'/project_autoload.cache');
-
-    if (is_readable($file = $this->rootDir.'/config/autoload.yml'))
-    {
-      $this->configuration->getEventDispatcher()->connect('autoload.filter_config', array($this, 'filterAutoloadConfig'));
-      $autoload->loadConfiguration(array($file));
-      $this->configuration->getEventDispatcher()->disconnect('autoload.filter_config', array($this, 'filterAutoloadConfig'));
-    }
-    else
-    {
-      $autoload->addDirectory($this->rootDir.'/lib');
-    }
-
-    $autoload->register();
-  }
-
-  /**
-   * Filters sfAutoload configuration values.
-   * 
-   * @param sfEvent $event  
-   * @param array   $config 
-   * 
-   * @return array
-   */
-  public function filterAutoloadConfig(sfEvent $event, array $config)
-  {
-    // use array_merge so config is added to the front of the autoload array
-    if (!isset($config['autoload'][$this->name.'_lib']))
-    {
-      $config['autoload'] = array_merge(array(
-        $this->name.'_lib' => array(
-          'path'      => $this->rootDir.'/lib',
-          'recursive' => true,
-        ),
-      ), $config['autoload']);
-    }
-
-    if (!isset($config['autoload'][$this->name.'_module_libs']))
-    {
-      $config['autoload'] = array_merge(array(
-        $this->name.'_module_libs' => array(
-          'path'      => $this->rootDir.'/modules/*/lib',
-          'recursive' => true,
-          'prefix'    => 1,
-        ),
-      ), $config['autoload']);
-    }
-
-    return $config;
-  }
-
-  /**
-   * Connects the current plugin's tests to the "test:*" tasks.
-   */
-  public function connectTests()
-  {
-    $this->dispatcher->connect('task.test.filter_test_files', array($this, 'filterTestFiles'));
-  }
-
-  /**
-   * Listens for the "task.test.filter_test_files" event and adds tests from the current plugin.
-   * 
-   * @param  sfEvent $event
-   * @param  array   $files
-   * 
-   * @return array An array of files with the appropriate tests from the current plugin merged in
-   */
-  public function filterTestFiles(sfEvent $event, $files)
-  {
-    $task = $event->getSubject();
-
-    if ($task instanceof sfTestAllTask)
-    {
-      $directory = $this->rootDir.'/test';
-      $names = array();
-    }
-    else if ($task instanceof sfTestFunctionalTask)
-    {
-      $directory = $this->rootDir.'/test/functional';
-      $names = $event['arguments']['controller'];
-    }
-    else if ($task instanceof sfTestUnitTask)
-    {
-      $directory = $this->rootDir.'/test/unit';
-      $names = $event['arguments']['name'];
-    }
-
-    if (!count($names))
-    {
-      $names = array('*');
-    }
-
-    foreach ($names as $name)
-    {
-      $finder = sfFinder::type('file')->follow_link()->name(basename($name).'Test.php');
-      $files = array_merge($files, $finder->in($directory.'/'.dirname($name)));
-    }
-
-    return array_unique($files);
   }
 
   /**

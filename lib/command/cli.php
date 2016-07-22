@@ -8,9 +8,6 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/../autoload/sfCoreAutoload.class.php');
-sfCoreAutoload::register();
-
 try
 {
   $dispatcher = new sfEventDispatcher();
