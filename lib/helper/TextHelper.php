@@ -184,31 +184,6 @@ function simple_format_text($text, $options = array())
 }
 
 /**
- * Turns all urls and email addresses into clickable links. The +link+ parameter can limit what should be linked.
- * Options are :all (default), :email_addresses, and :urls.
- *
- * Example:
- *   auto_link("Go to http://www.symfony-project.com and say hello to fabien.potencier@example.com") =>
- *     Go to <a href="http://www.symfony-project.com">http://www.symfony-project.com</a> and
- *     say hello to <a href="mailto:fabien.potencier@example.com">fabien.potencier@example.com</a>
- */
-function auto_link_text($text, $link = 'all', $href_options = array(), $truncate = false, $truncate_len = 35, $pad = '...')
-{
-  if ($link == 'all')
-  {
-    return _auto_link_urls(_auto_link_email_addresses($text), $href_options, $truncate, $truncate_len, $pad);
-  }
-  else if ($link == 'email_addresses')
-  {
-    return _auto_link_email_addresses($text);
-  }
-  else if ($link == 'urls')
-  {
-    return _auto_link_urls($text, $href_options, $truncate, $truncate_len, $pad);
-  }
-}
-
-/**
  * Turns all links into words, like "<a href="something">else</a>" to "else".
  */
 function strip_links_text($text)
@@ -238,55 +213,4 @@ if (!defined('SF_AUTO_LINK_RE'))
     )
     ([[:punct:]]|\s|<|$)    # trailing text
    ~x');
-}
-
-/**
- * Turns all urls into clickable links.
- */
-function _auto_link_urls($text, $href_options = array(), $truncate = false, $truncate_len = 40, $pad = '...')
-{
-  $href_options = _tag_options($href_options);
-
-  $callback_function = '
-    if (preg_match("/<a\s/i", $matches[1]))
-    {
-      return $matches[0];
-    }
-    ';
-
-  if ($truncate)
-  {
-    $callback_function .= '
-      else if (strlen($matches[2].$matches[3]) > '.$truncate_len.')
-      {
-        return $matches[1].\'<a href="\'.($matches[2] == "www." ? "http://www." : $matches[2]).$matches[3].\'"'.$href_options.'>\'.substr($matches[2].$matches[3], 0, '.$truncate_len.').\''.$pad.'</a>\'.$matches[4];
-      }
-      ';
-  }
-
-  $callback_function .= '
-    else
-    {
-      return $matches[1].\'<a href="\'.($matches[2] == "www." ? "http://www." : $matches[2]).$matches[3].\'"'.$href_options.'>\'.$matches[2].$matches[3].\'</a>\'.$matches[4];
-    }
-    ';
-
-  return preg_replace_callback(
-    SF_AUTO_LINK_RE,
-    create_function('$matches', $callback_function),
-    $text
-    );
-}
-
-/**
- * Turns all email addresses into clickable links.
- */
-function _auto_link_email_addresses($text)
-{
-  // Taken from http://snippets.dzone.com/posts/show/6156
-  return preg_replace("#(^|[\n ])([a-z0-9&\-_\.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i", "\\1<a href=\"mailto:\\2@\\3\">\\2@\\3</a>", $text);
-
-  // Removed since it destroys already linked emails 
-  // Example:   <a href="mailto:me@example.com">bar</a> gets <a href="mailto:me@example.com">bar</a> gets <a href="mailto:<a href="mailto:me@example.com">bar</a>
-  //return preg_replace('/([\w\.!#\$%\-+.]+@[A-Za-z0-9\-]+(\.[A-Za-z0-9\-]+)+)/', '<a href="mailto:\\1">\\1</a>', $text);
 }

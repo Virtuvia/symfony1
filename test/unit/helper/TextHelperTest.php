@@ -109,30 +109,3 @@ $t->is(simple_format_text("1\n2\n3"), "<p>1\n<br />2\n<br />3</p>", 'text_simple
 $t->diag('text_strip_links()');
 $t->is(strip_links_text("<a href='almost'>on my mind</a>"), "on my mind", 'text_strip_links() strips all links in input');
 $t->is(strip_links_text('<a href="first.html">first</a> and <a href="second.html">second</a>'), "first and second", 'text_strip_links() strips all links in input');
-
-// auto_link_text()
-$t->diag('auto_link_text()');
-$email_raw = 'fabien.potencier@symfony-project.com';
-$email_result = '<a href="mailto:'.$email_raw.'">'.$email_raw.'</a>';
-$link_raw = 'http://www.google.com';
-$link_result = '<a href="'.$link_raw.'">'.$link_raw.'</a>';
-$link2_raw = 'www.google.com';
-$link2_result = '<a href="http://'.$link2_raw.'">'.$link2_raw.'</a>';
-
-$t->is(auto_link_text('hello '.$email_raw, 'email_addresses'), 'hello '.$email_result, 'auto_link_text() converts emails to links');
-$t->is(auto_link_text('Go to '.$link_raw, 'urls'), 'Go to '.$link_result, 'auto_link_text() converts absolute URLs to links');
-$t->is(auto_link_text('Go to '.$link_raw, 'email_addresses'), 'Go to '.$link_raw, 'auto_link_text() takes a second parameter');
-$t->is(auto_link_text('Go to '.$link_raw.' and say hello to '.$email_raw), 'Go to '.$link_result.' and say hello to '.$email_result, 'auto_link_text() converts emails and URLs if no second argument is given');
-$t->is(auto_link_text('<p>Link '.$link_raw.'</p>'), '<p>Link '.$link_result.'</p>', 'auto_link_text() converts URLs to links');
-$t->is(auto_link_text('<p>'.$link_raw.' Link</p>'), '<p>'.$link_result.' Link</p>', 'auto_link_text() converts URLs to links');
-$t->is(auto_link_text('Go to '.$link2_raw, 'urls'), 'Go to '.$link2_result, 'auto_link_text() converts URLs to links even if link does not start with http://');
-$t->is(auto_link_text('Go to '.$link2_raw, 'email_addresses'), 'Go to '.$link2_raw, 'auto_link_text() converts URLs to links');
-$t->is(auto_link_text('<p>Link '.$link2_raw.'</p>'), '<p>Link '.$link2_result.'</p>', 'auto_link_text() converts URLs to links');
-$t->is(auto_link_text('<p>'.$link2_raw.' Link</p>'), '<p>'.$link2_result.' Link</p>', 'auto_link_text() converts URLs to links');
-$t->is(auto_link_text('<p>http://www.google.com/?q=symfony Link</p>'), '<p><a href="http://www.google.com/?q=symfony">http://www.google.com/?q=symfony</a> Link</p>', 'auto_link_text() converts URLs to links');
-$t->is(auto_link_text('<p>http://www.google.com/?q=symfony+link</p>', 'all', array(), true), '<p><a href="http://www.google.com/?q=symfony+link">http://www.google.com/?q=symfony+li...</a></p>', 'auto_link_text() truncates URLs in links');
-$t->is(auto_link_text('<p>http://www.google.com/?q=symfony+link</p>', 'all', array(), true, 32, '***'), '<p><a href="http://www.google.com/?q=symfony+link">http://www.google.com/?q=symfony***</a></p>', 'auto_link_text() takes truncation parameters');
-$t->is(auto_link_text('<p>http://twitter.com/#!/fabpot</p>'),'<p><a href="http://twitter.com/#!/fabpot">http://twitter.com/#!/fabpot</a></p>',"auto_link_text() converts URLs with complex fragments to links");
-$t->is(auto_link_text('<p>http://twitter.com/#!/fabpot is Fabien Potencier on Twitter</p>'),'<p><a href="http://twitter.com/#!/fabpot">http://twitter.com/#!/fabpot</a> is Fabien Potencier on Twitter</p>',"auto_link_text() converts URLs with complex fragments and trailing text to links");
-$t->is(auto_link_text('hello '.$email_result, 'email_addresses'), 'hello '.$email_result, "auto_link_text() does not double-link emails");
-$t->is(auto_link_text('<p>Link '.$link_result.'</p>'), '<p>Link '.$link_result.'</p>', "auto_link_text() does not double-link emails");
