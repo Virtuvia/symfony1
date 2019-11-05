@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Yaml\Yaml;
+
 /**
  * sfYaml offers convenience methods to load and dump YAML.
  *
@@ -15,37 +17,10 @@
  * @subpackage yaml
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @version    SVN: $Id: sfYaml.class.php 8988 2008-05-15 20:24:26Z fabien $
+ * @deprecated use Symfony\Component\Yaml\Yaml
  */
 class sfYaml
 {
-  static protected
-    $spec = '1.2';
-
-  /**
-   * Sets the YAML specification version to use.
-   *
-   * @param string $version The YAML specification version
-   */
-  static public function setSpecVersion($version)
-  {
-    if (!in_array($version, array('1.1', '1.2')))
-    {
-      throw new InvalidArgumentException(sprintf('Version %s of the YAML specifications is not supported', $version));
-    }
-
-    self::$spec = $version;
-  }
-
-  /**
-   * Gets the YAML specification version to use.
-   *
-   * @return string The YAML specification version
-   */
-  static public function getSpecVersion()
-  {
-    return self::$spec;
-  }
-
   /**
    * Loads YAML into a PHP array.
    *
@@ -63,6 +38,7 @@ class sfYaml
    * @return array The YAML converted to a PHP array
    *
    * @throws InvalidArgumentException If the YAML is not valid
+   * @deprecated use \Symfony\Component\Yaml\Yaml::parse
    */
   public static function load($input)
   {
@@ -87,13 +63,9 @@ class sfYaml
       return $input;
     }
 
-    require_once dirname(__FILE__).'/sfYamlParser.php';
-
-    $yaml = new sfYamlParser();
-
     try
     {
-      $ret = $yaml->parse($input);
+      $ret = Yaml::parse($input);
     }
     catch (Exception $e)
     {
@@ -113,23 +85,10 @@ class sfYaml
    * @param integer $inline The level where you switch to inline YAML
    *
    * @return string A YAML string representing the original PHP array
+   * @deprecated use \Symfony\Component\Yaml\Yaml::dump
    */
   public static function dump($array, $inline = 2)
   {
-    require_once dirname(__FILE__).'/sfYamlDumper.php';
-
-    $yaml = new sfYamlDumper();
-
-    return $yaml->dump($array, $inline);
+      return Yaml::dump($array, $inline);
   }
-}
-
-/**
- * Wraps echo to automatically provide a newline.
- *
- * @param string $string The string to echo with new line
- */
-function echoln($string)
-{
-  echo $string."\n";
 }
