@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Form\Util\ServerParams;
+
 /**
  * sfValidatorSchema represents an array of fields.
  *
@@ -109,8 +111,12 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
     $unused = array_keys($this->fields);
     $errorSchema = new sfValidatorErrorSchema($this);
 
+    $serverParams = new ServerParams();
+    $contentLength = $serverParams->getContentLength();
+    $maxContentLength = $serverParams->getPostMaxSize();
+
     // check that post_max_size has not been reached
-    if (isset($_SERVER['CONTENT_LENGTH']) && (int) $_SERVER['CONTENT_LENGTH'] > $this->getBytes(ini_get('post_max_size')))
+    if (!empty($maxContentLength) && $contentLength > $maxContentLength)
     {
       $errorSchema->addError(new sfValidatorError($this, 'post_max_size'));
 
@@ -370,22 +376,5 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
     {
       $this->postValidator = clone $this->postValidator;
     }
-  }
-
-  protected function getBytes($value)
-  {
-    $value = trim($value);
-    switch (strtolower($value[strlen($value) - 1]))
-    {
-      // The 'G' modifier is available since PHP 5.1.0
-      case 'g':
-        $value *= 1024;
-      case 'm':
-        $value *= 1024;
-      case 'k':
-        $value *= 1024;
-    }
-
-    return $value;
   }
 }
