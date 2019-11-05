@@ -148,14 +148,6 @@ abstract class sfValidatorDecorator extends sfValidatorBase
   /**
    * @see sfValidatorBase
    */
-  public function asString($indent = 0)
-  {
-    return $this->validator->asString($indent);
-  }
-
-  /**
-   * @see sfValidatorBase
-   */
   public function getDefaultOptions()
   {
     return $this->validator->getDefaultOptions();

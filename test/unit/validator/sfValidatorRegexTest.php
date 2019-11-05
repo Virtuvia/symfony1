@@ -74,12 +74,6 @@ catch (sfValidatorError $e)
   $t->fail('->clean() uses the pattern returned by a sfCallable pattern option');
 }
 
-// ->asString()
-$t->diag('->asString()');
-
-$v = new sfValidatorRegex(array('pattern' => '/^[0-9]+$/', 'must_match' => false));
-$t->is($v->asString(), 'Regex({ must_match: false, pattern: \'/^[0-9]+$/\' })', '->asString() returns a string representation of the validator');
-
 // ->getPattern()
 $t->diag('->getPattern()');
 

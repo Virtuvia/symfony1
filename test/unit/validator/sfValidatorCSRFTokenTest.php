@@ -41,7 +41,3 @@ catch (sfValidatorError $e)
   $t->pass('->clean() throws an sfValidatorError if the token is not valid');
   $t->is($e->getCode(), 'csrf_attack', '->clean() throws a sfValidatorError');
 }
-
-// ->asString()
-$t->diag('->asString()');
-$t->is($v->asString(), 'CSRFToken({ token: symfony })', '->asString() returns a string representation of the validator');

@@ -43,10 +43,6 @@ $v = new MyValidator();
 $t->diag('->getErrorCodes()');
 $t->is($v->getErrorCodes(), $v->getValidator()->getErrorCodes(), '->getErrorCodes() is a proxy to the embedded validator method');
 
-// ->asString()
-$t->diag('->asString()');
-$t->is($v->asString(), $v->getValidator()->asString(), '->asString() is a proxy to the embedded validator method');
-
 // ->getDefaultMessages()
 $t->diag('->getDefaultMessages()');
 $t->is($v->getDefaultMessages(), $v->getValidator()->getDefaultMessages(), '->getDefaultMessages() is a proxy to the embedded validator method');

@@ -132,37 +132,4 @@ class sfValidatorAnd extends sfValidatorBase
 
     return $clean;
   }
-
-  /**
-   * @see sfValidatorBase
-   */
-  public function asString($indent = 0)
-  {
-    $validators = '';
-    for ($i = 0, $max = count($this->validators); $i < $max; $i++)
-    {
-      $validators .= "\n".$this->validators[$i]->asString($indent + 2)."\n";
-
-      if ($i < $max - 1)
-      {
-        $validators .= str_repeat(' ', $indent + 2).'and';
-      }
-
-      if ($i == $max - 2)
-      {
-        $options = $this->getOptionsWithoutDefaults();
-        $messages = $this->getMessagesWithoutDefaults();
-
-        if ($options || $messages)
-        {
-          $validators .= sprintf('(%s%s)',
-            $options ? sfYamlInline::dump($options) : ($messages ? '{}' : ''),
-            $messages ? ', '.sfYamlInline::dump($messages) : ''
-          );
-        }
-      }
-    }
-
-    return sprintf("%s(%s%s)", str_repeat(' ', $indent), $validators, str_repeat(' ', $indent));
-  }
 }

@@ -48,10 +48,6 @@ catch (sfValidatorError $e)
   $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
-// ->asString()
-$t->diag('->asString()');
-$t->is($v->asString(), 'Choice({ choices: [foo, bar] })', '->asString() returns a string representation of the validator');
-
 // choices as a callable
 $t->diag('choices as a callable');
 $v = new sfValidatorChoice(array('choices' => new sfCallable('choice_callable')));

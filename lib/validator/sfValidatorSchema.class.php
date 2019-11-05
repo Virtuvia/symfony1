@@ -354,14 +354,6 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
     return $this->fields;
   }
 
-  /**
-   * @see sfValidatorBase
-   */
-  public function asString($indent = 0)
-  {
-    throw new Exception('Unable to convert a sfValidatorSchema to string.');
-  }
-
   public function __clone()
   {
     foreach ($this->fields as $name => $field)

@@ -111,11 +111,3 @@ catch (InvalidArgumentException $e)
 {
   $t->pass('->clean() throws an InvalidArgumentException exception if the operator does not exist');
 }
-
-// ->asString()
-$t->diag('->asString()');
-$v = new sfValidatorSchemaCompare('left', sfValidatorSchemaCompare::EQUAL, 'right');
-$t->is($v->asString(), 'left == right', '->asString() returns a string representation of the validator');
-
-$v = new sfValidatorSchemaCompare('left', sfValidatorSchemaCompare::EQUAL, 'right', array(), array('required' => 'This is required.'));
-$t->is($v->asString(), 'left ==({}, { required: \'This is required.\' }) right', '->asString() returns a string representation of the validator');

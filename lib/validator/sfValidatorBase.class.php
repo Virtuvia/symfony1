@@ -435,26 +435,6 @@ abstract class sfValidatorBase
   }
 
   /**
-   * Returns a string representation of this validator.
-   *
-   * @param  int $indent  Indentation (number of spaces before each line)
-   *
-   * @return string The string representation of the validator
-   */
-  public function asString($indent = 0)
-  {
-    $options = $this->getOptionsWithoutDefaults();
-    $messages = $this->getMessagesWithoutDefaults();
-
-    return sprintf('%s%s(%s%s)',
-      str_repeat(' ', $indent),
-      str_replace('sfValidator', '', get_class($this)),
-      $options ? sfYamlInline::dump($options) : ($messages ? '{}' : ''),
-      $messages ? ', '.sfYamlInline::dump($messages) : ''
-    );
-  }
-
-  /**
    * Returns all error messages with non default values.
    *
    * @return string A string representation of the error messages

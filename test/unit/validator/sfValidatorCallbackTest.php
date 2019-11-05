@@ -58,8 +58,3 @@ catch (sfValidatorError $e)
 $t->diag('callback with arguments');
 $v = new sfValidatorCallback(array('callback' => 'clean_test', 'arguments' => array('fabien', 'symfony')));
 $t->is($v->clean('foo'), '*foo*fabien-symfony', '->configure() can take an arguments option');
-
-// ->asString()
-$t->diag('->asString()');
-$v = new sfValidatorCallback(array('callback' => 'clean_test'));
-$t->is($v->asString(), 'Callback({ callback: clean_test })', '->asString() returns a string representation of the validator');

@@ -38,12 +38,4 @@ class sfValidatorSchemaForEach extends sfValidatorSchema
 
     parent::__construct($fields, $options, $messages);
   }
-
-  /**
-   * @see sfValidatorBase
-   */
-  public function asString($indent = 0)
-  {
-    throw new Exception('Unable to convert a sfValidatorSchemaForEach to string.');
-  }
 }

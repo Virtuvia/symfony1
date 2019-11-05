@@ -216,21 +216,6 @@ $t->is(sfValidatorBase::getCharset(), 'UTF-8', '::getCharset() returns the chars
 sfValidatorBase::setCharset('ISO-8859-1');
 $t->is(sfValidatorBase::getCharset(), 'ISO-8859-1', '::setCharset() changes the charset to use for validators');
 
-// ->asString()
-$t->diag('->asString()');
-$v = new ValidatorIdentity();
-$t->is($v->asString(), 'ValidatorIdentity()', '->asString() returns a string representation of the validator');
-$v->setOption('required', false);
-$v->setOption('foo', 'foo');
-$t->is($v->asString(), 'ValidatorIdentity({ required: false, foo: foo })', '->asString() returns a string representation of the validator');
-
-$v->setMessage('required', 'This is required.');
-$t->is($v->asString(), 'ValidatorIdentity({ required: false, foo: foo }, { required: \'This is required.\' })', '->asString() returns a string representation of the validator');
-
-$v = new ValidatorIdentity();
-$v->setMessage('required', 'This is required.');
-$t->is($v->asString(), 'ValidatorIdentity({}, { required: \'This is required.\' })', '->asString() returns a string representation of the validator');
-
 // ::setDefaultMessage()
 $t->diag('::setDefaultMessage()');
 ValidatorIdentity::setDefaultMessage('required', 'This field is required.');
