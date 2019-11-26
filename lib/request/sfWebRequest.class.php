@@ -544,7 +544,7 @@ class sfWebRequest extends sfRequest
 
     $pathArray = $this->getPathInfoArray();
 
-    return isset($pathArray[$name]) ? sfToolkit::stripslashesDeep($pathArray[$name]) : null;
+    return isset($pathArray[$name]) ? (get_magic_quotes_gpc() ? sfToolkit::stripslashesDeep($pathArray[$name]) : $pathArray[$name]) : null;
   }
 
   /**
