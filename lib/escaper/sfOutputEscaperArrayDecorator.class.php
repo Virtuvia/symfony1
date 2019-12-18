@@ -35,7 +35,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
   {
     parent::__construct($escapingMethod, $value);
 
-    $this->count = count($this->value);
+    $this->count = is_countable($this->value) ? count($this->value) : ($this->value !== null);
   }
 
   /**
@@ -45,7 +45,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
   {
     reset($this->value);
 
-    $this->count = count($this->value);
+    $this->count = is_countable($this->value) ? count($this->value) : ($this->value !== null);
   }
 
   /**
@@ -159,7 +159,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
    */
   public function count()
   {
-    return count($this->value);
+    return symfony1_count($this->value);
   }
 
   /**

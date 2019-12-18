@@ -288,7 +288,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
       return false;
     }
 
-    return 0 == count($this->errorSchema);
+    return 0 == symfony1_count($this->errorSchema);
   }
 
   /**
@@ -305,7 +305,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
       return false;
     }
 
-    return count($this->errorSchema) > 0;
+    return symfony1_count($this->errorSchema) > 0;
   }
 
   /**
