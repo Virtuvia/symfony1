@@ -427,6 +427,10 @@ abstract class sfCommandApplication
 
       fwrite(STDERR, "\n");
     }
+
+    if ($previous = $e->getPrevious()) {
+      $this->renderException($previous);
+    }
   }
 
   /**
