@@ -320,6 +320,6 @@ class sfFormField
    */
   public function hasError()
   {
-    return is_countable($this->error) ? count($this->error) ? null !== $this->error;
+    return symfony1_count($this->error);
   }
 }
