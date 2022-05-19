@@ -34,9 +34,6 @@ class Swift_ByteStream_FileByteStream
   
   /** A lazy-loaded resource handle for writing the file */
   private $_writer;
-  
-  /** If magic_quotes_runtime is on, this will be true */
-  private $_quotes = false;
 
   /** If stream is seekable true/false, or null if not known */
   private $_seekable = null;
@@ -50,11 +47,6 @@ class Swift_ByteStream_FileByteStream
   {
     $this->_path = $path;
     $this->_mode = $writable ? 'w+b' : 'rb';
-    
-    if (function_exists('get_magic_quotes_runtime') && @get_magic_quotes_runtime() == 1)
-    {
-      $this->_quotes = true;
-    }
   }
   
   /**
@@ -80,15 +72,7 @@ class Swift_ByteStream_FileByteStream
     $fp = $this->_getReadHandle();
     if (!feof($fp))
     {
-      if ($this->_quotes)
-      {
-        ini_set('magic_quotes_runtime', 0);
-      }
       $bytes = fread($fp, $length);
-      if ($this->_quotes)
-      {
-        ini_set('magic_quotes_runtime', 1);
-      }
       $this->_offset = ftell($fp);
       return $bytes;
     }

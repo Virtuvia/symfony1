@@ -48,8 +48,6 @@ class sfProjectConfiguration
     $this->symfonyLibDir = realpath(dirname(__FILE__).'/..');
     $this->dispatcher = null === $dispatcher ? new sfEventDispatcher() : $dispatcher;
 
-    ini_set('magic_quotes_runtime', 'off');
-
     sfConfig::set('sf_symfony_lib_dir', $this->symfonyLibDir);
 
     $this->setRootDir($this->rootDir);
