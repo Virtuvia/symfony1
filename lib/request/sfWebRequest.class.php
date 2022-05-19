@@ -914,7 +914,7 @@ class sfWebRequest extends sfRequest
    * This method returns null if no proxy passed this request. Note that some proxies
    * do not use this header, and act as if they were the client.
    *
-   * @return string|null An array of IP from the client and the proxies that passed
+   * @return string[]|null An array of IP from the client and the proxies that passed
    * the request, or null if no proxy was used.
    */
   public function getForwardedFor()

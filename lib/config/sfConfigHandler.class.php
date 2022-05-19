@@ -69,7 +69,7 @@ abstract class sfConfigHandler
    *
    * @param mixed $value The value on which to run the replacement procedure
    *
-   * @return string The new value
+   * @return string[]|string The new value
    */
   static public function replaceConstants($value)
   {
