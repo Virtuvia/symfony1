@@ -104,7 +104,7 @@ EOF;
               $nodes[] = $node->childNodes->item($i);
             }
           }
-          else if ('DOMProcessingInstruction' == get_class($node) && 'php' == $node->target)
+          else if ($node !== null && 'DOMProcessingInstruction' == get_class($node) && 'php' == $node->target)
           {
             // processing instruction node
             $tokens = token_get_all('<?php '.$node->nodeValue);
