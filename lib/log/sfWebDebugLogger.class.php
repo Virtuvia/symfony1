@@ -33,7 +33,7 @@ class sfWebDebugLogger extends sfVarLogger
    * @param  sfEventDispatcher $dispatcher  A sfEventDispatcher instance
    * @param  array             $options     An array of options.
    *
-   * @return Boolean           true, if initialization completes successfully, otherwise false.
+   * @return bool           true, if initialization completes successfully, otherwise false.
    *
    * @see sfVarLogger
    */

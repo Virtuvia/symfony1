@@ -102,7 +102,7 @@ class sfCommandOptionSet
    *
    * @param string $name The option name
    *
-   * @return Boolean true if the option object exists, false otherwise
+   * @return bool true if the option object exists, false otherwise
    */
   public function hasOption($name)
   {
@@ -124,7 +124,7 @@ class sfCommandOptionSet
    *
    * @param string $name The option shortcut
    *
-   * @return Boolean true if the option object exists, false otherwise
+   * @return bool true if the option object exists, false otherwise
    */
   public function hasShortcut($name)
   {

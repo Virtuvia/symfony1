@@ -217,7 +217,7 @@ abstract class sfComponent
    *
    * @param string  The route name
    * @param array   An array of parameters for the route
-   * @param Boolean Whether to generate an absolute URL or not
+   * @param bool Whether to generate an absolute URL or not
    *
    * @return string  The URL
    */
@@ -259,7 +259,7 @@ abstract class sfComponent
    *
    * @param string  $name  The variable name
    * @param mixed   $value The variable value
-   * @param Boolean $safe  true if the value is safe for output (false by default)
+   * @param bool $safe  true if the value is safe for output (false by default)
    */
   public function setVar($name, $value, $safe = false)
   {

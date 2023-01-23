@@ -83,7 +83,7 @@ class sfTesterUser extends sfTester
   /**
    * Tests if the user is authenticated.
    *
-   * @param  Boolean $boolean Whether to check if the user is authenticated or not
+   * @param bool $boolean Whether to check if the user is authenticated or not
    *
    * @return sfTestFunctionalBase|sfTester
    */

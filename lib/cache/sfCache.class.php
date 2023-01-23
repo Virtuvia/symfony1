@@ -78,7 +78,7 @@ abstract class sfCache
    *
    * @param string $key The cache key
    *
-   * @return Boolean true if the cache exists, false otherwise
+   * @return bool true if the cache exists, false otherwise
    */
   abstract public function has($key);
 
@@ -89,7 +89,7 @@ abstract class sfCache
    * @param string $data     The data to put in cache
    * @param int    $lifetime The lifetime
    *
-   * @return Boolean true if no problem
+   * @return bool true if no problem
    */
   abstract public function set($key, $data, $lifetime = null);
 
@@ -98,7 +98,7 @@ abstract class sfCache
    *
    * @param string $key The cache key
    *
-   * @return Boolean true if no problem
+   * @return bool true if no problem
    */
   abstract public function remove($key);
 
@@ -107,7 +107,7 @@ abstract class sfCache
    *
    * @param string $pattern The cache key pattern
    *
-   * @return Boolean true if no problem
+   * @return bool true if no problem
    *
    * @see patternToRegexp
    */
@@ -120,7 +120,7 @@ abstract class sfCache
    *                     sfCache::ALL: remove all keys (default)
    *                     sfCache::OLD: remove all expired keys
    *
-   * @return Boolean true if no problem
+   * @return bool true if no problem
    */
   abstract public function clean($mode = self::ALL);
 

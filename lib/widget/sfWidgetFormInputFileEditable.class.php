@@ -25,7 +25,7 @@ class sfWidgetFormInputFileEditable extends sfWidgetFormInputFile
    * Available options:
    *
    *  * file_src:     The current image web source path (required)
-   *  * edit_mode:    A Boolean: true to enabled edit mode, false otherwise
+   *  * edit_mode:    A bool: true to enabled edit mode, false otherwise
    *  * is_image:     Whether the file is a displayable image
    *  * with_delete:  Whether to add a delete checkbox or not
    *  * delete_label: The delete label used by the template

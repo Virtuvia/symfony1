@@ -129,7 +129,7 @@ class sfSymfonyCommandApplication extends sfCommandApplication
    *
    * @param  string  $class  The task class name
    *
-   * @return Boolean
+   * @return bool
    */
   public function autoloadTask($class)
   {

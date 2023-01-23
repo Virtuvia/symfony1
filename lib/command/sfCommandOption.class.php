@@ -100,7 +100,7 @@ class sfCommandOption
   /**
    * Returns true if the option accept a parameter.
    *
-   * @return Boolean true if parameter mode is not self::PARAMETER_NONE, false otherwise
+   * @return bool true if parameter mode is not self::PARAMETER_NONE, false otherwise
    */
   public function acceptParameter()
   {
@@ -110,7 +110,7 @@ class sfCommandOption
   /**
    * Returns true if the option requires a parameter.
    *
-   * @return Boolean true if parameter mode is self::PARAMETER_REQUIRED, false otherwise
+   * @return bool true if parameter mode is self::PARAMETER_REQUIRED, false otherwise
    */
   public function isParameterRequired()
   {
@@ -120,7 +120,7 @@ class sfCommandOption
   /**
    * Returns true if the option takes an optional parameter.
    *
-   * @return Boolean true if parameter mode is self::PARAMETER_OPTIONAL, false otherwise
+   * @return bool true if parameter mode is self::PARAMETER_OPTIONAL, false otherwise
    */
   public function isParameterOptional()
   {
@@ -130,7 +130,7 @@ class sfCommandOption
   /**
    * Returns true if the option can take multiple values.
    *
-   * @return Boolean true if mode is self::IS_ARRAY, false otherwise
+   * @return bool true if mode is self::IS_ARRAY, false otherwise
    */
   public function isArray()
   {

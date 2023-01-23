@@ -83,7 +83,7 @@ class sfEvent implements ArrayAccess
   /**
    * Sets the processed flag.
    *
-   * @param Boolean $processed The processed flag value
+   * @param bool $processed The processed flag value
    */
   public function setProcessed($processed)
   {
@@ -93,7 +93,7 @@ class sfEvent implements ArrayAccess
   /**
    * Returns whether the event has been processed by a listener or not.
    *
-   * @return Boolean true if the event has been processed, false otherwise
+   * @return bool true if the event has been processed, false otherwise
    */
   public function isProcessed()
   {
@@ -115,7 +115,7 @@ class sfEvent implements ArrayAccess
    *
    * @param  string  $name  The parameter name
    *
-   * @return Boolean true if the parameter exists, false otherwise
+   * @return bool true if the parameter exists, false otherwise
    */
   public function offsetExists($name)
   {

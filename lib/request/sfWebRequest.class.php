@@ -160,7 +160,7 @@ class sfWebRequest extends sfRequest
   /**
    * Returns the content type of the current request.
    *
-   * @param  Boolean $trimmed If false the full Content-Type header will be returned
+   * @param bool $trimmed If false the full Content-Type header will be returned
    *
    * @return string
    */

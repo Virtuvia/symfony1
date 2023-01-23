@@ -149,7 +149,7 @@ abstract class sfRequest implements ArrayAccess
    *
    * @param  string $name The name of the request parameter
    *
-   * @return Boolean true if the request parameter exists, false otherwise
+   * @return bool true if the request parameter exists, false otherwise
    */
   public function offsetExists($name)
   {
@@ -285,7 +285,7 @@ abstract class sfRequest implements ArrayAccess
   /**
    * Returns the content of the current request.
    *
-   * @return string|Boolean The content or false if none is available
+   * @return string|bool The content or false if none is available
    */
   public function getContent()
   {

@@ -272,7 +272,7 @@ abstract class sfModelGeneratorConfiguration
    *
    * @param string  $key     The configuration key (title.list.name for example)
    * @param mixed   $default The default value if none has been defined
-   * @param Boolean $escaped Whether to escape single quote (false by default)
+   * @param bool $escaped Whether to escape single quote (false by default)
    *
    * @return mixed The configuration value
    */

@@ -60,7 +60,7 @@ class sfObjectRoute extends sfRequestRoute
    * @param  mixed  $params  The parameters
    * @param  array  $context The context
    *
-   * @return Boolean         true if the parameters matches this route, false otherwise.
+   * @return bool         true if the parameters matches this route, false otherwise.
    */
   public function matchesParameters($params, $context = array())
   {
@@ -72,7 +72,7 @@ class sfObjectRoute extends sfRequestRoute
    *
    * @param  mixed   $params    The parameter values
    * @param  array   $context   The context
-   * @param  Boolean $absolute  Whether to generate an absolute URL
+   * @param bool $absolute  Whether to generate an absolute URL
    *
    * @return string The generated URL
    */

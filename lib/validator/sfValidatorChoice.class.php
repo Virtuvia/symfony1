@@ -120,7 +120,7 @@ class sfValidatorChoice extends sfValidatorBase
    * @param  mixed $value   The value to check
    * @param  array $choices The array of available choices
    *
-   * @return Boolean
+   * @return bool
    */
   static protected function inChoices($value, array $choices = array())
   {

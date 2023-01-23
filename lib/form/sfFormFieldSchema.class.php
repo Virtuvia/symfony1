@@ -89,7 +89,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
    *
    * @param string $name The name of the bound field
    *
-   * @return Boolean true if the widget exists, false otherwise
+   * @return bool true if the widget exists, false otherwise
    */
   public function offsetExists($name)
   {

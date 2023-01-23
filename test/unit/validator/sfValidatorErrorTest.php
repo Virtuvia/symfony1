@@ -30,7 +30,7 @@ $t->is($e->getValidator(), $v, '->getValidator() returns the validator that trig
 // ->getArguments()
 $t->diag('->getArguments()');
 $t->is($e->getArguments(), array('%value%' => 'foo&lt;br /&gt;', '%max_length%' => 1), '->getArguments() returns the arguments needed to format the error message, escaped according to the current charset');
-$t->is($e->getArguments(true), array('value' => 'foo<br />', 'max_length' => 1), '->getArguments() takes a Boolean as its first argument to return the raw arguments');
+$t->is($e->getArguments(true), array('value' => 'foo<br />', 'max_length' => 1), '->getArguments() takes a bool as its first argument to return the raw arguments');
 
 // ->getMessageFormat()
 $t->diag('->getMessageFormat()');

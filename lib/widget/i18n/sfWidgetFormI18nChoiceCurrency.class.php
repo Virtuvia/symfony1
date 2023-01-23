@@ -26,7 +26,7 @@ class sfWidgetFormI18nChoiceCurrency extends sfWidgetFormChoice
    *  * culture:    The culture to use for internationalized strings
    *  * currencies: An array of currency codes to use (ISO 4217)
    *  * add_empty:  Whether to add a first empty value or not (false by default)
-   *                If the option is not a Boolean, the value will be used as the text value
+   *                If the option is not a bool, the value will be used as the text value
    *
    * @param array $options     An array of options
    * @param array $attributes  An array of default HTML attributes

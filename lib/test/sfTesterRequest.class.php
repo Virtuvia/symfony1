@@ -82,7 +82,7 @@ class sfTesterRequest extends sfTester
    * Checks if a cookie exists.
    *
    * @param string  $name   The cookie name
-   * @param Boolean $exists Whether the cookie must exist or not
+   * @param bool $exists Whether the cookie must exist or not
    *
    * @return sfTestFunctionalBase|sfTester
    */

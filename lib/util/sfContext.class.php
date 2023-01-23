@@ -446,7 +446,7 @@ class sfContext implements ArrayAccess
    *
    * @param  string $name The name of the context object
    *
-   * @return Boolean true if the context object exists, false otherwise
+   * @return bool true if the context object exists, false otherwise
    */
   public function offsetExists($name)
   {

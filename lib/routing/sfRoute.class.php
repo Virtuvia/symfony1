@@ -76,7 +76,7 @@ class sfRoute implements Serializable
   /**
    * Returns true if the route is bound to context and parameters.
    *
-   * @return Boolean true if theroute is bound to context and parameters, false otherwise
+   * @return bool true if theroute is bound to context and parameters, false otherwise
    */
   public function isBound()
   {
@@ -139,7 +139,7 @@ class sfRoute implements Serializable
    * @param  mixed  $params  The parameters
    * @param  array  $context The context
    *
-   * @return Boolean         true if the parameters matches this route, false otherwise.
+   * @return bool         true if the parameters matches this route, false otherwise.
    */
   public function matchesParameters($params, $context = array())
   {
@@ -202,7 +202,7 @@ class sfRoute implements Serializable
    *
    * @param  mixed   $params    The parameter values
    * @param  array   $context   The context
-   * @param  Boolean $absolute  Whether to generate an absolute URL
+   * @param bool $absolute  Whether to generate an absolute URL
    *
    * @return string The generated URL
    */
@@ -598,10 +598,10 @@ class sfRoute implements Serializable
    *
    * @param string   $buffer           The current route buffer
    * @param array    $tokens           An array of current tokens
-   * @param Boolean  $afterASeparator  Whether the buffer is just after a separator
+   * @param bool  $afterASeparator  Whether the buffer is just after a separator
    * @param string   $currentSeparator The last matched separator
    *
-   * @return Boolean true if a token has been generated, false otherwise
+   * @return bool true if a token has been generated, false otherwise
    */
   protected function tokenizeBufferBefore(&$buffer, &$tokens, &$afterASeparator, &$currentSeparator)
   {
@@ -615,10 +615,10 @@ class sfRoute implements Serializable
    *
    * @param string   $buffer           The current route buffer
    * @param array    $tokens           An array of current tokens
-   * @param Boolean  $afterASeparator  Whether the buffer is just after a separator
+   * @param bool  $afterASeparator  Whether the buffer is just after a separator
    * @param string   $currentSeparator The last matched separator
    *
-   * @return Boolean true if a token has been generated, false otherwise
+   * @return bool true if a token has been generated, false otherwise
    */
   protected function tokenizeBufferAfter(&$buffer, &$tokens, &$afterASeparator, &$currentSeparator)
   {

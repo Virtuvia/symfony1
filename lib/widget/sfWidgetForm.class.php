@@ -123,7 +123,7 @@ abstract class sfWidgetForm extends sfWidget
   /**
    * Returns true if the widget is hidden.
    *
-   * @return Boolean true if the widget is hidden, false otherwise
+   * @return bool true if the widget is hidden, false otherwise
    */
   public function isHidden()
   {

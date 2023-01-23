@@ -128,7 +128,7 @@ class sfEventDispatcher
    *
    * @param  string   $name    The event name
    *
-   * @return Boolean true if some listeners are connected, false otherwise
+   * @return bool true if some listeners are connected, false otherwise
    */
   public function hasListeners($name)
   {

@@ -399,7 +399,7 @@ class sfI18N
    *
    * @param  string  $source  The source name
    *
-   * @return Boolean true if messages are stored in a file, false otherwise
+   * @return bool true if messages are stored in a file, false otherwise
    */
   static public function isMessageSourceFileBased($source)
   {

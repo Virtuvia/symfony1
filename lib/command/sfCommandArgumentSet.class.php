@@ -124,7 +124,7 @@ class sfCommandArgumentSet
    *
    * @param string $name The argument name
    *
-   * @return Boolean true if the argument object exists, false otherwise
+   * @return bool true if the argument object exists, false otherwise
    */
   public function hasArgument($name)
   {

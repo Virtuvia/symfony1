@@ -420,7 +420,7 @@ abstract class sfTask
     }
 
     $style = str_replace('_LARGE', '', $style, $count);
-    $large = (Boolean) $count;
+    $large = (bool) $count;
 
     $len = 0;
     $lines = array();
@@ -478,9 +478,9 @@ abstract class sfTask
    *
    * @param string|array $question The question to ask
    * @param string       $style    The style to use (QUESTION by default)
-   * @param Boolean      $default  The default answer if the user enters nothing
+   * @param bool      $default  The default answer if the user enters nothing
    *
-   * @param Boolean      true if the user has confirmed, false otherwise
+   * @param bool      true if the user has confirmed, false otherwise
    */
   public function askConfirmation($question, $style = 'QUESTION', $default = true)
   {

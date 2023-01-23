@@ -587,7 +587,7 @@ class sfProjectConfiguration
    *
    * @param string            $application    An application name
    * @param string            $environment    The environment name
-   * @param Boolean           $debug          true to enable debug mode
+   * @param bool           $debug          true to enable debug mode
    * @param string            $rootDir        The project root directory
    * @param sfEventDispatcher $dispatcher     An event dispatcher
    *

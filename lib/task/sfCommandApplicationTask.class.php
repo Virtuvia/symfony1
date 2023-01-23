@@ -88,7 +88,7 @@ abstract class sfCommandApplicationTask extends sfTask
    * @param  array   $arguments An array of arguments to pass to the task
    * @param  array   $options   An array of options to pass to the task
    *
-   * @return Boolean The returned value of the task run() method
+   * @return bool The returned value of the task run() method
    *
    * @see createTask()
    */

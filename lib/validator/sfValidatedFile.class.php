@@ -171,7 +171,7 @@ class sfValidatedFile
   /**
    * Returns true if the file has already been saved.
    *
-   * @return Boolean true if the file has already been saved, false otherwise
+   * @return bool true if the file has already been saved, false otherwise
    */
   public function isSaved()
   {

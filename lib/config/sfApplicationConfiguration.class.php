@@ -34,7 +34,7 @@ abstract class sfApplicationConfiguration extends ProjectConfiguration
    * Constructor.
    *
    * @param string            $environment    The environment name
-   * @param Boolean           $debug          true to enable debug mode
+   * @param bool           $debug          true to enable debug mode
    * @param string            $rootDir        The project root directory
    * @param sfEventDispatcher $dispatcher     An event dispatcher
    */
@@ -594,7 +594,7 @@ abstract class sfApplicationConfiguration extends ProjectConfiguration
   /**
    * Returns true if this configuration has debug enabled.
    *
-   * @return Boolean true if the configuration has debug enabled, false otherwise
+   * @return bool true if the configuration has debug enabled, false otherwise
    */
   public function isDebug()
   {

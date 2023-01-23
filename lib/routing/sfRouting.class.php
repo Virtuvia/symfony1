@@ -157,7 +157,7 @@ abstract class sfRouting
   *
   * @param  string  $name      The route name
   * @param  array   $params    The parameter values
-  * @param  Boolean $absolute  Whether to generate an absolute URL
+  * @param bool $absolute  Whether to generate an absolute URL
   *
   * @return string The generated URL
   */

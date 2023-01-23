@@ -753,7 +753,7 @@ class sfCultureInfo
    * Gets a list of currencies in the language of the localized version.
    *
    * @param  array   $currencies An array of currencies used to restrict the returned array (null by default, which means all currencies)
-   * @param  Boolean $full       Whether to return the symbol and the name or not (false by default)
+   * @param bool $full       Whether to return the symbol and the name or not (false by default)
    *
    * @return array a list of localized currencies.
    */

@@ -49,7 +49,7 @@ class sfModelGeneratorConfigurationField
    *
    * @param string  $key     A key string
    * @param mixed   $default The default value if the key does not exist
-   * @param Boolean $escaped Whether to escape single quote (false by default)
+   * @param bool $escaped Whether to escape single quote (false by default)
    *
    * @return mixed The configuration value associated with the key
    */
@@ -98,7 +98,7 @@ class sfModelGeneratorConfigurationField
   /**
    * Sets or unsets the partial flag.
    *
-   * @param Boolean $boolean true if the field is a partial, false otherwise
+   * @param bool $boolean true if the field is a partial, false otherwise
    */
   public function setPartial($boolean)
   {
@@ -118,7 +118,7 @@ class sfModelGeneratorConfigurationField
   /**
    * Sets or unsets the component flag.
    *
-   * @param Boolean $boolean true if the field is a component, false otherwise
+   * @param bool $boolean true if the field is a component, false otherwise
    */
   public function setComponent($boolean)
   {
@@ -138,7 +138,7 @@ class sfModelGeneratorConfigurationField
   /**
    * Sets or unsets the link flag.
    *
-   * @param Boolean $boolean true if the field is a link, false otherwise
+   * @param bool $boolean true if the field is a link, false otherwise
    */
   public function setLink($boolean)
   {

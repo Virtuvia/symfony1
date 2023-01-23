@@ -68,7 +68,7 @@ class sfUser implements ArrayAccess
    * @param sfStorage         $storage     An sfStorage instance.
    * @param array             $options     An associative array of options.
    *
-   * @return Boolean          true, if initialization completes successfully, otherwise false.
+   * @return bool          true, if initialization completes successfully, otherwise false.
    */
   public function initialize(sfEventDispatcher $dispatcher, sfStorage $storage, $options = array())
   {
@@ -219,7 +219,7 @@ class sfUser implements ArrayAccess
    *
    * @param  string $name The name of the user attribute
    *
-   * @return Boolean true if the user attribute exists, false otherwise
+   * @return bool true if the user attribute exists, false otherwise
    */
   public function offsetExists($name)
   {

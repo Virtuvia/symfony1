@@ -126,7 +126,7 @@ abstract class sfBrowserBase
       'expire'   => $expire,
       'path'     => $path,
       'domain'   => $domain,
-      'secure'   => (Boolean) $secure,
+      'secure'   => (bool) $secure,
       'httpOnly' => $httpOnly,
     );
 

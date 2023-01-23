@@ -58,7 +58,7 @@ abstract class sfFormObject extends BaseForm
   /**
    * Returns true if the current form embeds a new object.
    *
-   * @return Boolean true if the current form embeds a new object, false otherwise
+   * @return bool true if the current form embeds a new object, false otherwise
    */
   public function isNew()
   {
@@ -82,7 +82,7 @@ abstract class sfFormObject extends BaseForm
    * @param  array An array of uploaded files (in the $_FILES or $_GET format)
    * @param  mixed An optional connection object
    *
-   * @return Boolean true if the form is valid, false otherwise
+   * @return bool true if the form is valid, false otherwise
    */
   public function bindAndSave($taintedValues, $taintedFiles = null, $con = null)
   {

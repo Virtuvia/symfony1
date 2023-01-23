@@ -75,7 +75,7 @@ class sfTesterForm extends sfTester
   /**
    * Tests if the submitted form has some error.
    *
-   * @param  Boolean|integer $value Whether to check if the form has error or not, or the number of errors
+   * @param bool|integer $value Whether to check if the form has error or not, or the number of errors
    *
    * @return sfTestFunctionalBase|sfTester
    */
