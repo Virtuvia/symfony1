@@ -65,7 +65,7 @@ class sfYaml
 
     try
     {
-      $ret = Yaml::parse($input);
+      $ret = Yaml::parse($input, Yaml::PARSE_CONSTANT);
     }
     catch (Exception $e)
     {
