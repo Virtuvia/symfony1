@@ -303,52 +303,6 @@ class Doctrine_Template_Sortable extends Doctrine_Template
     return $query->execute();
   }
 
-
-  /**
-   * Finds and returns records sorted where the parent (fk) in a specified
-   * one to many relationship has the value specified
-   *
-   * @param string $parentValue
-   * @param string $parent_column_value
-   * @param string $order
-   * @return $query
-   */
-  public function findAllSortedWithParentTableProxy($parentValue, $parentColumnName = null, $order = 'ASC')
-  {
-    $order = $this->formatAndCheckOrder($order);
-
-    $object = $this->getInvoker();
-    $class  = get_class($object);
-
-    if (!$parentColumnName)
-    {
-      $parents = get_class($object->getParent());
-
-      if (count($parents) > 1)
-      {
-        throw new Doctrine_Exception('No parent column name specified and object has mutliple parents');
-      }
-      elseif (count($parents) < 1)
-      {
-        throw new Doctrine_Exception('No parent column name specified and object has no parents');
-      }
-      else
-      {
-        $parentColumnName = $parents[0]->getType();
-        exit((string) $parentColumnName);
-        exit(print_r($parents[0]->toArray()));
-      }
-    }
-
-    $query = $object->getTable()->createQuery()
-                                ->from($class . ' od')
-                                ->where('od.' . $parentColumnName . ' = ?', $parentValue)
-                                ->orderBy($this->_options['name'] . ' ' . $order);
-
-    return $query->execute();
-  }
-
-
   /**
    * Formats the ORDER for insertion in to query, else throws exception
    *

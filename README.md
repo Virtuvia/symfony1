@@ -95,11 +95,6 @@ Clear your cache
 
         Doctrine::getTable('Model')->findAllSorted('asc');
 
-  * **findAllSortedWithParent** - accepts the parent column name, the value, and sort order (asc, desc)
-
-        Doctrine::getTable('MyModel')->findAllSortedWithParent($fk_value, $fk_name, 'asc');
-
-
 #Example Usage With Admin Generator
 
 In your module, edit `config/generator.yml`, and under list, object actions, add:
