@@ -84,9 +84,9 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
   /**
    * Moves to the next element in the iterator (as required by the Iterator interface).
    */
-  public function next()
+  public function next(): void
   {
-    return $this->iterator->next();
+    $this->iterator->next();
   }
 
   /**
