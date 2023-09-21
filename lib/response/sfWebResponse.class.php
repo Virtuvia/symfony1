@@ -820,17 +820,41 @@ class sfWebResponse extends sfResponse
   /**
    * @see sfResponse
    */
-  public function serialize()
+  public function __serialize(): array
   {
-    return serialize(array($this->content, $this->statusCode, $this->statusText, $this->options, $this->headerOnly, $this->headers, $this->metas, $this->httpMetas, $this->stylesheets, $this->javascripts, $this->slots));
+    return [
+      $this->content,
+      $this->statusCode,
+      $this->statusText,
+      $this->options,
+      $this->headerOnly,
+      $this->headers,
+      $this->metas,
+      $this->httpMetas,
+      $this->stylesheets,
+      $this->javascripts,
+      $this->slots,
+    ];
   }
 
   /**
    * @see sfResponse
    */
-  public function unserialize($serialized)
+  public function __unserialize(array $serialized): void
   {
-    list($this->content, $this->statusCode, $this->statusText, $this->options, $this->headerOnly, $this->headers, $this->metas, $this->httpMetas, $this->stylesheets, $this->javascripts, $this->slots) = unserialize($serialized);
+    [
+      $this->content,
+      $this->statusCode,
+      $this->statusText,
+      $this->options,
+      $this->headerOnly,
+      $this->headers,
+      $this->metas,
+      $this->httpMetas,
+      $this->stylesheets,
+      $this->javascripts,
+      $this->slots,
+    ] = $serialized;
   }
 
   /**

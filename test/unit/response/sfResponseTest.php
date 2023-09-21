@@ -12,15 +12,21 @@ require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 
 class myResponse extends sfResponse
 {
-  function serialize() {}
-  function unserialize($serialized) {}
+  function __serialize(): array
+  {
+    return [];
+  }
+
+  function __unserialize(array $serialized): void
+  {
+  }
 }
 
 class fakeResponse
 {
 }
 
-$t = new lime_test(8);
+$t = new lime_test(9);
 
 $dispatcher = new sfEventDispatcher();
 
@@ -45,8 +51,10 @@ $content = ob_get_clean();
 $t->is($content, 'test', '->sendContent() output the current response content');
 
 // ->serialize() ->unserialize()
-$t->diag('->serialize() ->unserialize()');
-$t->ok(new myResponse($dispatcher) instanceof Serializable, 'sfResponse implements the Serializable interface');
+$t->diag('->__serialize() ->__unserialize()');
+$response = new myResponse($dispatcher);
+$t->ok(method_exists($response, '__serialize'), 'sfResponse is serializable');
+$t->ok(method_exists($response, '__unserialize'), 'sfResponse is unserializable');
 
 // new methods via sfEventDispatcher
 require_once($_test_dir.'/unit/sfEventDispatcherTest.class.php');

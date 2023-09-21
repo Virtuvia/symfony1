@@ -14,7 +14,7 @@ require_once($_test_dir.'/unit/sfNoRouting.class.php');
 
 $t = new lime_test(21);
 
-class myWebResponse extends sfWebResponse
+class myWebControllerResponse extends sfWebResponse
 {
   public function sendHttpHeaders()
   {
@@ -31,7 +31,7 @@ sfConfig::set('sf_max_forwards', 10);
 $context = sfContext::getInstance(array(
   'routing'  => 'sfNoRouting',
   'request'  => 'sfWebRequest',
-  'response' => 'myWebResponse',
+  'response' => 'myWebControllerResponse',
 ));
 
 $controller = new sfFrontWebController($context, null);
