@@ -10,7 +10,7 @@
 
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 
-$t = new lime_test(24);
+$t = new lime_test(25);
 
 // ->clear()
 $t->diag('->clear()');
@@ -31,10 +31,10 @@ $t->is($ph->get('bar'), null, '->get() returns null if the key does not exist');
 
 // checks that get returns reference
 $ref = 'foobar';
-$ph->set('ref', $ref);
-$ref2 = null;
-$ref2 &= $ph->get('ref'); // obtain the very same reference and modify it
-$ref2 &= 'barfoo';
+$ph->setByRef('ref', $ref);
+$ref2 = &$ph->get('ref'); // obtain the very same reference and modify it
+$t->is($ref2 , $ref, '->get() returns a reference for the given key');
+$ref2 = 'barfoo';
 $t->is($ref2 , $ref, '->get() returns a reference for the given key');
 
 $ph = new sfParameterHolder();

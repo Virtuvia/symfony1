@@ -21,7 +21,7 @@
  * @author     Sean Kerr <sean@code-box.org>
  * @version    SVN: $Id: sfParameterHolder.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
-class sfParameterHolder implements Serializable
+class sfParameterHolder
 {
   protected $parameters = array();
 
@@ -183,18 +183,18 @@ class sfParameterHolder implements Serializable
    *
    * @return array Objects instance
    */
-  public function serialize()
+  public function __serialize(): array
   {
-    return serialize($this->parameters);
+    return $this->parameters;
   }
 
   /**
    * Unserializes a sfParameterHolder instance.
    *
-   * @param string $serialized  A serialized sfParameterHolder instance
+   * @param array $serialized  A serialized sfParameterHolder instance
    */
-  public function unserialize($serialized)
+  public function __unserialize(array $serialized): void
   {
-    $this->parameters = unserialize($serialized);
+    $this->parameters = $serialized;
   }
 }
