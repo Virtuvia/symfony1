@@ -10,13 +10,6 @@
         "symfony/yaml": ">=v3.4.47 <=v3.4.49",
         "symfony/form": ">=v3.4.47 <=v3.4.49"
     },
-    "replace": {
-        "symfony/polyfill-ctype": "1.99",
-        "symfony/polyfill-intl-grapheme": "1.99",
-        "symfony/polyfill-intl-icu": "1.99",
-        "symfony/polyfill-intl-normalizer": "1.99",
-        "symfony/polyfill-mbstring": "1.99"
-    },
     "autoload": {
         "classmap": [
             "lib/",
