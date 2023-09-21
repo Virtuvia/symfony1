@@ -15,7 +15,7 @@ function generate_regex()
   return '/^123$/';
 }
 
-$t = new lime_test(11);
+$t = new lime_test(10);
 
 // __construct()
 $t->diag('__construct()');

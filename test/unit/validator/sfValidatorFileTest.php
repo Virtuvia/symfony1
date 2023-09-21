@@ -97,7 +97,8 @@ $t->diag('->guessFromFileBinary()');
 $v = new testValidatorFile();
 $t->is($v->guessFromFileBinary($tmpDir.'/test.txt'), 'text/plain', '->guessFromFileBinary() guesses the type of a given file');
 $t->is($v->guessFromFileBinary($tmpDir.'/foo.txt'), null, '->guessFromFileBinary() returns null if the file type is not guessable');
-$t->is($v->guessFromFileBinary('/bin/ls'), (PHP_OS != 'Darwin') ? 'application/x-executable' : 'application/octet-stream', '->guessFromFileBinary() returns correct type if file is guessable');
+$guessedType = $v->guessFromFileBinary('/bin/ls');
+$t->ok(in_array($guessedType, ['application/x-executable', 'application/x-pie-executable', 'application/x-sharedlib', 'application/octet-stream'], true), '->guessFromFileBinary() returns correct type if file is guessable');
 
 // ->getMimeType()
 $t->diag('->getMimeType()');

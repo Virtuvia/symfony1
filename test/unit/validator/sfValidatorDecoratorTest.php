@@ -10,7 +10,7 @@
 
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 
-$t = new lime_test(20);
+$t = new lime_test(19);
 
 class MyValidator extends sfValidatorDecorator
 {

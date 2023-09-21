@@ -17,14 +17,10 @@ require_once($_test_dir.'/../lib/vendor/lime/lime.php');
 
 sfConfig::set('sf_symfony_lib_dir', realpath($_test_dir.'/../lib'));
 
+ob_start();
+
 $plan = 8;
 $t = new lime_test($plan);
-
-if (!ini_get('apc.enable_cli'))
-{
-  $t->skip('APC must be enable on CLI to run these tests', $plan);
-  return;
-}
 
 // initialize the storage
 try
@@ -38,7 +34,11 @@ catch (InvalidArgumentException $e)
 }
 
 
-$storage = new sfCacheSessionStorage(array('cache' => array('class' => 'sfAPCCache', 'param' => array())));
+$temp = tempnam('/tmp/cache_dir', 'tmp');
+unlink($temp);
+mkdir($temp);
+
+$storage = new sfCacheSessionStorage(array('cache' => array('class' => sfFileCache::class, 'param' => array('cache_dir' => $temp))));
 $t->ok($storage instanceof sfStorage, '->__construct() is an instance of sfStorage');
 
 $storage->write('test', 123);
@@ -64,3 +64,5 @@ $t->is($storage->read($key), null, '->remove() removes data from the storage');
 
 // shutdown the storage
 $storage->shutdown();
+
+ob_end_flush();

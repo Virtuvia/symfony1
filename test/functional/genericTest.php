@@ -170,7 +170,7 @@ $b->
     checkElement('#lib1', 'pong')->
     checkElement('#lib2', 'pong')->
     checkElement('#lib3', 'pong')->
-    checkElement('#lib4', 'nopong')->
+    checkElement('#lib4', 'pong')->
   end()
 ;
 

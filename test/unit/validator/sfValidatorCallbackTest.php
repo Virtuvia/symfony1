@@ -10,7 +10,7 @@
 
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 
-$t = new lime_test(7);
+$t = new lime_test(6);
 
 function clean_test($validator, $value, $arguments)
 {

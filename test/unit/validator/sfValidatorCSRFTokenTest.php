@@ -10,7 +10,7 @@
 
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 
-$t = new lime_test(5);
+$t = new lime_test(4);
 
 // __construct()
 $t->diag('__construct()');

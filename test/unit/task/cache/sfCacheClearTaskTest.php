@@ -15,13 +15,7 @@ $t = new lime_test(2);
 $dispatcher = new sfEventDispatcher();
 $formatter = new sfFormatter();
 
-$task = new sfGenerateProjectTask($dispatcher, $formatter);
-$task->run(array('test'));
-$task = new sfGenerateAppTask($dispatcher, $formatter);
-$task->run(array('frontend'));
-
-require_once sfConfig::get('sf_root_dir').'/config/ProjectConfiguration.class.php';
-$configuration = ProjectConfiguration::getApplicationConfiguration('frontend', 'test', true);
+$configuration = ProjectConfiguration::getApplicationConfiguration('cache', 'test', true);
 
 // Put something in the cache
 $file = sfConfig::get('sf_config_cache_dir').DIRECTORY_SEPARATOR.'test';

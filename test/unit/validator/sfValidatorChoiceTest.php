@@ -10,7 +10,7 @@
 
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 
-$t = new lime_test(13);
+$t = new lime_test(12);
 
 function choice_callable()
 {

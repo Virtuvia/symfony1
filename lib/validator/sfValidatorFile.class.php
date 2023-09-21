@@ -100,7 +100,7 @@ class sfValidatorFile extends sfValidatorBase
   {
     if (!is_array($value) || !isset($value['tmp_name']))
     {
-      throw new sfValidatorError($this, 'invalid', array('value' => (string) $value));
+      throw new sfValidatorError($this, 'invalid', array('value' => $value));
     }
 
     if (!isset($value['name']))

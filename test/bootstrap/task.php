@@ -10,13 +10,12 @@
 
 require_once(dirname(__FILE__).'/unit.php');
 
-require_once(sfConfig::get('sf_symfony_lib_dir').'/command/sfCommandApplication.class.php');
-require_once(sfConfig::get('sf_symfony_lib_dir').'/command/sfSymfonyCommandApplication.class.php');
+if (!isset($root_dir))
+{
+    $root_dir = realpath(dirname(__FILE__).sprintf('/../%s/fixtures', isset($type) ? $type : 'functional'));
+}
 
-$tmpDir = sys_get_temp_dir().DIRECTORY_SEPARATOR.'sf_'.rand(11111, 99999);
-mkdir($tmpDir, 0777, true);
-chdir($tmpDir);
-
+require_once $root_dir.'/config/ProjectConfiguration.class.php';
 $application = new sfSymfonyCommandApplication(new sfEventDispatcher(), new sfFormatter(), array(
   'symfony_lib_dir' => sfConfig::get('sf_symfony_lib_dir'),
 ));

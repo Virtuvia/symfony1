@@ -164,10 +164,12 @@ class sfI18N
    */
   public function setCulture($culture)
   {
+    $culture = implode('_', Locale::parseLocale($culture));
+
     $this->culture = $culture;
 
     // change user locale for formatting, collation, and internal error messages
-    setlocale(LC_ALL, 'en_US.utf8', 'en_US.UTF8', 'en_US.utf-8', 'en_US.UTF-8');
+    setlocale(LC_ALL, $culture.'.utf8', $culture.'.UTF8', $culture.'.utf-8', $culture.'.UTF-8');
     setlocale(LC_COLLATE, $culture.'.utf8', $culture.'.UTF8', $culture.'.utf-8', $culture.'.UTF-8');
     setlocale(LC_CTYPE, $culture.'.utf8', $culture.'.UTF8', $culture.'.utf-8', $culture.'.UTF-8');
     setlocale(LC_MONETARY, $culture.'.utf8', $culture.'.UTF8', $culture.'.utf-8', $culture.'.UTF-8');

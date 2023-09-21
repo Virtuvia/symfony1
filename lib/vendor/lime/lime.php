@@ -570,7 +570,7 @@ class lime_test
     $this->error($type.': '.$message, $file, $line, $trace);
   }
 
-  public function handle_exception(Exception $exception)
+  public function handle_exception(\Throwable $exception)
   {
     $this->error(get_class($exception).': '.$exception->getMessage(), $exception->getFile(), $exception->getLine(), $exception->getTrace());
 
@@ -1108,11 +1108,6 @@ class lime_coverage extends lime_registration
     if (!function_exists('xdebug_start_code_coverage'))
     {
       throw new Exception('You must install and enable xdebug before using lime coverage.');
-    }
-
-    if (!ini_get('xdebug.extended_info'))
-    {
-      throw new Exception('You must set xdebug.extended_info to 1 in your php.ini to use lime coverage.');
     }
   }
 

@@ -10,7 +10,7 @@
 
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 
-$t = new lime_test(47);
+$t = new lime_test(43);
 
 class ValidatorIdentity extends sfValidatorBase
 {

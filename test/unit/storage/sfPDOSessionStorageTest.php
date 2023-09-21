@@ -11,7 +11,7 @@
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 
 ob_start();
-$plan = 15;
+$plan = 18;
 $t = new lime_test($plan);
 
 if (!extension_loaded('SQLite') && !extension_loaded('pdo_SQLite'))
@@ -33,12 +33,21 @@ $t->ok($storage instanceof sfStorage, 'sfPDOSessionStorage is an instance of sfS
 $t->ok($storage instanceof sfDatabaseSessionStorage, 'sfPDOSessionStorage is an instance of sfDatabaseSessionStorage');
 
 // regenerate()
-$oldSessionData = 'foo:bar';
-$storage->sessionWrite($session_id, $oldSessionData);
-$storage->regenerate(false);
+$_SESSION['foo'] = 'bar';
+$t->ok($storage->regenerate(false), 'session regenerated');
 
-$newSessionData = 'foo:bar:baz';
-$storage->sessionWrite(session_id(), $newSessionData);
+$result = $connection->query(sprintf('SELECT sess_id, sess_data FROM session WHERE sess_id = "%s"', session_id()));
+$data = $result->fetchAll();
+$t->is(count($data), 1, 'regenerate() has created a new session record');
+$oldSessionData = $data[0]['sess_data'];
+
+$_SESSION['foo'] = 'bar:baz';
+session_commit();
+$result = $connection->query(sprintf('SELECT sess_id, sess_data FROM session WHERE sess_id = "%s"', session_id()));
+$data = $result->fetchAll();
+$t->is(count($data), 1, 'regenerate() has created a new session record');
+$newSessionData = $data[0]['sess_data'];
+
 $t->isnt(session_id(), $session_id, 'regenerate() regenerated the session with a different session id');
 
 // checking if the old session record still exists

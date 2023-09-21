@@ -3,13 +3,28 @@
     "description": "Symfony is a complete framework designed to optimize the development of web applications by way of several key features.",
     "license": "MIT",
     "require": {
-        "php": ">=5.3.0",
-        "symfony/yaml": "@stable",
-        "symfony/polyfill-php73": "^1.13"
+        "php": ">=7.4.0",
+        "ext-apcu": "*",
+        "ext-intl": "*",
+        "ext-xml": "*",
+        "symfony/yaml": "v3.4.47",
+        "symfony/form": "v3.4.47"
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "1.99",
+        "symfony/polyfill-intl-grapheme": "1.99",
+        "symfony/polyfill-intl-icu": "1.99",
+        "symfony/polyfill-intl-normalizer": "1.99",
+        "symfony/polyfill-mbstring": "1.99"
     },
     "autoload": {
         "classmap": [
-            "lib/"
+            "lib/",
+            "test/functional/fixtures/lib",
+            "test/functional/fixtures/apps/*/lib",
+            "test/functional/fixtures/apps/*/modules/*/lib",
+            "test/functional/fixtures/plugins/*/lib",
+            "test/functional/fixtures/plugins/*/modules/*/lib"
         ],
         "files": [
             "symfony_version.php",

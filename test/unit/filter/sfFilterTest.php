@@ -13,7 +13,7 @@ require_once($_test_dir.'/unit/sfContextMock.class.php');
 
 $t = new lime_test(17);
 
-class myFilter extends sfFilter
+class myTestFilter extends sfFilter
 {
   public function isFirstCall()
   {
@@ -22,11 +22,11 @@ class myFilter extends sfFilter
 }
 
 $context = sfContext::getInstance();
-$filter = new myFilter($context);
+$filter = new myTestFilter($context);
 
 // ->initialize()
 $t->diag('->initialize()');
-$filter = new myFilter($context);
+$filter = new myTestFilter($context);
 $t->is($filter->getContext(), $context, '->initialize() takes a sfContext object as its first argument');
 $filter->initialize($context, array('foo' => 'bar'));
 $t->is($filter->getParameter('foo'), 'bar', '->initialize() takes an array of parameters as its second argument');
@@ -42,7 +42,7 @@ $t->is($filter->isFirstCall('beforeExecution'), true, '->isFirstCall() returns t
 $t->is($filter->isFirstCall('beforeExecution'), false, '->isFirstCall() returns false if this is not the first call with this argument');
 $t->is($filter->isFirstCall('beforeExecution'), false, '->isFirstCall() returns false if this is not the first call with this argument');
 
-$filter = new myFilter($context);
+$filter = new myTestFilter($context);
 $filter->initialize($context);
 $t->is($filter->isFirstCall('beforeExecution'), false, '->isFirstCall() returns false if this is not the first call with this argument');
 
