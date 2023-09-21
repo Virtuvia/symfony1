@@ -1026,38 +1026,38 @@ class sfForm implements ArrayAccess, Iterator, Countable
   /**
    * Returns true if the bound field exists (implements the ArrayAccess interface).
    *
-   * @param  string $name The name of the bound field
+   * @param  mixed $offset The name of the bound field
    *
    * @return bool true if the widget exists, false otherwise
    */
-  public function offsetExists($name)
+  public function offsetExists($offset): bool
   {
-    return isset($this->widgetSchema[$name]);
+    return isset($this->widgetSchema[$offset]);
   }
 
   /**
    * Returns the form field associated with the name (implements the ArrayAccess interface).
    *
-   * @param  string $name  The offset of the value to get
+   * @param  mixed $offset  The offset of the value to get
    *
    * @return sfFormField   A form field instance
    */
-  public function offsetGet($name)
+  public function offsetGet($offset)
   {
-    if (!isset($this->formFields[$name]))
+    if (!isset($this->formFields[$offset]))
     {
-      if (!$widget = $this->widgetSchema[$name])
+      if (!$widget = $this->widgetSchema[$offset])
       {
-        throw new InvalidArgumentException(sprintf('Widget "%s" does not exist.', $name));
+        throw new InvalidArgumentException(sprintf('Widget "%s" does not exist.', $offset));
       }
 
       if ($this->isBound)
       {
-        $value = isset($this->taintedValues[$name]) ? $this->taintedValues[$name] : null;
+        $value = isset($this->taintedValues[$offset]) ? $this->taintedValues[$offset] : null;
       }
-      else if (isset($this->defaults[$name]))
+      else if (isset($this->defaults[$offset]))
       {
-        $value = $this->defaults[$name];
+        $value = $this->defaults[$offset];
       }
       else
       {
@@ -1066,21 +1066,21 @@ class sfForm implements ArrayAccess, Iterator, Countable
 
       $class = $widget instanceof sfWidgetFormSchema ? 'sfFormFieldSchema' : 'sfFormField';
 
-      $this->formFields[$name] = new $class($widget, $this->getFormFieldSchema(), $name, $value, $this->errorSchema[$name]);
+      $this->formFields[$offset] = new $class($widget, $this->getFormFieldSchema(), $offset, $value, $this->errorSchema[$offset]);
     }
 
-    return $this->formFields[$name];
+    return $this->formFields[$offset];
   }
 
   /**
    * Throws an exception saying that values cannot be set (implements the ArrayAccess interface).
    *
-   * @param string $offset (ignored)
-   * @param string $value (ignored)
+   * @param mixed $offset (ignored)
+   * @param mixed $value (ignored)
    *
    * @throws <b>LogicException</b>
    */
-  public function offsetSet($offset, $value)
+  public function offsetSet($offset, $value): void
   {
     throw new LogicException('Cannot update form fields.');
   }
@@ -1090,9 +1090,9 @@ class sfForm implements ArrayAccess, Iterator, Countable
    *
    * It removes the widget and the validator for the given field.
    *
-   * @param string $offset The field name
+   * @param mixed $offset The field name
    */
-  public function offsetUnset($offset)
+  public function offsetUnset($offset): void
   {
     unset(
       $this->widgetSchema[$offset],

@@ -652,65 +652,65 @@ class sfWidgetFormSchema extends sfWidgetForm implements ArrayAccess
   /**
    * Returns true if the schema has a field with the given name (implements the ArrayAccess interface).
    *
-   * @param string $name The field name
+   * @param mixed $offset The field name
    *
    * @return bool true if the schema has a field with the given name, false otherwise
    */
-  public function offsetExists($name)
+  public function offsetExists($offset): bool
   {
-    return isset($this->fields[$name]);
+    return isset($this->fields[$offset]);
   }
 
   /**
    * Gets the field associated with the given name (implements the ArrayAccess interface).
    *
-   * @param string $name The field name
+   * @param mixed $offset The field name
    *
    * @return sfWidget|null The sfWidget instance associated with the given name, null if it does not exist
    */
-  public function offsetGet($name)
+  public function offsetGet($offset)
   {
-    return isset($this->fields[$name]) ? $this->fields[$name] : null;
+    return $this->fields[$offset] ?? null;
   }
 
   /**
    * Sets a field (implements the ArrayAccess interface).
    *
-   * @param string   $name   The field name
+   * @param mixed   $offset   The field name
    * @param sfWidget $widget An sfWidget instance
    *
    * @throws InvalidArgumentException when the field is not instance of sfWidget
    */
-  public function offsetSet($name, $widget)
+  public function offsetSet($offset, $widget): void
   {
     if (!$widget instanceof sfWidget)
     {
       throw new InvalidArgumentException('A field must be an instance of sfWidget.');
     }
 
-    if (!isset($this->fields[$name]))
+    if (!isset($this->fields[$offset]))
     {
-      $this->positions[] = (string) $name;
+      $this->positions[] = (string) $offset;
     }
 
-    $this->fields[$name] = clone $widget;
-    $this->fields[$name]->setParent($this);
+    $this->fields[$offset] = clone $widget;
+    $this->fields[$offset]->setParent($this);
 
     if ($widget instanceof sfWidgetFormSchema)
     {
-      $this->fields[$name]->setNameFormat($name.'[%s]');
+      $this->fields[$offset]->setNameFormat($offset.'[%s]');
     }
   }
 
   /**
    * Removes a field by name (implements the ArrayAccess interface).
    *
-   * @param string $name field name
+   * @param mixed $offset field name
    */
-  public function offsetUnset($name)
+  public function offsetUnset($offset): void
   {
-    unset($this->fields[$name]);
-    if (false !== $position = array_search((string) $name, $this->positions))
+    unset($this->fields[$offset]);
+    if (false !== $position = array_search((string) $offset, $this->positions))
     {
       unset($this->positions[$position]);
 

@@ -87,32 +87,32 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
   /**
    * Returns true if the bound field exists (implements the ArrayAccess interface).
    *
-   * @param string $name The name of the bound field
+   * @param mixed $offset The name of the bound field
    *
    * @return bool true if the widget exists, false otherwise
    */
-  public function offsetExists($name)
+  public function offsetExists($offset): bool
   {
-    return isset($this->widget[$name]);
+    return isset($this->widget[$offset]);
   }
 
   /**
    * Returns the form field associated with the name (implements the ArrayAccess interface).
    *
-   * @param string $name The offset of the value to get
+   * @param mixed $offset The offset of the value to get
    *
    * @return sfFormField A form field instance
    */
-  public function offsetGet($name)
+  public function offsetGet($offset)
   {
-    if (!isset($this->fields[$name]))
+    if (!isset($this->fields[$offset]))
     {
-      if (null === $widget = $this->widget[$name])
+      if (null === $widget = $this->widget[$offset])
       {
-        throw new InvalidArgumentException(sprintf('Widget "%s" does not exist.', $name));
+        throw new InvalidArgumentException(sprintf('Widget "%s" does not exist.', $offset));
       }
 
-      $error = isset($this->error[$name]) ? $this->error[$name] : null;
+      $error = $this->error[$offset] ?? null;
 
       if ($widget instanceof sfWidgetFormSchema)
       {
@@ -128,21 +128,21 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
         $class = 'sfFormField';
       }
 
-      $this->fields[$name] = new $class($widget, $this, $name, isset($this->value[$name]) ? $this->value[$name] : null, $error);
+      $this->fields[$offset] = new $class($widget, $this, $offset, $this->value[$offset] ?? null, $error);
     }
 
-    return $this->fields[$name];
+    return $this->fields[$offset];
   }
 
   /**
    * Throws an exception saying that values cannot be set (implements the ArrayAccess interface).
    *
-   * @param string $offset (ignored)
-   * @param string $value (ignored)
+   * @param mixed $offset (ignored)
+   * @param mixed $value (ignored)
    *
    * @throws LogicException
    */
-  public function offsetSet($offset, $value)
+  public function offsetSet($offset, $value): void
   {
     throw new LogicException('Cannot update form fields (read-only).');
   }
@@ -150,11 +150,11 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
   /**
    * Throws an exception saying that values cannot be unset (implements the ArrayAccess interface).
    *
-   * @param string $offset (ignored)
+   * @param mixed $offset (ignored)
    *
    * @throws LogicException
    */
-  public function offsetUnset($offset)
+  public function offsetUnset($offset): void
   {
     throw new LogicException('Cannot remove form fields (read-only).');
   }

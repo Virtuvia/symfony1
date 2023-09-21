@@ -98,11 +98,11 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
   /**
    * Returns true if the supplied offset isset in the array (as required by the ArrayAccess interface).
    *
-   * @param  string $offset  The offset of the value to check existance of
+   * @param  mixed $offset  The offset of the value to check existance of
    *
    * @return bool true if the offset isset; false otherwise
    */
-  public function offsetExists($offset)
+  public function offsetExists($offset): bool
   {
     return isset($this->value[$offset]);
   }
@@ -110,7 +110,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
   /**
    * Returns the element associated with the offset supplied (as required by the ArrayAccess interface).
    *
-   * @param  string $offset  The offset of the value to get
+   * @param  mixed $offset  The offset of the value to get
    *
    * @return mixed The escaped value
    */
@@ -126,12 +126,12 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
    * This (and the other sfOutputEscaper classes) are designed to be read only
    * so this is an illegal operation.
    *
-   * @param  string $offset  (ignored)
-   * @param  string $value   (ignored)
+   * @param  mixed $offset  (ignored)
+   * @param  mixed $value   (ignored)
    *
    * @throws sfException
    */
-  public function offsetSet($offset, $value)
+  public function offsetSet($offset, $value): void
   {
     throw new sfException('Cannot set values.');
   }
@@ -143,11 +143,11 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
    * This (and the other sfOutputEscaper classes) are designed to be read only
    * so this is an illegal operation.
    *
-   * @param  string $offset  (ignored)
+   * @param  mixed $offset  (ignored)
    *
    * @throws sfException
    */
-  public function offsetUnset($offset)
+  public function offsetUnset($offset): void
   {
     throw new sfException('Cannot unset values.');
   }

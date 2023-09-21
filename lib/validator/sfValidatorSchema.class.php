@@ -303,51 +303,51 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
   /**
    * Returns true if the schema has a field with the given name (implements the ArrayAccess interface).
    *
-   * @param  string  $name  The field name
+   * @param  mixed  $offset  The field name
    *
    * @return bool true if the schema has a field with the given name, false otherwise
    */
-  public function offsetExists($name)
+  public function offsetExists($offset): bool
   {
-    return isset($this->fields[$name]);
+    return isset($this->fields[$offset]);
   }
 
   /**
    * Gets the field associated with the given name (implements the ArrayAccess interface).
    *
-   * @param  string $name  The field name
+   * @param  mixed $offset  The field name
    *
    * @return sfValidatorBase The sfValidatorBase instance associated with the given name, null if it does not exist
    */
-  public function offsetGet($name)
+  public function offsetGet($offset)
   {
-    return isset($this->fields[$name]) ? $this->fields[$name] : null;
+    return $this->fields[$offset] ?? null;
   }
 
   /**
    * Sets a field (implements the ArrayAccess interface).
    *
-   * @param string          $name       The field name
+   * @param mixed          $offset       The field name
    * @param sfValidatorBase $validator  An sfValidatorBase instance
    */
-  public function offsetSet($name, $validator)
+  public function offsetSet($offset, $validator): void
   {
     if (!$validator instanceof sfValidatorBase)
     {
       throw new InvalidArgumentException('A field must be an instance of sfValidatorBase.');
     }
 
-    $this->fields[$name] = clone $validator;
+    $this->fields[$offset] = clone $validator;
   }
 
   /**
    * Removes a field by name (implements the ArrayAccess interface).
    *
-   * @param string $name
+   * @param mixed $offset
    */
-  public function offsetUnset($name)
+  public function offsetUnset($offset): void
   {
-    unset($this->fields[$name]);
+    unset($this->fields[$offset]);
   }
 
   /**

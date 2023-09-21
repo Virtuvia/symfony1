@@ -217,34 +217,34 @@ class sfUser implements ArrayAccess
   /**
    * Returns true if the user attribute exists (implements the ArrayAccess interface).
    *
-   * @param  string $name The name of the user attribute
+   * @param  mixed $offset The name of the user attribute
    *
    * @return bool true if the user attribute exists, false otherwise
    */
-  public function offsetExists($name)
+  public function offsetExists($offset): bool
   {
-    return $this->hasAttribute($name);
+    return $this->hasAttribute($offset);
   }
 
   /**
    * Returns the user attribute associated with the name (implements the ArrayAccess interface).
    *
-   * @param  string $name  The offset of the value to get
+   * @param  mixed $offset  The offset of the value to get
    *
    * @return mixed The user attribute if exists, null otherwise
    */
-  public function offsetGet($name)
+  public function offsetGet($offset)
   {
-    return $this->getAttribute($name, false);
+    return $this->getAttribute($offset, false);
   }
 
   /**
    * Sets the user attribute associated with the offset (implements the ArrayAccess interface).
    *
-   * @param string $offset The parameter name
-   * @param string $value The parameter value
+   * @param mixed $offset The parameter name
+   * @param mixed $value The parameter value
    */
-  public function offsetSet($offset, $value)
+  public function offsetSet($offset, $value): void
   {
     $this->setAttribute($offset, $value);
   }
@@ -252,9 +252,9 @@ class sfUser implements ArrayAccess
   /**
    * Unsets the user attribute associated with the offset (implements the ArrayAccess interface).
    *
-   * @param string $offset The parameter name
+   * @param mixed $offset The parameter name
    */
-  public function offsetUnset($offset)
+  public function offsetUnset($offset): void
   {
     $this->getAttributeHolder()->remove($offset);
   }

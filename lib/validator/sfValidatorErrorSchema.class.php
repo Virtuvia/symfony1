@@ -252,36 +252,36 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
   /**
    * Returns true if the error exists (implements the ArrayAccess interface).
    *
-   * @param  string $name  The name of the error
+   * @param  mixed $offset  The name of the error
    *
    * @return bool true if the error exists, false otherwise
    */
-  public function offsetExists($name)
+  public function offsetExists($offset): bool
   {
-    return isset($this->errors[$name]);
+    return isset($this->errors[$offset]);
   }
 
   /**
    * Returns the error associated with the name (implements the ArrayAccess interface).
    *
-   * @param  string $name  The offset of the value to get
+   * @param  mixed $offset  The offset of the value to get
    *
    * @return sfValidatorError A sfValidatorError instance
    */
-  public function offsetGet($name)
+  public function offsetGet($offset)
   {
-    return isset($this->errors[$name]) ? $this->errors[$name] : null;
+    return $this->errors[$offset] ?? null;
   }
 
   /**
    * Throws an exception saying that values cannot be set (implements the ArrayAccess interface).
    *
-   * @param string $offset  (ignored)
-   * @param string $value   (ignored)
+   * @param mixed $offset  (ignored)
+   * @param mixed $value   (ignored)
    *
    * @throws LogicException
    */
-  public function offsetSet($offset, $value)
+  public function offsetSet($offset, $value): void
   {
     throw new LogicException('Unable update an error.');
   }
@@ -289,9 +289,9 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
   /**
    * Impossible to call because this is an exception!
    *
-   * @param string $offset  (ignored)
+   * @param mixed $offset  (ignored)
    */
-  public function offsetUnset($offset)
+  public function offsetUnset($offset): void
   {
   }
 

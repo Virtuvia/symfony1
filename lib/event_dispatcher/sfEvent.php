@@ -113,50 +113,50 @@ class sfEvent implements ArrayAccess
   /**
    * Returns true if the parameter exists (implements the ArrayAccess interface).
    *
-   * @param  string  $name  The parameter name
+   * @param  mixed  $offset  The parameter name
    *
    * @return bool true if the parameter exists, false otherwise
    */
-  public function offsetExists($name)
+  public function offsetExists($offset): bool
   {
-    return array_key_exists($name, $this->parameters);
+    return array_key_exists($offset, $this->parameters);
   }
 
   /**
    * Returns a parameter value (implements the ArrayAccess interface).
    *
-   * @param  string  $name  The parameter name
+   * @param  mixed  $offset  The parameter name
    *
    * @return mixed  The parameter value
    */
-  public function offsetGet($name)
+  public function offsetGet($offset)
   {
-    if (!array_key_exists($name, $this->parameters))
+    if (!array_key_exists($offset, $this->parameters))
     {
-      throw new InvalidArgumentException(sprintf('The event "%s" has no "%s" parameter.', $this->name, $name));
+      throw new InvalidArgumentException(sprintf('The event "%s" has no "%s" parameter.', $this->name, $offset));
     }
 
-    return $this->parameters[$name];
+    return $this->parameters[$offset];
   }
 
   /**
    * Sets a parameter (implements the ArrayAccess interface).
    *
-   * @param string  $name   The parameter name
+   * @param mixed  $offset   The parameter name
    * @param mixed   $value  The parameter value 
    */
-  public function offsetSet($name, $value)
+  public function offsetSet($offset, $value): void
   {
-    $this->parameters[$name] = $value;
+    $this->parameters[$offset] = $value;
   }
 
   /**
    * Removes a parameter (implements the ArrayAccess interface).
    *
-   * @param string $name    The parameter name
+   * @param mixed $name    The parameter name
    */
-  public function offsetUnset($name)
+  public function offsetUnset($offset): void
   {
-    unset($this->parameters[$name]);
+    unset($this->parameters[$offset]);
   }
 }
