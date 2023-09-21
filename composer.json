@@ -3,12 +3,12 @@
     "description": "Symfony is a complete framework designed to optimize the development of web applications by way of several key features.",
     "license": "MIT",
     "require": {
-        "php": ">=7.4.0",
+        "php": "7.4.* | 8.1.*",
         "ext-apcu": "*",
         "ext-intl": "*",
         "ext-xml": "*",
-        "symfony/yaml": "v3.4.47",
-        "symfony/form": "v3.4.47"
+        "symfony/yaml": ">=v3.4.47 <=v3.4.49",
+        "symfony/form": ">=v3.4.47 <=v3.4.49"
     },
     "replace": {
         "symfony/polyfill-ctype": "1.99",
