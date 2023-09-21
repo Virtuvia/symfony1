@@ -668,6 +668,7 @@ class sfWidgetFormSchema extends sfWidgetForm implements ArrayAccess
    *
    * @return sfWidget|null The sfWidget instance associated with the given name, null if it does not exist
    */
+  #[\ReturnTypeWillChange]
   public function offsetGet($offset)
   {
     return $this->fields[$offset] ?? null;

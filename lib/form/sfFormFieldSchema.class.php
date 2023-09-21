@@ -103,6 +103,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
    *
    * @return sfFormField A form field instance
    */
+  #[\ReturnTypeWillChange]
   public function offsetGet($offset)
   {
     if (!isset($this->fields[$offset]))
@@ -173,6 +174,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
    *
    * @return string The key
    */
+  #[\ReturnTypeWillChange]
   public function key()
   {
     return current($this->fieldNames);
@@ -183,6 +185,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
    *
    * @return mixed The escaped value
    */
+  #[\ReturnTypeWillChange]
   public function current()
   {
     return $this[current($this->fieldNames)];

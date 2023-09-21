@@ -528,6 +528,7 @@ abstract class sfPager implements Iterator, Countable
    *
    * @see Iterator
    */
+  #[\ReturnTypeWillChange]
   public function current()
   {
     if (!$this->isIteratorInitialized())
@@ -543,6 +544,7 @@ abstract class sfPager implements Iterator, Countable
    *
    * @see Iterator
    */
+  #[\ReturnTypeWillChange]
   public function key()
   {
     if (!$this->isIteratorInitialized())

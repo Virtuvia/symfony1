@@ -64,6 +64,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
    *
    * @return mixed The escaped value
    */
+  #[\ReturnTypeWillChange]
   public function current()
   {
     return sfOutputEscaper::escape($this->escapingMethod, $this->iterator->current());
@@ -74,6 +75,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
    *
    * @return string Iterator key
    */
+  #[\ReturnTypeWillChange]
   public function key()
   {
     return $this->iterator->key();
@@ -117,6 +119,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
    *
    * @return mixed The escaped value
    */
+  #[\ReturnTypeWillChange]
   public function offsetGet($offset)
   {
     return sfOutputEscaper::escape($this->escapingMethod, $this->value[$offset]);

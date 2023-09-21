@@ -319,6 +319,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
    *
    * @return sfValidatorBase The sfValidatorBase instance associated with the given name, null if it does not exist
    */
+  #[\ReturnTypeWillChange]
   public function offsetGet($offset)
   {
     return $this->fields[$offset] ?? null;

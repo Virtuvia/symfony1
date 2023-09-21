@@ -215,6 +215,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
    *
    * @return string The key
    */
+  #[\ReturnTypeWillChange]
   public function key()
   {
     return key($this->errors);
@@ -225,6 +226,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
    *
    * @return mixed The escaped value
    */
+  #[\ReturnTypeWillChange]
   public function current()
   {
     return current($this->errors);
@@ -269,6 +271,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
    *
    * @return sfValidatorError A sfValidatorError instance
    */
+  #[\ReturnTypeWillChange]
   public function offsetGet($offset)
   {
     return $this->errors[$offset] ?? null;

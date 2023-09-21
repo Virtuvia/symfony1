@@ -1042,6 +1042,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    *
    * @return sfFormField   A form field instance
    */
+  #[\ReturnTypeWillChange]
   public function offsetGet($offset)
   {
     if (!isset($this->formFields[$offset]))
@@ -1169,6 +1170,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    *
    * @return string The key
    */
+  #[\ReturnTypeWillChange]
   public function key()
   {
     return current($this->fieldNames);
@@ -1179,6 +1181,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    *
    * @return mixed The escaped value
    */
+  #[\ReturnTypeWillChange]
   public function current()
   {
     return $this[current($this->fieldNames)];

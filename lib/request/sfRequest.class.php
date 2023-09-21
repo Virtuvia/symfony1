@@ -163,6 +163,7 @@ abstract class sfRequest implements ArrayAccess
    *
    * @return mixed The request parameter if exists, null otherwise
    */
+  #[\ReturnTypeWillChange]
   public function offsetGet($offset)
   {
     return $this->getParameter($offset, false);

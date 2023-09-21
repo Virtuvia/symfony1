@@ -73,6 +73,7 @@ class sfRouteCollection implements Iterator
    *
    * @return string The key
    */
+  #[\ReturnTypeWillChange]
   public function key()
   {
     return key($this->routes);
@@ -83,6 +84,7 @@ class sfRouteCollection implements Iterator
    *
    * @return mixed The escaped value
    */
+  #[\ReturnTypeWillChange]
   public function current()
   {
     return current($this->routes);

@@ -327,6 +327,7 @@ class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
   /**
    * @see sfWidgetFormSchema
    */
+  #[\ReturnTypeWillChange]
   public function offsetGet($offset)
   {
     return $this->widget[$offset];

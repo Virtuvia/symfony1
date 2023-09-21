@@ -575,6 +575,7 @@ class sfDomCssSelector implements Countable, Iterator
    *
    * @return string The key
    */
+  #[\ReturnTypeWillChange]
   public function key()
   {
     return key($this->nodes);
@@ -585,6 +586,7 @@ class sfDomCssSelector implements Countable, Iterator
    *
    * @return mixed The escaped value
    */
+  #[\ReturnTypeWillChange]
   public function current()
   {
     return current($this->nodes);
