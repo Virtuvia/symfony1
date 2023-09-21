@@ -34,15 +34,16 @@ $t->is($e->getArguments(true), array('value' => 'foo<br />', 'max_length' => 1),
 
 // ->getMessageFormat()
 $t->diag('->getMessageFormat()');
-$t->is($e->getMessageFormat(), $v->getMessage($e->getCode()), '->getMessageFormat()');
+$t->is($e->getMessageFormat(), $v->getMessage($e->getCodeString()), '->getMessageFormat()');
 
 // ->getMessage()
 $t->diag('->getMessage()');
 $t->is($e->getMessage(), '"foo&lt;br /&gt;" is too long (1 characters max).', '->getMessage() returns the error message string');
 
 // ->getCode()
-$t->diag('->getCode()');
-$t->is($e->getCode(), 'max_length', '->getCode() returns the error code');
+$t->diag('->getCodeString()');
+$t->is($e->getCode(), 0, '->getCode() returns the error code');
+$t->is($e->getCodeString(), 'max_length', '->getCodeString() returns the error code');
 
 // ->__toString()
 $t->diag('__toString()');
@@ -86,6 +87,6 @@ catch (Exception $e)
 
 $e1 = unserialize($serialized);
 $t->is($e1->getMessage(), $e->getMessage(), 'sfValidatorError implements Serializable');
-$t->is($e1->getCode(), $e->getCode(), 'sfValidatorError implements Serializable');
+$t->is($e1->getCodeString(), $e->getCodeString(), 'sfValidatorError implements Serializable');
 $t->is(get_class($e1->getValidator()), get_class($e->getValidator()), 'sfValidatorError implements Serializable');
 $t->is($e1->getArguments(), $e->getArguments(), 'sfValidatorError implements Serializable');

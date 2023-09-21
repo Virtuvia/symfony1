@@ -86,7 +86,7 @@ foreach (array(
     catch (sfValidatorError $e)
     {
       $t->pass('->clean() throws an sfValidatorError if the value is the comparison failed');
-      $t->is($e->getCode(), $globalError ? 'invalid' : 'left [invalid]', '->clean() throws a sfValidatorError');
+      $t->is($e->getCodeString(), $globalError ? 'invalid' : 'left [invalid]', '->clean() throws a sfValidatorError');
     }
   }
 }

@@ -38,18 +38,18 @@ $t->diag('embedded errors');
 $es1 = new sfValidatorErrorSchema($v1, array($e1, 'e1' => $e1, 'e2' => $e2));
 $es = new sfValidatorErrorSchema($v1, array($e1, 'e1' => $e1, 'e2' => $es1));
 $es->addError($e2, 'e1');
-$t->is($es->getCode(), 'max_length e1 [max_length min_length] e2 [max_length e1 [max_length] e2 [min_length]]', '->addError() adds an error to the error schema');
+$t->is($es->getCodeString(), 'max_length e1 [max_length min_length] e2 [max_length e1 [max_length] e2 [min_length]]', '->addError() adds an error to the error schema');
 $es->addError($e2);
-$t->is($es->getCode(), 'max_length min_length e1 [max_length min_length] e2 [max_length e1 [max_length] e2 [min_length]]', '->addError() adds an error to the error schema');
+$t->is($es->getCodeString(), 'max_length min_length e1 [max_length min_length] e2 [max_length e1 [max_length] e2 [min_length]]', '->addError() adds an error to the error schema');
 $es->addError($es1, 'e3');
-$t->is($es->getCode(), 'max_length min_length e1 [max_length min_length] e2 [max_length e1 [max_length] e2 [min_length]] e3 [max_length e1 [max_length] e2 [min_length]]', '->addError() adds an error to the error schema');
+$t->is($es->getCodeString(), 'max_length min_length e1 [max_length min_length] e2 [max_length e1 [max_length] e2 [min_length]] e3 [max_length e1 [max_length] e2 [min_length]]', '->addError() adds an error to the error schema');
 $es->addError($es1);
-$t->is($es->getCode(), 'max_length min_length max_length e1 [max_length min_length max_length] e2 [max_length min_length e1 [max_length] e2 [min_length]] e3 [max_length e1 [max_length] e2 [min_length]]', '->addError() adds an error to the error schema');
+$t->is($es->getCodeString(), 'max_length min_length max_length e1 [max_length min_length max_length] e2 [max_length min_length e1 [max_length] e2 [min_length]] e3 [max_length e1 [max_length] e2 [min_length]]', '->addError() adds an error to the error schema');
 
 $es = new sfValidatorErrorSchema($v1, array($e1, 'e1' => $e1, 'e2' => $es1));
 $es2 = new sfValidatorErrorSchema($v1, array($e1, 'e1' => $e1, 'e2' => $es1));
 $es->addError($es2, 'e2');
-$t->is($es->getCode(), 'max_length e1 [max_length] e2 [max_length max_length e1 [max_length max_length] e2 [min_length max_length e1 [max_length] e2 [min_length]]]', '->addError() adds an error to the error schema');
+$t->is($es->getCodeString(), 'max_length e1 [max_length] e2 [max_length max_length e1 [max_length max_length] e2 [min_length max_length e1 [max_length] e2 [min_length]]]', '->addError() adds an error to the error schema');
 
 // ->addErrors()
 $t->diag('->addErrors()');
@@ -92,7 +92,9 @@ $t->is($e->getMessage(), '"foo" is too long (1 characters max). e2 ["bar" is too
 
 // ->getCode()
 $t->diag('->getCode()');
-$t->is($e->getCode(), 'max_length e2 [min_length] 2 [max_length]', '->getCode() returns the error code');
+$t->is($e->getCode(), 0, '->getCode() returns the error code');
+$t->diag('->getCodeString()');
+$t->is($e->getCodeString(), 'max_length e2 [min_length] 2 [max_length]', '->getCodeString() returns the error code');
 
 // implements Countable
 $t->diag('implements Countable');
@@ -165,7 +167,7 @@ catch (Exception $e)
 $e = new sfValidatorErrorSchema($v1);
 $e1 = unserialize($serialized);
 $t->is($e1->getMessage(), $e->getMessage(), 'sfValidatorErrorSchema implements Serializable');
-$t->is($e1->getCode(), $e->getCode(), 'sfValidatorErrorSchema implements Serializable');
+$t->is($e1->getCodeString(), $e->getCodeString(), 'sfValidatorErrorSchema implements Serializable');
 $t->is(get_class($e1->getValidator()), get_class($e->getValidator()), 'sfValidatorErrorSchema implements Serializable');
 $t->is($e1->getArguments(), $e->getArguments(), 'sfValidatorErrorSchema implements Serializable');
 $t->is($e1->getNamedErrors(), $e->getNamedErrors(), 'sfValidatorErrorSchema implements Serializable');

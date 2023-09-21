@@ -41,6 +41,6 @@ foreach (array(
   catch (sfValidatorError $e)
   {
     $t->pass('->clean() throws an sfValidatorError if the value is not a valid email');
-    $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+    $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
   }
 }

@@ -18,6 +18,8 @@
  */
 class sfValidatorError extends Exception implements Serializable
 {
+  protected string $codeString = '';
+
   protected
     $validator = null,
     $arguments = array();
@@ -35,7 +37,8 @@ class sfValidatorError extends Exception implements Serializable
     $this->arguments = $arguments;
 
     // override default exception message and code
-    $this->code = $code;
+    $this->codeString = (string) $code;
+    $this->code = is_numeric($code) ? $code : 0;
 
     if (!$messageFormat = $this->getMessageFormat())
     {
@@ -52,6 +55,11 @@ class sfValidatorError extends Exception implements Serializable
   public function __toString(): string
   {
     return $this->getMessage();
+  }
+
+  public function getCodeString(): string
+  {
+      return $this->codeString;
   }
 
   /**
@@ -117,7 +125,7 @@ class sfValidatorError extends Exception implements Serializable
    */
   public function getMessageFormat()
   {
-    $messageFormat = $this->validator->getMessage($this->code);
+    $messageFormat = $this->validator->getMessage($this->codeString);
     if (!$messageFormat)
     {
       $messageFormat = $this->getMessage();
@@ -140,7 +148,7 @@ class sfValidatorError extends Exception implements Serializable
    */
   public function serialize()
   {
-    return serialize(array($this->validator, $this->arguments, $this->code, $this->message));
+    return serialize(array($this->validator, $this->arguments, $this->code, $this->codeString, $this->message));
   }
 
   /**
@@ -151,6 +159,6 @@ class sfValidatorError extends Exception implements Serializable
    */
   public function unserialize($serialized)
   {
-    list($this->validator, $this->arguments, $this->code, $this->message) = unserialize($serialized);
+    list($this->validator, $this->arguments, $this->code, $this->codeString, $this->message) = unserialize($serialized);
   }
 }

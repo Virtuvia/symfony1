@@ -52,7 +52,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws a sfValidatorError');
-  $t->is($e->getCode(), 'must_be_foo', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'must_be_foo', '->clean() throws a sfValidatorError');
 }
 
 $t->diag('callback with arguments');

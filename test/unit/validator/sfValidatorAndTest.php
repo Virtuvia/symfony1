@@ -56,7 +56,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError exception if the input value is required');
-  $t->is($e->getCode(), 'required', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'required', '->clean() throws a sfValidatorError');
 }
 
 $v2->setOption('max_length', 2);
@@ -69,7 +69,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError exception if one of the validators fails');
-  $t->is($e[0]->getCode(), 'max_length', '->clean() throws a sfValidatorSchemaError');
+  $t->is($e[0]->getCodeString(), 'max_length', '->clean() throws a sfValidatorSchemaError');
   $t->is($e instanceof sfValidatorErrorSchema, 'max_length', '->clean() throws a sfValidatorSchemaError');
 }
 
@@ -84,8 +84,8 @@ catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError exception if one of the validators fails');
   $t->is(count($e), 2, '->clean() throws an error for every error');
-  $t->is($e[0]->getCode(), 'max_length', '->clean() throws a sfValidatorSchemaError');
-  $t->is($e[1]->getCode(), 'max_length', '->clean() throws a sfValidatorSchemaError');
+  $t->is($e[0]->getCodeString(), 'max_length', '->clean() throws a sfValidatorSchemaError');
+  $t->is($e[1]->getCodeString(), 'max_length', '->clean() throws a sfValidatorSchemaError');
   $t->is($e instanceof sfValidatorErrorSchema, 'max_length', '->clean() throws a sfValidatorSchemaError');
 }
 
@@ -100,7 +100,7 @@ catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError exception if one of the validators fails');
   $t->is(count($e), 1, '->clean() only returns the first error if halt_on_error option is true');
-  $t->is($e[0]->getCode(), 'max_length', '->clean() throws a sfValidatorSchemaError');
+  $t->is($e[0]->getCodeString(), 'max_length', '->clean() throws a sfValidatorSchemaError');
   $t->is($e instanceof sfValidatorErrorSchema, 'max_length', '->clean() throws a sfValidatorSchemaError');
 }
 
@@ -114,6 +114,6 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError exception if one of the validators fails');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError if invalid message is not empty');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError if invalid message is not empty');
   $t->is(!$e instanceof sfValidatorErrorSchema, 'max_length', '->clean() throws a sfValidatorError if invalid message is not empty');
 }

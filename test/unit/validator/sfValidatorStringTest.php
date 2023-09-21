@@ -33,7 +33,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('"max_length" option set the maximum length of the string');
-  $t->is($e->getCode(), 'max_length', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'max_length', '->clean() throws a sfValidatorError');
 }
 
 $v->setMessage('max_length', 'Too long');
@@ -60,7 +60,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('"min_length" option set the minimum length of the string');
-  $t->is($e->getCode(), 'min_length', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'min_length', '->clean() throws a sfValidatorError');
 }
 
 $v->setMessage('min_length', 'Too short');

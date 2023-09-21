@@ -71,7 +71,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('"min" option set the minimum number allowed');
-  $t->is($e->getCode(), 'min', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'min', '->clean() throws a sfValidatorError');
 }
 
 $v->setMessage('min', 'Too small');

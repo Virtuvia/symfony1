@@ -43,7 +43,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an error if the input value is not a true or a false value');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
 // empty

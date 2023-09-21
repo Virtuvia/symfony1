@@ -45,7 +45,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError if the value is not an expected value');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
 // choices as a callable
@@ -64,7 +64,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError if the value is not strictly an expected value');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
 // min/max options
@@ -78,7 +78,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError if the minimum number of values are not selected');
-  $t->is($e->getCode(), 'min', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'min', '->clean() throws a sfValidatorError');
 }
 
 try
@@ -90,5 +90,5 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError if more than the maximum number of values are selected');
-  $t->is($e->getCode(), 'max', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'max', '->clean() throws a sfValidatorError');
 }

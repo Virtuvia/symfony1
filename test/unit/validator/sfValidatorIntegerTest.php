@@ -28,7 +28,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws a sfValidatorError if the value is not an integer');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
 try
@@ -40,7 +40,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws a sfValidatorError if the value is not an integer');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
 $v->setOption('required', false);
@@ -57,7 +57,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('"max" option set the maximum number allowed');
-  $t->is($e->getCode(), 'max', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'max', '->clean() throws a sfValidatorError');
 }
 
 $v->setMessage('max', 'Too large');
@@ -84,7 +84,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('"min" option set the minimum number allowed');
-  $t->is($e->getCode(), 'min', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'min', '->clean() throws a sfValidatorError');
 }
 
 $v->setMessage('min', 'Too small');

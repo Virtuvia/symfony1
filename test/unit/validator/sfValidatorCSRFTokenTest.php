@@ -39,5 +39,5 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError if the token is not valid');
-  $t->is($e->getCode(), 'csrf_attack', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'csrf_attack', '->clean() throws a sfValidatorError');
 }

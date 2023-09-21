@@ -425,7 +425,7 @@ $f->setWidgetSchema(new sfWidgetFormSchema(array('file' => new sfWidgetFormInput
 $f->bind(array(1 => 'f', 2 => 'potencier'), array(
   'file' => array('name' => 'test1.txt', 'type' => 'text/plain', 'tmp_name' => '/tmp/test1.txt', 'error' => 0, 'size' => 100)
 ));
-$t->is($f->getErrorSchema()->getCode(), '1 [min_length] file [max_size]', '->bind() behaves correctly with files');
+$t->is($f->getErrorSchema()->getCodeString(), '1 [min_length] file [max_size]', '->bind() behaves correctly with files');
 
 try
 {
@@ -453,7 +453,7 @@ $pf->embedForm('ef', $ef);
 $pf->bind(array('ef' => array(1 => 'f', 2 => 'potencier')), array('ef' => array(
   'file' => array('name' => 'test1.txt', 'type' => 'text/plain', 'tmp_name' => '/tmp/test1.txt', 'error' => 0, 'size' => 100)
 )));
-$t->is($pf->getErrorSchema()->getCode(), 'ef [1 [min_length] file [max_size]]', '->bind() behaves correctly with files in embed form');
+$t->is($pf->getErrorSchema()->getCodeString(), 'ef [1 [min_length] file [max_size]]', '->bind() behaves correctly with files in embed form');
 
 
 // ->renderGlobalErrors()

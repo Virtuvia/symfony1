@@ -82,7 +82,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws a sfValidatorError if the value is required');
-  $t->is($e->getCode(), 'required', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'required', '->clean() throws a sfValidatorError');
 }
 
 try
@@ -94,7 +94,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws a sfValidatorError if the wrapped validator failed');
-  $t->is($e->getCode(), 'min_length', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'min_length', '->clean() throws a sfValidatorError');
 }
 
 $t->is($v->clean('  foo  '), 'foo', '->clean() cleans the value by executing the clean() method from the wrapped validator');

@@ -156,11 +156,11 @@ class sfTesterForm extends sfTester
       {
         if ($match[1] == '!')
         {
-          $this->tester->unlike($error->getCode(), substr($value, 1), sprintf('the submitted form has a "%s" error that does not match "%s".', $field, $value));
+          $this->tester->unlike($error->getCodeString(), substr($value, 1), sprintf('the submitted form has a "%s" error that does not match "%s".', $field, $value));
         }
         else
         {
-          $this->tester->like($error->getCode(), $value, sprintf('the submitted form has a "%s" error that matches "%s".', $field, $value));
+          $this->tester->like($error->getCodeString(), $value, sprintf('the submitted form has a "%s" error that matches "%s".', $field, $value));
         }
       }
     }
@@ -172,7 +172,7 @@ class sfTesterForm extends sfTester
       }
       else
       {
-        $this->tester->is($error->getCode(), $value, sprintf('the submitted form has a "%s" error (%s).', $field, $value));
+        $this->tester->is($error->getCodeString(), $value, sprintf('the submitted form has a "%s" error (%s).', $field, $value));
       }
     }
 

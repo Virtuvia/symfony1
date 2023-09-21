@@ -21,7 +21,7 @@ try
 catch (RuntimeException $e)
 {
   $t->pass('__construct() throws a sfValidatorError if you don\'t pass a from_date and a to_date option');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCode(), 0, '->clean() throws a sfValidatorError');
 }
 
 $v = new sfValidatorDateRange(array(
@@ -44,7 +44,8 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws a sfValidatorError if the from date is after the to date');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCode(), 0, '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
 // custom field names

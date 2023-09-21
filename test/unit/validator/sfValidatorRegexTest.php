@@ -44,7 +44,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError if the value does not match the pattern');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
 $v = new sfValidatorRegex(array('pattern' => '/^[0-9]+$/', 'must_match' => false));
@@ -59,7 +59,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError if the value matches the pattern if must_match is false');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
 $v = new sfValidatorRegex(array('pattern' => new sfCallable('generate_regex')));

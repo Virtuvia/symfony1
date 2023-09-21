@@ -36,7 +36,8 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
     $this->arguments = array();
 
     // override default exception message and code
-    $this->code    = '';
+    $this->codeString = '';
+    $this->code = 0;
     $this->message = '';
 
     $this->addErrors($errors);
@@ -300,9 +301,9 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
    */
   protected function updateCode()
   {
-    $this->code = implode(' ', array_merge(
-      array_map(function (sfValidatorError $e) { return $e->getCode(); }, $this->globalErrors),
-      array_map(function ($n, sfValidatorError $e) { return $n.' ['.$e->getCode().']'; }, array_keys($this->namedErrors), array_values($this->namedErrors))
+    $this->codeString = implode(' ', array_merge(
+      array_map(function (sfValidatorError $e) { return $e->getCodeString(); }, $this->globalErrors),
+      array_map(function ($n, sfValidatorError $e) { return $n.' ['.$e->getCodeString().']'; }, array_keys($this->namedErrors), array_values($this->namedErrors))
     ));
   }
 
@@ -324,7 +325,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
    */
   public function serialize()
   {
-    return serialize(array($this->validator, $this->arguments, $this->code, $this->message, $this->errors, $this->globalErrors, $this->namedErrors));
+    return serialize(array($this->validator, $this->arguments, $this->code, $this->codeString, $this->message, $this->errors, $this->globalErrors, $this->namedErrors));
   }
 
   /**
@@ -335,6 +336,6 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
    */
   public function unserialize($serialized)
   {
-    list($this->validator, $this->arguments, $this->code, $this->message, $this->errors, $this->globalErrors, $this->namedErrors) = unserialize($serialized);
+    list($this->validator, $this->arguments, $this->code, $this->codeString, $this->message, $this->errors, $this->globalErrors, $this->namedErrors) = unserialize($serialized);
   }
 }

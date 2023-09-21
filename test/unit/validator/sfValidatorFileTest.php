@@ -121,7 +121,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError if the given value is not well formatted');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 $f = $v->clean(array('tmp_name' => $tmpDir.'/test.txt'));
 $t->ok($f instanceof sfValidatedFile, '->clean() returns a sfValidatedFile instance');
@@ -148,7 +148,7 @@ foreach (array(UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE, UPLOAD_ERR_PARTIAL, UP
   catch (sfValidatorError $e)
   {
     $t->pass('->clean() throws an sfValidatorError if the error code is not UPLOAD_ERR_OK (0)');
-    $t->is($e->getCode(), $code = strtolower(str_replace('UPLOAD_ERR_', '', $e->getCode())), '->clean() throws an error code of '.$code);
+    $t->is($e->getCodeString(), $code = strtolower(str_replace('UPLOAD_ERR_', '', $e->getCodeString())), '->clean() throws an error code of '.$code);
   }
 }
 
@@ -163,7 +163,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError if the file size is too large');
-  $t->is($e->getCode(), 'max_size', '->clean() throws an error code of max_size');
+  $t->is($e->getCodeString(), 'max_size', '->clean() throws an error code of max_size');
 }
 $v->setOption('max_size', null);
 
@@ -178,7 +178,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError if the file mime type is not in mime_types option');
-  $t->is($e->getCode(), 'mime_types', '->clean() throws an error code of mime_types');
+  $t->is($e->getCodeString(), 'mime_types', '->clean() throws an error code of mime_types');
 }
 $v->setOption('mime_types', null);
 
@@ -193,7 +193,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError if the file is required and no file is uploaded');
-  $t->is($e->getCode(), 'required', '->clean() throws an error code of required');
+  $t->is($e->getCodeString(), 'required', '->clean() throws an error code of required');
 }
 try
 {
@@ -204,7 +204,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws an sfValidatorError if the file is required and no file is uploaded');
-  $t->is($e->getCode(), 'required', '->clean() throws an error code of required');
+  $t->is($e->getCodeString(), 'required', '->clean() throws an error code of required');
 }
 $v = new testValidatorFile(array('required' => false));
 $t->is($v->clean(array('tmp_name' => '', 'error' => UPLOAD_ERR_NO_FILE, 'name' => '', 'size' => 0, 'type' => '')), null, '->clean() handles the required option correctly');

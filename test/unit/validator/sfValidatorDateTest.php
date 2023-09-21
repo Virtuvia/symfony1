@@ -34,7 +34,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws a sfValidatorError if the date is a string and is not parsable by strtotime');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
 // validate timestamp
@@ -57,7 +57,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws a sfValidatorError if the date is not valid');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
 try
@@ -69,7 +69,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws a sfValidatorError if the date is not valid');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
 try
@@ -81,7 +81,7 @@ try
 catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws a sfValidatorError if the date is not valid');
-  $t->is($e->getCode(), 'invalid', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'invalid', '->clean() throws a sfValidatorError');
 }
 
 // validate regex
@@ -100,7 +100,7 @@ catch (sfValidatorError $e)
 {
   $t->pass('->clean() throws a sfValidatorError if the date does not match the regex');
   $t->like($e->getMessage(), '/'.preg_quote(htmlspecialchars($v->getOption('date_format'), ENT_QUOTES, 'UTF-8'), '/').'/', '->clean() returns the expected date format in the error message');
-  $t->is($e->getCode(), 'bad_format', '->clean() throws a sfValidatorError');
+  $t->is($e->getCodeString(), 'bad_format', '->clean() throws a sfValidatorError');
 }
 
 $v->setOption('date_format_error', 'dd/mm/YYYY');
