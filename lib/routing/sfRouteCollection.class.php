@@ -61,7 +61,7 @@ class sfRouteCollection implements Iterator
   /**
    * Reset the error array to the beginning (implements the Iterator interface).
    */
-  public function rewind()
+  public function rewind(): void
   {
     reset($this->routes);
 
@@ -91,7 +91,7 @@ class sfRouteCollection implements Iterator
   /**
    * Moves to the next route (implements the Iterator interface).
    */
-  public function next()
+  public function next(): void
   {
     next($this->routes);
 
@@ -103,7 +103,7 @@ class sfRouteCollection implements Iterator
    *
    * @return boolean The validity of the current route; true if it is valid
    */
-  public function valid()
+  public function valid(): bool
   {
     return $this->count > 0;
   }

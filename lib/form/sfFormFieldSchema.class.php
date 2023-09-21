@@ -162,7 +162,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
   /**
    * Resets the field names array to the beginning (implements the Iterator interface).
    */
-  public function rewind()
+  public function rewind(): void
   {
     reset($this->fieldNames);
     $this->count = count($this->fieldNames);
@@ -191,7 +191,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
   /**
    * Moves to the next form field (implements the Iterator interface).
    */
-  public function next()
+  public function next(): void
   {
     next($this->fieldNames);
     --$this->count;
@@ -202,7 +202,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
    *
    * @return boolean The validity of the current element; true if it is valid
    */
-  public function valid()
+  public function valid(): bool
   {
     return $this->count > 0;
   }
@@ -212,7 +212,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
    *
    * @return integer The number of embedded form fields
    */
-  public function count()
+  public function count(): int
   {
     return count($this->fieldNames);
   }

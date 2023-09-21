@@ -677,13 +677,13 @@ class sfWidgetFormSchema extends sfWidgetForm implements ArrayAccess
    * Sets a field (implements the ArrayAccess interface).
    *
    * @param mixed   $offset   The field name
-   * @param sfWidget $widget An sfWidget instance
+   * @param sfWidget $value An sfWidget instance
    *
    * @throws InvalidArgumentException when the field is not instance of sfWidget
    */
-  public function offsetSet($offset, $widget): void
+  public function offsetSet($offset, $value): void
   {
-    if (!$widget instanceof sfWidget)
+    if (!$value instanceof sfWidget)
     {
       throw new InvalidArgumentException('A field must be an instance of sfWidget.');
     }
@@ -693,10 +693,10 @@ class sfWidgetFormSchema extends sfWidgetForm implements ArrayAccess
       $this->positions[] = (string) $offset;
     }
 
-    $this->fields[$offset] = clone $widget;
+    $this->fields[$offset] = clone $value;
     $this->fields[$offset]->setParent($this);
 
-    if ($widget instanceof sfWidgetFormSchema)
+    if ($value instanceof sfWidgetFormSchema)
     {
       $this->fields[$offset]->setNameFormat($offset.'[%s]');
     }

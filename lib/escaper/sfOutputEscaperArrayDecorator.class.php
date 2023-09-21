@@ -41,7 +41,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
   /**
    * Reset the array to the beginning (as required for the Iterator interface).
    */
-  public function rewind()
+  public function rewind(): void
   {
     reset($this->value);
 
@@ -74,7 +74,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
   /**
    * Moves to the next element (as required by the Iterator interface).
    */
-  public function next()
+  public function next(): void
   {
     next($this->value);
 
@@ -90,7 +90,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
    *
    * @return bool The validity of the current element; true if it is valid
    */
-  public function valid()
+  public function valid(): bool
   {
     return $this->count > 0;
   }

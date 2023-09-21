@@ -49,7 +49,7 @@ class sfValidatorError extends Exception implements Serializable
    *
    * @return string The error message
    */
-  public function __toString()
+  public function __toString(): string
   {
     return $this->getMessage();
   }

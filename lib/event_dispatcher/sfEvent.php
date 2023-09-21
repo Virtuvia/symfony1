@@ -153,7 +153,7 @@ class sfEvent implements ArrayAccess
   /**
    * Removes a parameter (implements the ArrayAccess interface).
    *
-   * @param mixed $name    The parameter name
+   * @param mixed $offset    The parameter name
    */
   public function offsetUnset($offset): void
   {

@@ -328,16 +328,16 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
    * Sets a field (implements the ArrayAccess interface).
    *
    * @param mixed          $offset       The field name
-   * @param sfValidatorBase $validator  An sfValidatorBase instance
+   * @param sfValidatorBase $value  An sfValidatorBase instance
    */
-  public function offsetSet($offset, $validator): void
+  public function offsetSet($offset, $value): void
   {
-    if (!$validator instanceof sfValidatorBase)
+    if (!$value instanceof sfValidatorBase)
     {
       throw new InvalidArgumentException('A field must be an instance of sfValidatorBase.');
     }
 
-    $this->fields[$offset] = clone $validator;
+    $this->fields[$offset] = clone $value;
   }
 
   /**

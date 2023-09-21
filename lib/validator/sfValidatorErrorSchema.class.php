@@ -194,7 +194,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
    *
    * @return int The number of array
    */
-  public function count()
+  public function count(): int
   {
     return count($this->errors);
   }
@@ -202,7 +202,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
   /**
    * Reset the error array to the beginning (implements the Iterator interface).
    */
-  public function rewind()
+  public function rewind(): void
   {
     reset($this->errors);
 
@@ -232,7 +232,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
   /**
    * Moves to the next error (implements the Iterator interface).
    */
-  public function next()
+  public function next(): void
   {
     next($this->errors);
 
@@ -244,7 +244,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
    *
    * @return boolean The validity of the current element; true if it is valid
    */
-  public function valid()
+  public function valid(): bool
   {
     return $this->count > 0;
   }

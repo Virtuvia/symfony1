@@ -53,12 +53,10 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
 
   /**
    * Resets the iterator (as required by the Iterator interface).
-   *
-   * @return bool true, if the iterator rewinds successfully otherwise false
    */
-  public function rewind()
+  public function rewind(): void
   {
-    return $this->iterator->rewind();
+    $this->iterator->rewind();
   }
 
   /**
@@ -95,7 +93,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
    *
    * @return bool true if the current element is valid; false otherwise
    */
-  public function valid()
+  public function valid(): bool
   {
     return $this->iterator->valid();
   }
