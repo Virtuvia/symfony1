@@ -132,7 +132,7 @@ $t->is($response->getContentType(), $response->getHttpHeader('content-type'), '-
 
 $response->setContentType('text/xml');
 $response->setContentType('text/html');
-$t->is(count($response->getHttpHeader('content-type')), 1, '->setContentType() overrides previous content type if replace is true');
+$t->is('text/html; charset=ISO-8859-1', $response->getHttpHeader('content-type'), '->setContentType() overrides previous content type if replace is true');
 
 // ->getTitle() ->setTitle()
 $t->diag('->getTitle() ->setTitle()');

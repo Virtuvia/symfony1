@@ -547,27 +547,23 @@ class lime_test
     return array($traces[$last]['file'], $traces[$last]['line']);
   }
 
-  public function handle_error($code, $message, $file, $line, $context)
+  public function handle_error(int $errno, string $errstr, ?string $errfile = null, ?int $errline = null): bool
   {
-    if (!$this->options['error_reporting'] || ($code & error_reporting()) == 0)
+    if (!$this->options['error_reporting'] || (error_reporting() & $errno) === 0)
     {
       return false;
     }
 
-    switch ($code)
-    {
-      case E_WARNING:
-        $type = 'Warning';
-        break;
-      default:
-        $type = 'Notice';
-        break;
-    }
+    $type = $errno === E_WARNING ? 'Warning' : 'Notice';
 
+    // PHPCompatibility will warn that $errno has changed, but we drop the arguments via array_shift() before using them below
+    // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue
     $trace = debug_backtrace();
     array_shift($trace); // remove the handle_error() call from the trace
 
-    $this->error($type.': '.$message, $file, $line, $trace);
+    $this->error($type . ': ' . $errstr, $errfile, $errline, $trace);
+
+    return true;
   }
 
   public function handle_exception(\Throwable $exception)

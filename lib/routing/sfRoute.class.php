@@ -16,7 +16,7 @@
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @version    SVN: $Id: sfRoute.class.php 32939 2011-08-22 13:40:06Z fabien $
  */
-class sfRoute implements Serializable
+class sfRoute
 {
   protected
     $isBound           = false,
@@ -232,7 +232,7 @@ class sfRoute implements Serializable
     {
       // replace variables
       $variables = $this->variables;
-      uasort($variables, array('sfRoute', 'generateCompareVarsByStrlen'));
+      uasort($variables, static fn(string $a, string $b): int => strlen($b) <=> strlen($a));
       foreach ($variables as $variable => $value)
       {
         $url = str_replace($value, urlencode($tparams[$variable]), $url);
@@ -257,11 +257,6 @@ class sfRoute implements Serializable
     }
 
     return $url;
-  }
-
-  static private function generateCompareVarsByStrlen($a, $b)
-  {
-    return strlen($a) < strlen($b);
   }
 
   /**
@@ -838,17 +833,43 @@ class sfRoute implements Serializable
     }
   }
 
-  public function serialize()
+  public function __serialize(): array
   {
     // always serialize compiled routes
     $this->compile();
+
     // sfPatternRouting will always re-set defaultParameters, so no need to serialize them
-    return serialize(array($this->tokens, $this->defaultOptions, $this->options, $this->pattern, $this->staticPrefix, $this->regex, $this->variables, $this->defaults, $this->requirements, $this->suffix, $this->customToken));
+    return [
+      $this->tokens,
+      $this->defaultOptions,
+      $this->options,
+      $this->pattern,
+      $this->staticPrefix,
+      $this->regex,
+      $this->variables,
+      $this->defaults,
+      $this->requirements,
+      $this->suffix,
+      $this->customToken,
+    ];
   }
 
-  public function unserialize($data)
+  public function __unserialize(array $data): void
   {
-    list($this->tokens, $this->defaultOptions, $this->options, $this->pattern, $this->staticPrefix, $this->regex, $this->variables, $this->defaults, $this->requirements, $this->suffix, $this->customToken) = unserialize($data);
+    [
+      $this->tokens,
+      $this->defaultOptions,
+      $this->options,
+      $this->pattern,
+      $this->staticPrefix,
+      $this->regex,
+      $this->variables,
+      $this->defaults,
+      $this->requirements,
+      $this->suffix,
+      $this->customToken,
+    ] = $data;
+
     $this->compiled = true;
   }
 }

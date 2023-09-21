@@ -191,10 +191,10 @@ class sfParameterHolder
   /**
    * Unserializes a sfParameterHolder instance.
    *
-   * @param array $serialized  A serialized sfParameterHolder instance
+   * @param array $data  A serialized sfParameterHolder instance
    */
-  public function __unserialize(array $serialized): void
+  public function __unserialize(array $data): void
   {
-    $this->parameters = $serialized;
+    $this->parameters = $data;
   }
 }

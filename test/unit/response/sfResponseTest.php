@@ -10,14 +10,14 @@
 
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 
-class myResponse extends sfResponse
+class myResponseTestResponse extends sfResponse
 {
-  function __serialize(): array
+  public function __serialize(): array
   {
     return [];
   }
 
-  function __unserialize(array $serialized): void
+  public function __unserialize(array $data): void
   {
   }
 }
@@ -32,7 +32,7 @@ $dispatcher = new sfEventDispatcher();
 
 // ->initialize()
 $t->diag('->initialize()');
-$response = new myResponse($dispatcher, array('foo' => 'bar'));
+$response = new myResponseTestResponse($dispatcher, array('foo' => 'bar'));
 $options = $response->getOptions();
 $t->is($options['foo'], 'bar', '->initialize() takes an array of options as its second argument');
 $t->is($options['logging'], false, '->getOptions() returns options for response instance');
@@ -52,7 +52,7 @@ $t->is($content, 'test', '->sendContent() output the current response content');
 
 // ->serialize() ->unserialize()
 $t->diag('->__serialize() ->__unserialize()');
-$response = new myResponse($dispatcher);
+$response = new myResponseTestResponse($dispatcher);
 $t->ok(method_exists($response, '__serialize'), 'sfResponse is serializable');
 $t->ok(method_exists($response, '__unserialize'), 'sfResponse is unserializable');
 

@@ -375,11 +375,13 @@ class sfNamespacedParameterHolder extends sfParameterHolder
   /**
    * Unserializes a sfNamespacedParameterHolder instance.
    *
-   * @param array $serialized  A serialized sfNamespacedParameterHolder instance
+   * @param array $data  A serialized sfNamespacedParameterHolder instance
    */
-  public function __unserialize(array $serialized): void
+  public function __unserialize(array $data): void
   {
-    $this->default_namespace = $serialized[0];
-    $this->parameters = $serialized[1];
+    [
+        $this->default_namespace,
+        $this->parameters,
+    ] = $data;
   }
 }

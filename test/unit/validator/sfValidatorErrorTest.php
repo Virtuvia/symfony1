@@ -10,7 +10,7 @@
 
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 
-$t = new lime_test(14);
+$t = new lime_test(16);
 
 $v = new sfValidatorString();
 
@@ -49,20 +49,20 @@ $t->is($e->getCodeString(), 'max_length', '->getCodeString() returns the error c
 $t->diag('__toString()');
 $t->is($e->__toString(), $e->getMessage(), '->__toString() returns the error message string');
 
-// implements Serializable
-$t->diag('implements Serializable');
+// is serializable
+$t->diag('is serializable');
 
 // we test with non serializable objects
 // to ensure that the errors are always serializable
 // even if you use PDO as a session handler
-class NotSerializable implements Serializable
+class NotSerializableErrorTest
 {
-  public function serialize()
+  public function __serialize(): array
   {
     throw new Exception('Not serializable');
   }
 
-  public function unserialize($serialized)
+  public function __unserialize(array $data): void
   {
     throw new Exception('Not serializable');
   }
@@ -73,20 +73,21 @@ function will_crash($a)
   return serialize(new sfValidatorError(new sfValidatorString(), 'max_length', array('value' => 'foo<br />', 'max_length' => 1)));
 }
 
-$a = new NotSerializable();
+$a = new NotSerializableErrorTest();
 
 try
 {
   $serialized = will_crash($a);
-  $t->pass('sfValidatorError implements Serializable');
+  $t->pass('sfValidatorError is serializable');
 }
 catch (Exception $e)
 {
-  $t->fail('sfValidatorError implements Serializable');
+  $t->fail('sfValidatorError is serializable');
 }
 
 $e1 = unserialize($serialized);
-$t->is($e1->getMessage(), $e->getMessage(), 'sfValidatorError implements Serializable');
-$t->is($e1->getCodeString(), $e->getCodeString(), 'sfValidatorError implements Serializable');
-$t->is(get_class($e1->getValidator()), get_class($e->getValidator()), 'sfValidatorError implements Serializable');
-$t->is($e1->getArguments(), $e->getArguments(), 'sfValidatorError implements Serializable');
+$t->is($e1->getMessage(), $e->getMessage(), 'sfValidatorError is serializable');
+$t->is($e1->getCode(), $e->getCode(), 'sfValidatorError is serializable');
+$t->is($e1->getCodeString(), $e->getCodeString(), 'sfValidatorError is serializable');
+$t->is(get_class($e1->getValidator()), get_class($e->getValidator()), 'sfValidatorError is serializable');
+$t->is($e1->getArguments(), $e->getArguments(), 'sfValidatorError is serializable');

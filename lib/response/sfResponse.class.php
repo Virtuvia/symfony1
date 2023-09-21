@@ -161,13 +161,13 @@ abstract class sfResponse
    *
    * You need to inject a dispatcher after unserializing a sfResponse instance.
    *
-   * @param array $serialized  A serialized sfResponse instance
+   * @param array $data  A serialized sfResponse instance
    *
    */
-  public function __unserialize(array $serialized): void
+  public function __unserialize(array $data): void
   {
     [
       $this->content,
-    ] = $serialized;
+    ] = $data;
   }
 }

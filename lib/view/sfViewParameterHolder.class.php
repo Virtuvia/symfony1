@@ -179,11 +179,15 @@ class sfViewParameterHolder extends sfParameterHolder
   /**
    * Unserializes a sfViewParameterHolder instance.
    *
-   * @param array $serialized The serialized instance data
+   * @param array $data The serialized instance data
    */
-  public function __unserialize($serialized): void
+  public function __unserialize(array $data): void
   {
-    list($this->parameters, $escapingMethod, $escaping) = $serialized;
+    [
+        $this->parameters,
+        $escapingMethod,
+        $escaping,
+    ] = $data;
 
     $this->initialize(sfContext::hasInstance() ? sfContext::getInstance()->getEventDispatcher() : new sfEventDispatcher());
 

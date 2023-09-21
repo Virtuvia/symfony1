@@ -356,15 +356,22 @@ abstract class sfBrowserBase
     $this->domCssSelector = null;
     if (preg_match('/(x|ht)ml/i', $response->getContentType(), $matches))
     {
+      $content = $response->getContent();
       $this->dom = new DomDocument('1.0', $response->getCharset());
       $this->dom->validateOnParse = true;
       if ('x' == $matches[1])
       {
-        @$this->dom->loadXML($response->getContent());
+        if ($content === '') {
+          $content = '<xml></xml>';
+        }
+        @$this->dom->loadXML($content);
       }
       else
       {
-        @$this->dom->loadHTML($response->getContent());
+        if ($content === '') {
+          $content = '<html></html>';
+        }
+        @$this->dom->loadHTML($content);
       }
       $this->domCssSelector = new sfDomCssSelector($this->dom);
     }

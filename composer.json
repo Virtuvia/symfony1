@@ -8,7 +8,8 @@
         "ext-intl": "*",
         "ext-xml": "*",
         "symfony/yaml": ">=v3.4.47 <=v3.4.49",
-        "symfony/form": ">=v3.4.47 <=v3.4.49"
+        "symfony/form": ">=v3.4.47 <=v3.4.49",
+        "php81_bc/strftime": "0.5.0"
     },
     "autoload": {
         "classmap": [

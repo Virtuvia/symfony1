@@ -516,7 +516,7 @@ class sfCultureInfo
     $culture = $this->getInvariantCulture();
 
     $language = $culture->findInfo("Languages/{$lang}");
-    if (count($language) == 0)
+    if (empty($language))
     {
       return $this->culture;
     }

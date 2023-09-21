@@ -840,7 +840,7 @@ class sfWebResponse extends sfResponse
   /**
    * @see sfResponse
    */
-  public function __unserialize(array $serialized): void
+  public function __unserialize(array $data): void
   {
     [
       $this->content,
@@ -854,7 +854,7 @@ class sfWebResponse extends sfResponse
       $this->stylesheets,
       $this->javascripts,
       $this->slots,
-    ] = $serialized;
+    ] = $data;
   }
 
   /**

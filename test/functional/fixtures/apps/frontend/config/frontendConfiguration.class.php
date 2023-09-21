@@ -11,7 +11,8 @@ class frontendConfiguration extends sfApplicationConfiguration
 
   public function filter_parameters(sfEvent $event, $parameters)
   {
-    if (false !== stripos($event->getSubject()->getHttpHeader('user-agent'), 'iPhone'))
+    $userAgent = $event->getSubject()->getHttpHeader('user-agent');
+    if (!empty($userAgent) && false !== stripos($userAgent, 'iPhone'))
     {
       $event->getSubject()->setRequestFormat('iphone');
     }

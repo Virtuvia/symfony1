@@ -74,7 +74,7 @@ class sfCacheSessionStorage extends sfStorage
 
     $cookie = $this->request->getCookie($this->options['session_name']);
 
-    if(strpos($cookie, ':') !== false)
+    if(!empty($cookie) && strpos($cookie, ':') !== false)
     {
       // split cookie data id:signature(id+secret)
       list($id, $signature) = explode(':', $cookie, 2);
@@ -98,8 +98,8 @@ class sfCacheSessionStorage extends sfStorage
 
     if(empty($this->id))
     {
-       $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'localhost';
-       $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'ua';
+       $ip = $_SERVER['REMOTE_ADDR'] ?? 'localhost';
+       $ua = $_SERVER['HTTP_USER_AGENT'] ?? 'ua';
 
        // generate new id based on random # / ip / user agent / secret
        $this->id = md5(rand(0, 999999).$ip.$ua.$this->options['session_cookie_secret']);
@@ -230,9 +230,10 @@ class sfCacheSessionStorage extends sfStorage
     }
 
     // generate session id
-    $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'ua';
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'localhost';
+    $ua = $_SERVER['HTTP_USER_AGENT'] ?? 'ua';
     
-    $this->id = md5(rand(0, 999999).$_SERVER['REMOTE_ADDR'].$ua.$this->options['session_cookie_secret']);
+    $this->id = md5(rand(0, 999999).$ip.$ua.$this->options['session_cookie_secret']);
 
     // save data to cache
     $this->cache->set($this->id, serialize($this->data));

@@ -41,15 +41,22 @@ class sfTesterResponse extends sfTester
     $this->domCssSelector = null;
     if (preg_match('/(x|ht)ml/i', $this->response->getContentType(), $matches))
     {
+      $content = $this->response->getContent();
       $this->dom = new DOMDocument('1.0', $this->response->getCharset());
       $this->dom->validateOnParse = true;
       if ('x' == $matches[1])
       {
-        @$this->dom->loadXML($this->response->getContent());
+        if ($content === '') {
+          $content = '<xml></xml>';
+        }
+        @$this->dom->loadXML($content);
       }
       else
       {
-        @$this->dom->loadHTML($this->response->getContent());
+        if ($content === '') {
+          $content = '<html></html>';
+        }
+        @$this->dom->loadHTML($content);
       }
       $this->domCssSelector = new sfDomCssSelector($this->dom);
     }
