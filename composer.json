@@ -13,16 +13,20 @@
     },
     "autoload": {
         "classmap": [
-            "lib/",
+            "lib/"
+        ],
+        "files": [
+            "symfony_version.php",
+            "functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "classmap": [
             "test/functional/fixtures/lib",
             "test/functional/fixtures/apps/*/lib",
             "test/functional/fixtures/apps/*/modules/*/lib",
             "test/functional/fixtures/plugins/*/lib",
             "test/functional/fixtures/plugins/*/modules/*/lib"
-        ],
-        "files": [
-            "symfony_version.php",
-            "functions.php"
         ]
     }
 }
