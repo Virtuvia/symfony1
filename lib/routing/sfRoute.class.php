@@ -126,7 +126,7 @@ class sfRoute
     {
       if (!is_int($key))
       {
-        $parameters[$key] = urldecode($value);
+        $parameters[$key] = $value === null ? null : urldecode($value);
       }
     }
 
@@ -576,7 +576,7 @@ class sfRoute
         throw new InvalidArgumentException(sprintf('Unable to parse "%s" route near "%s".', $this->pattern, $buffer));
       }
     }
-    
+
     // check for suffix
     if ($this->suffix)
     {
