@@ -160,7 +160,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
    *
    * @return int The size of the array
    */
-  public function count()
+  public function count(): int
   {
     return symfony1_count($this->value);
   }

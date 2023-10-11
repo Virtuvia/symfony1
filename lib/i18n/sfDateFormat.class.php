@@ -239,10 +239,10 @@ class sfDateFormat
       }
       else
       {
-        $function = ucfirst($this->getFunctionName($pattern));
-        if ($function != null)
+        $function = $this->getFunctionName($pattern);
+        if ($function !== null)
         {
-          $fName = 'get'.$function;
+          $fName = 'get'.ucfirst($function);
           if (in_array($fName, $this->methods))
           {
             $tokens[$i] = $this->$fName($date, $pattern);
