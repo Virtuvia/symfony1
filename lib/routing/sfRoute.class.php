@@ -777,6 +777,10 @@ class sfRoute
       {
         $this->defaults[$value] = true;
       }
+      elseif ($value === null)
+      {
+          continue;
+      }
       else
       {
         $this->defaults[$key] = urldecode($value);
