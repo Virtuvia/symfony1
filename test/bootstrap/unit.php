@@ -16,7 +16,7 @@ ini_set('allow_url_fopen', 'on');
 
 $_test_dir = realpath(dirname(__FILE__).'/..');
 
-require_once __DIR__ . '/../../vendor/autoload.php';
+require_once 'autoload.php';
 
 require_once($_test_dir.'/../lib/vendor/lime/lime.php');
 require_once($_test_dir.'/../lib/config/sfConfig.class.php');
