@@ -779,7 +779,7 @@ class sfRoute
       }
       elseif ($value === null)
       {
-          continue;
+          $this->defaults[$key] = '';
       }
       else
       {
