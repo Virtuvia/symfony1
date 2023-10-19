@@ -111,6 +111,8 @@ EOF;
         if ($options['xml'])
         {
             file_put_contents($options['xml'], $h->to_xml());
+
+            return 0;
         }
 
         return $ret;
