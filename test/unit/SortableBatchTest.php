@@ -1,8 +1,8 @@
 <?php
 
-require_once dirname(__FILE__).'/../bootstrap/bootstrap.php';
+require_once dirname(__FILE__).'/../bootstrap/functional.php';
 
-$t = new lime_test();
+$t = new lime_test(5);
 
 $categories = Doctrine::getTable('SortableArticleCategory')->findAll();
 

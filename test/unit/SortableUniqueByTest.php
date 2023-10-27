@@ -1,8 +1,8 @@
 <?php
 
-require_once dirname(__FILE__).'/../bootstrap/bootstrap.php';
+require_once dirname(__FILE__).'/../bootstrap/functional.php';
 
-$t = new lime_test();
+$t = new lime_test(21);
 
 $categories = Doctrine::getTable('SortableArticleCategory')->findAll();
 
@@ -54,7 +54,7 @@ $t->info('Test Demote and Promote');
     $t->is($a3['position'], 2, 'Third item now has position of 2');
     $t->is($a4['position'], 1, 'Fourth item now has position of 1');
     $t->is($a5['position'], 3, 'Fifth item still has a position of 3');
-    
+
 $t->info('Test Removing an item - items after it should be promoted');
 
     $a2->delete(); doctrine_refresh($a1);
@@ -63,9 +63,9 @@ $t->info('Test Removing an item - items after it should be promoted');
     $a4->delete(); doctrine_refresh($a3, $a5);
     $t->is($a3['position'], 1, '"Third item" has been promoted to "1" from "2"');
     $t->is($a5['position'], 2, '"Fifth item" has been promoted to "2" from "3"');
-    
+
 $t->info('Test Moving an item to a different category with an item already at the same rank');
-    
+
     try {
       $a1->Category = $categories[1];
       $a1->save();
@@ -77,7 +77,7 @@ $t->info('Test Moving an item to a different category with an item already at th
     $t->is($a1['position'], 3, '"First item" has been moved to "3" from "1"');
 
 $t->info('Test deleting a collection of sortable items');
-    
+
     $d1 = new SortableArticleUniqueBy();
     $d1->name = 'ArticleUniqueBy To Delete 1';
     $d1->Category = $categories[2];
@@ -87,7 +87,7 @@ $t->info('Test deleting a collection of sortable items');
     $d2->name = 'ArticleUniqueBy To Delete 2';
     $d2->Category = $categories[2];
     $d2->save();
-    
+
     $d3 = new SortableArticleUniqueBy();
     $d3->name = 'ArticleUniqueBy To Delete 3';
     $d3->Category = $categories[2];
@@ -97,18 +97,18 @@ $t->info('Test deleting a collection of sortable items');
     $d4->name = 'ArticleUniqueBy To Delete 4';
     $d4->Category = $categories[2];
     $d4->save();
-    
+
     $collection = Doctrine::getTable('SortableArticleUniqueBy')
         ->createQuery()
         ->where('category_id = ?', $categories[2]['id'])
         ->execute();
 
     $t->is($collection->count(), 4, 'Three items exist in the Doctrine Collection to be deleted');
-    
+
     $collection->delete();
-    
+
     $t->is($collection->count(), 0, 'No items in collection - they have been deleted');
-    
+
     $t->ok(!$d1->exists(), '"ArticleUniqueBy To Delete 1" has been removed');
     $t->ok(!$d2->exists(), '"ArticleUniqueBy To Delete 2" has been removed');
     $t->ok(!$d3->exists(), '"ArticleUniqueBy To Delete 3" has been removed');

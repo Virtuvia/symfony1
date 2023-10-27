@@ -1,5 +1,0 @@
-all:
-  doctrine:
-    class: sfDoctrineDatabase
-    param:
-      dsn: 'mysql://root:@localhost/cs_doctrine_act_as_sortable_test'

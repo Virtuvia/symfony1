@@ -1,14 +1,14 @@
 <?php
 
-require_once dirname(__FILE__).'/../bootstrap/bootstrap.php';
+require_once dirname(__FILE__).'/../bootstrap/functional.php';
 
-$t = new lime_test();
+$t = new lime_test(25);
 
 $t->info('Create Sortable Sample Set');
 
     Doctrine::getTable('SortableArticle')
         ->createQuery()->delete()->execute();
-    
+
     $a1 = new SortableArticle();
     $a1->name = 'First Article';
     $a1->save();
@@ -42,7 +42,7 @@ $t->info('Test Table Method "sort()"');
     $table = $a1->getTable();
     $sort = array($a1['id'], $a2['id'], $a3['id']);
     $table->sort($sort);
-    
+
     $t->comment('Sort to original position (before promote/demote)');
     $articles = $table->findAllSorted();
     $t->is($articles->count(), 3, 'Three articles returned for "findAllSorted()" method');
@@ -58,7 +58,7 @@ $t->info('Test Table Method "sort()"');
     $t->is($articles[0]['id'], $a2['id'], 'Second item first (same as position)');
     $t->is($articles[1]['id'], $a3['id'], 'Third item second (same as position)');
     $t->is($articles[2]['id'], $a1['id'], 'First item last (same as position)');
-    
+
 $t->info('Test Removing an item - items after it should be promoted');
 
     $t->is($a2->getFinalPosition(), 3, '"Final Position" is "3" before the item is deleted');
@@ -78,7 +78,7 @@ $t->info('Test "moveToPosition" method');
     $t->is($a1['position'], 3, 'The 2nd-positioned item has been bumped up');
 
 $t->info('Test deleting a collection of sortable items');
-    
+
     $d1 = new SortableArticle();
     $d1->name = 'Article To Delete 1';
     $d1->save();
@@ -86,23 +86,23 @@ $t->info('Test deleting a collection of sortable items');
     $d2 = new SortableArticle();
     $d2->name = 'Article To Delete 2';
     $d2->save();
-    
+
     $d3 = new SortableArticle();
     $d3->name = 'Article To Delete 3';
     $d3->save();
-    
+
     $d4 = new SortableArticle();
     $d4->name = 'Article To Delete 4';
     $d4->save();
-    
+
     $collection = new Doctrine_Collection('SortableArticle');
     $collection[] = $d1;
     $collection[] = $d2;
     $collection[] = $d3;
     $collection[] = $d4;
-    
+
     $collection->delete();
-    
+
     $t->ok(!$d1->exists(), '"Article To Delete 1" has been removed');
     $t->ok(!$d2->exists(), '"Article To Delete 2" has been removed');
     $t->ok(!$d3->exists(), '"Article To Delete 3" has been removed');
