@@ -93,13 +93,13 @@ class lime_test
       $testsuite->setAttribute('failures', count($result['stats']['failed']));
       $testsuite->setAttribute('errors', count($result['stats']['errors']));
       $testsuite->setAttribute('skipped', count($result['stats']['skipped']));
-      $testsuite->setAttribute('tests', $result['stats']['plan']);
-      $testsuite->setAttribute('assertions', $result['stats']['plan']);
+      $testsuite->setAttribute('tests', $result['stats']['plan'] ?? $result['stats']['total']);
+      $testsuite->setAttribute('assertions', $result['stats']['plan'] ?? $result['stats']['total']);
 
       $failures += count($result['stats']['failed']);
       $errors += count($result['stats']['errors']);
       $skipped += count($result['stats']['skipped']);
-      $assertions += $result['stats']['plan'];
+      $assertions += $result['stats']['plan'] ?? $result['stats']['total'];
 
       foreach ($result['tests'] as $test)
       {
