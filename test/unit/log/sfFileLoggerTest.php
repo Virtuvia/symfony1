@@ -61,26 +61,21 @@ $t->diag('option: format');
 unlink($file);
 $logger = new TestLogger($dispatcher, array('file' => $file));
 $logger->log('foo');
-$t->is(file_get_contents($file), \PHP81_BC\strftime($logger->getTimeFormat(), null, 'en').' symfony [*6*] foo'.PHP_EOL, '->initialize() can take a format option');
+$timeLength = 25; // DateTime format "c"
+$t->is(substr(file_get_contents($file), $timeLength), ' symfony [*6*] foo' . PHP_EOL, '->initialize() can take a format option');
 
 unlink($file);
 $logger = new TestLogger($dispatcher, array('file' => $file, 'format' => '%message%'));
 $logger->log('foo');
-$t->is(file_get_contents($file), 'foo', '->initialize() can take a format option');
-
-// option: time_format
-$t->diag('option: time_format');
-unlink($file);
-$logger = new TestLogger($dispatcher, array('file' => $file, 'time_format' => '%Y %m %d'));
-$logger->log('foo');
-$t->is(file_get_contents($file), \PHP81_BC\strftime($logger->getTimeFormat(), null, 'en').' symfony [*6*] foo'.PHP_EOL, '->initialize() can take a format option');
+$t->is(substr(file_get_contents($file), $timeLength), 'foo', '->initialize() can take a format option');
 
 // option: type
 $t->diag('option: type');
 unlink($file);
 $logger = new TestLogger($dispatcher, array('file' => $file, 'type' => 'foo'));
 $logger->log('foo');
-$t->is(file_get_contents($file), \PHP81_BC\strftime($logger->getTimeFormat(), null, 'en').' foo [*6*] foo'.PHP_EOL, '->initialize() can take a format option');
+$time = date_create()->format('c');
+$t->is(substr(file_get_contents($file), $timeLength), $time . ' foo [*6*] foo' . PHP_EOL, '->initialize() can take a format option');
 
 // ->shutdown()
 $t->diag('->shutdown()');

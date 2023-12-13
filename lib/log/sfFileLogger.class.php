@@ -21,7 +21,6 @@ class sfFileLogger extends sfLogger
   protected
     $type       = 'symfony',
     $format     = '%time% %type% [%priority%] %message%%EOL%',
-    $timeFormat = '%b %d %H:%M:%S',
     $fp         = null;
 
   /**
@@ -32,7 +31,6 @@ class sfFileLogger extends sfLogger
    * - file:        The file path or a php wrapper to log messages
    *                You can use any support php wrapper. To write logs to the Apache error log, use php://stderr
    * - format:      The log line format (default to %time% %type% [%priority%] %message%%EOL%)
-   * - time_format: The log time strftime format (default to %b %d %H:%M:%S)
    * - dir_mode:    The mode to use when creating a directory (default to 0777)
    * - file_mode:   The mode to use when creating a file (default to 0666)
    *
@@ -51,11 +49,6 @@ class sfFileLogger extends sfLogger
     if (isset($options['format']))
     {
       $this->format = $options['format'];
-    }
-
-    if (isset($options['time_format']))
-    {
-      $this->timeFormat = $options['time_format'];
     }
 
     if (isset($options['type']))
@@ -96,7 +89,7 @@ class sfFileLogger extends sfLogger
     fwrite($this->fp, strtr($this->format, array(
       '%type%'     => $this->type,
       '%message%'  => $message,
-      '%time%'     => \PHP81_BC\strftime($this->timeFormat, null, 'en'),
+      '%time%'     => date_create()->format('c'),
       '%priority%' => $this->getPriority($priority),
       '%EOL%'      => PHP_EOL,
     )));
