@@ -45,11 +45,6 @@ $t->like($lines[1], '/bar/', '->log() logs a message to the file');
 
 class TestLogger extends sfFileLogger
 {
-  public function getTimeFormat()
-  {
-    return $this->timeFormat;
-  }
-
   protected function getPriority($priority)
   {
     return '*'.$priority.'*';
@@ -62,7 +57,7 @@ unlink($file);
 $logger = new TestLogger($dispatcher, array('file' => $file));
 $logger->log('foo');
 $timeLength = 25; // DateTime format "c"
-$t->is(substr(file_get_contents($file), $timeLength), ' symfony [*6*] foo' . PHP_EOL, '->initialize() can take a format option');
+$t->is(substr(file_get_contents($file), $timeLength), ' symfony [*6*] foo' . PHP_EOL, '->initialize() has a default format');
 
 unlink($file);
 $logger = new TestLogger($dispatcher, array('file' => $file, 'format' => '%message%'));
@@ -75,7 +70,7 @@ unlink($file);
 $logger = new TestLogger($dispatcher, array('file' => $file, 'type' => 'foo'));
 $logger->log('foo');
 $time = date_create()->format('c');
-$t->is(substr(file_get_contents($file), $timeLength), $time . ' foo [*6*] foo' . PHP_EOL, '->initialize() can take a format option');
+$t->is(substr(file_get_contents($file), $timeLength), ' foo [*6*] foo' . PHP_EOL, '->initialize() can take a type option');
 
 // ->shutdown()
 $t->diag('->shutdown()');
