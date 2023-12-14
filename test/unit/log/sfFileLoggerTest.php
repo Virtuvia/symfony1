@@ -62,7 +62,7 @@ $t->is(substr(file_get_contents($file), $timeLength), ' symfony [*6*] foo' . PHP
 unlink($file);
 $logger = new TestLogger($dispatcher, array('file' => $file, 'format' => '%message%'));
 $logger->log('foo');
-$t->is(substr(file_get_contents($file), $timeLength), 'foo', '->initialize() can take a format option');
+$t->is(file_get_contents($file), 'foo', '->initialize() can take a format option');
 
 // option: type
 $t->diag('option: type');
