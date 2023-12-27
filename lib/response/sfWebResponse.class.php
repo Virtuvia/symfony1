@@ -84,6 +84,10 @@ class sfWebResponse extends sfResponse
     '505' => 'HTTP Version Not Supported',
   );
 
+  public const COOKIE_SAMESITE_STRICT = 'Strict';
+  public const COOKIE_SAMESITE_LAX = 'Lax';
+  public const COOKIE_SAMESITE_NONE = 'None';
+
   /**
    * Initializes this sfWebResponse.
    *
@@ -158,10 +162,11 @@ class sfWebResponse extends sfResponse
    * @param  string  $domain    Domain name
    * @param  bool    $secure    If secure
    * @param  bool    $httpOnly  If uses only HTTP
+   * @param  self::COOKIE_SAMESITE_* $sameSite
    *
    * @throws <b>sfException</b> If fails to set the cookie
    */
-  public function setCookie($name, $value, $expire = null, $path = '/', $domain = '', $secure = false, $httpOnly = false)
+  public function setCookie($name, $value, $expire = null, $path = '/', $domain = '', $secure = true, $httpOnly = true, string $sameSite = self::COOKIE_SAMESITE_LAX)
   {
     if ($expire !== null)
     {
@@ -187,6 +192,7 @@ class sfWebResponse extends sfResponse
       'domain'   => $domain,
       'secure'   => $secure ? true : false,
       'httpOnly' => $httpOnly,
+      'sameSite' => $sameSite,
     );
   }
 
@@ -365,7 +371,14 @@ class sfWebResponse extends sfResponse
     // cookies
     foreach ($this->cookies as $cookie)
     {
-      setrawcookie($cookie['name'], $cookie['value'], $cookie['expire'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
+      setrawcookie($cookie['name'], $cookie['value'], [
+          'expires' => $cookie['expire'],
+          'path' => $cookie['path'],
+          'domain' => $cookie['domain'],
+          'secure' => $cookie['secure'],
+          'httponly' => $cookie['httpOnly'],
+          'samesite' => $cookie['sameSite'],
+      ]);
 
       if ($this->options['logging'])
       {
