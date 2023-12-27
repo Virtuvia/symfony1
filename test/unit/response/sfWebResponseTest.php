@@ -270,7 +270,7 @@ $t->is(array_keys($response->getJavascripts()), array('foo', 'last_js'), '->remo
 // ->setCookie() ->getCookies()
 $t->diag('->setCookie() ->getCookies()');
 $response->setCookie('foo', 'bar');
-$t->is($response->getCookies(), array('foo' => array('name' => 'foo', 'value' => 'bar', 'expire' => null, 'path' => '/', 'domain' => '', 'secure' => false, 'httpOnly' => false)), '->setCookie() adds a cookie for the response');
+$t->is($response->getCookies(), array('foo' => array('name' => 'foo', 'value' => 'bar', 'expire' => null, 'path' => '/', 'domain' => '', 'secure' => true, 'httpOnly' => true, 'sameSite' => 'Lax')), '->setCookie() adds a cookie for the response');
 
 // ->setHeaderOnly() ->getHeaderOnly()
 $t->diag('->setHeaderOnly() ->isHeaderOnly()');
