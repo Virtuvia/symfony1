@@ -9,7 +9,7 @@ sf_image:
     sf_method: [ get ]
   options:
     image_source: File
-    image_location: %SF_ROOT_DIR%
+    image_location: '%SF_ROOT_DIR%'
     max_folder_depth: 10
 
 ## ROUTE FOR DOCTRINE SOURCES
@@ -28,7 +28,7 @@ sf_image:
 #     image_source: Doctrine
 #     segment_separators: [ '/', '.', '-' ]
 #     max_folder_depth: 7
-# 
+#
 ## ROUTE FOR HTTP SOURCES
 # sf_image:
 #   class: sfImageTransformRoute
@@ -44,7 +44,7 @@ sf_image:
 #   options:
 #     image_source: HTTP
 #     max_folder_depth: 10
-# 
+#
 ## ROUTE FOR MOCK SOURCES
 # sf_image:
 #   class: sfImageTransformRoute

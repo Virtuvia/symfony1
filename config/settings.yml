@@ -4,5 +4,5 @@ all:
       class:                        sfRawFileCache
       param:
         automatic_cleaning_factor:  0
-        cache_dir:                  %SF_WEB_DIR%
+        cache_dir:                  '%SF_WEB_DIR%'
       namespace_callback:           'sfRawFileCache::setCacheKey'
