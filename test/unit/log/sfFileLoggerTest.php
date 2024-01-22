@@ -10,7 +10,7 @@
 
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 
-$t = new lime_test(7);
+$t = new lime_test(6);
 
 require_once(dirname(__FILE__).'/../../../lib/util/sfToolkit.class.php');
 $file = sys_get_temp_dir().DIRECTORY_SEPARATOR.'sf_log_file.txt';
