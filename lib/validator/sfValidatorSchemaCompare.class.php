@@ -67,20 +67,20 @@ class sfValidatorSchemaCompare extends sfValidatorSchema
   /**
    * @see sfValidatorBase
    */
-  protected function doClean($values)
+  protected function doClean($value)
   {
-    if (null === $values)
+    if (null === $value)
     {
-      $values = array();
+      $value = array();
     }
 
-    if (!is_array($values))
+    if (!is_array($value))
     {
       throw new InvalidArgumentException('You must pass an array parameter to the clean() method');
     }
 
-    $leftValue  = isset($values[$this->getOption('left_field')]) ? $values[$this->getOption('left_field')] : null;
-    $rightValue = isset($values[$this->getOption('right_field')]) ? $values[$this->getOption('right_field')] : null;
+    $leftValue  = $value[$this->getOption('left_field')] ?? null;
+    $rightValue = $value[$this->getOption('right_field')] ?? null;
 
     switch ($this->getOption('operator'))
     {
@@ -127,6 +127,6 @@ class sfValidatorSchemaCompare extends sfValidatorSchema
       throw new sfValidatorErrorSchema($this, array($this->getOption('left_field') => $error));
     }
 
-    return $values;
+    return $value;
   }
 }

@@ -87,22 +87,22 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
   /**
    * @see sfValidatorBase
    */
-  public function clean($values)
+  public function clean($value)
   {
-    return $this->doClean($values);
+    return $this->doClean($value);
   }
 
   /**
    * @see sfValidatorBase
    */
-  protected function doClean($values)
+  protected function doClean($value)
   {
-    if (null === $values)
+    if (null === $value)
     {
-      $values = array();
+        $value = array();
     }
 
-    if (!is_array($values))
+    if (!is_array($value))
     {
       throw new InvalidArgumentException('You must pass an array parameter to the clean() method');
     }
@@ -126,7 +126,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
     // pre validator
     try
     {
-      $values = $this->preClean($values);
+        $value = $this->preClean($value);
     }
     catch (sfValidatorErrorSchema $e)
     {
@@ -138,7 +138,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
     }
 
     // validate given values
-    foreach ($values as $name => $value)
+    foreach ($value as $name => $namedValue)
     {
       // field exists in our schema?
       if (!array_key_exists($name, $this->fields))
@@ -149,7 +149,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
         }
         else if (!$this->options['filter_extra_fields'])
         {
-          $clean[$name] = $value;
+          $clean[$name] = $namedValue;
         }
 
         continue;
@@ -160,7 +160,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
       // validate value
       try
       {
-        $clean[$name] = $this->fields[$name]->clean($value);
+        $clean[$name] = $this->fields[$name]->clean($namedValue);
       }
       catch (sfValidatorError $e)
       {

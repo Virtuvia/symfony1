@@ -39,29 +39,29 @@ class sfValidatorSchemaFilter extends sfValidatorSchema
   /**
    * @see sfValidatorBase
    */
-  protected function doClean($values)
+  protected function doClean($value)
   {
-    if (null === $values)
+    if (null === $value)
     {
-      $values = array();
+      $value = array();
     }
 
-    if (!is_array($values))
+    if (!is_array($value))
     {
       throw new InvalidArgumentException('You must pass an array parameter to the clean() method');
     }
 
-    $value = isset($values[$this->getOption('field')]) ? $values[$this->getOption('field')] : null;
+    $fieldValue = isset($value[$this->getOption('field')]) ? $value[$this->getOption('field')] : null;
 
     try
     {
-      $values[$this->getOption('field')] = $this->getOption('validator')->clean($value);
+      $value[$this->getOption('field')] = $this->getOption('validator')->clean($fieldValue);
     }
     catch (sfValidatorError $error)
     {
       throw new sfValidatorErrorSchema($this, array($this->getOption('field') => $error));
     }
 
-    return $values;
+    return $value;
   }
 }
