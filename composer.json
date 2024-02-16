@@ -7,8 +7,8 @@
         "ext-apcu": "*",
         "ext-intl": "*",
         "ext-xml": "*",
-        "symfony/yaml": ">=v3.4.47 <v4.5",
-        "symfony/form": ">=v3.4.47 <v4.5"
+        "symfony/yaml": ">=v3.4.47 <v5.5",
+        "symfony/form": ">=v3.4.47 <v5.5"
     },
     "autoload": {
         "classmap": [
