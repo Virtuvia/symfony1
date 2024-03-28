@@ -1239,6 +1239,9 @@ class sfForm implements ArrayAccess, Iterator, Countable
   static protected function fixPhpFilesArray($data)
   {
     $fileKeys = array('error', 'name', 'size', 'tmp_name', 'type');
+
+    // Remove extra key added by PHP 8.1.
+    unset($data['full_path']);
     $keys = array_keys($data);
     sort($keys);
 

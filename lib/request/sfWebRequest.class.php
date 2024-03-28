@@ -25,7 +25,7 @@ class sfWebRequest extends sfRequest
   const
     PORT_HTTP  = 80,
     PORT_HTTPS = 443;
-  
+
   protected
     $languages              = null,
     $charsets               = null,
@@ -807,6 +807,9 @@ class sfWebRequest extends sfRequest
   static protected function fixPhpFilesArray($data)
   {
     $fileKeys = array('error', 'name', 'size', 'tmp_name', 'type');
+
+    // Remove extra key added by PHP 8.1.
+    unset($data['full_path']);
     $keys = array_keys($data);
     sort($keys);
 

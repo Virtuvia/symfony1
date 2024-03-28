@@ -271,7 +271,7 @@ EOF;
     }
     else if ('Date' == $field->getType())
     {
-      $html = sprintf("false !== strtotime($html) ? format_date(%s, \"%s\") : '&nbsp;'", $html, $field->getConfig('date_format', 'f'));
+      $html = sprintf("false !== strtotime({$html} ?? '') ? format_date(%s, \"%s\") : '&nbsp;'", $html, $field->getConfig('date_format', 'f'));
     }
     else if ('Boolean' == $field->getType())
     {
