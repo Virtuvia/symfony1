@@ -371,7 +371,7 @@ class sfWebResponse extends sfResponse
     // cookies
     foreach ($this->cookies as $cookie)
     {
-      setrawcookie($cookie['name'], $cookie['value'], [
+      setrawcookie($cookie['name'], $cookie['value'] ?? '', [
           'expires' => $cookie['expire'],
           'path' => $cookie['path'],
           'domain' => $cookie['domain'],
