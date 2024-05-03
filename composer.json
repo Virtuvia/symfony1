@@ -3,12 +3,12 @@
     "description": "Symfony is a complete framework designed to optimize the development of web applications by way of several key features.",
     "license": "MIT",
     "require": {
-        "php": "7.4.* | 8.1.*",
+        "php": "8.1.*",
         "ext-apcu": "*",
         "ext-intl": "*",
         "ext-xml": "*",
-        "symfony/yaml": ">=v3.4.47 <v4.5",
-        "symfony/form": ">=v3.4.47 <v4.5"
+        "symfony/yaml": "^5.4",
+        "symfony/form": "^5.4"
     },
     "autoload": {
         "classmap": [
