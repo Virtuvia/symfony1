@@ -371,7 +371,7 @@ abstract class sfBrowserBase
         if ($content === '') {
           $content = '<html></html>';
         }
-        @$this->dom->loadHTML($content);
+        @$this->dom->loadHTML($content, LIBXML_NOERROR);
       }
       $this->domCssSelector = new sfDomCssSelector($this->dom);
     }
