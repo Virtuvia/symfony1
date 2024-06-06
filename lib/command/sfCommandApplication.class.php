@@ -32,6 +32,11 @@ abstract class sfCommandApplication
     $formatter      = null;
 
   /**
+   * @var null|string|array
+   */
+  protected $commandOptions;
+
+  /**
    * Constructor.
    *
    * @param sfEventDispatcher $dispatcher   A sfEventDispatcher instance

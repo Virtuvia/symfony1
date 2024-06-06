@@ -32,6 +32,8 @@ class sfViewCacheManager
     $request     = null,
     $loaded      = array();
 
+  protected array $options = [];
+
   /**
    * Class constructor.
    *
