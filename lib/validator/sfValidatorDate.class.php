@@ -94,7 +94,7 @@ class sfValidatorDate extends sfValidatorBase
     {
       try
       {
-        $date = new DateTime($value);
+        $date = new DateTime($value ?? '');
         $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
         $clean = $date->format('YmdHis');
       }

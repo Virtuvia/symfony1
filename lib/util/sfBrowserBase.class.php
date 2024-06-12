@@ -913,7 +913,7 @@ abstract class sfBrowserBase
     }
     else
     {
-      $queryString = http_build_query($arguments, null, '&');
+      $queryString = http_build_query($arguments, '', '&');
       $sep = false === strpos($url, '?') ? '?' : '&';
 
       return array($url.($queryString ? $sep.$queryString : ''), 'get', array());
