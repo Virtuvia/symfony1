@@ -1008,7 +1008,7 @@ class sfViewCacheManager
     if ($getParameters = $this->request->getGetParameters())
     {
       $cacheKey .= false === strpos($cacheKey, '?') ? '?' : '&';
-      $cacheKey .= http_build_query($getParameters, '', '&');
+      $cacheKey .= http_build_query($getParameters, arg_separator: '&');
     }
 
     return $cacheKey;
