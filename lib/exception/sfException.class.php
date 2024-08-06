@@ -321,12 +321,12 @@ class sfException extends Exception
         (isset($traceData[$i]['type']) ? $traceData[$i]['type'] : ''),
         $traceData[$i]['function'],
         self::formatArgs($args, false, $format),
-        self::formatFile($file, $line, $format, null === $file ? 'n/a' : sfDebug::shortenFilePath($file)),
+        null === $file ? 'n/a' : self::formatFile($file, $line, $format, sfDebug::shortenFilePath($file)),
         null === $line ? 'n/a' : $line,
         'trace_'.$i,
         'trace_'.$i,
         $i == 0 ? 'block' : 'none',
-        self::fileExcerpt($file, $line)
+        null === $file ? '' : self::fileExcerpt($file, $line)
       );
     }
 
