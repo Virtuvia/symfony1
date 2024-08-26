@@ -104,7 +104,7 @@ class sfValidatorError extends Exception
         continue;
       }
 
-      $arguments["%$key%"] = htmlspecialchars($value, ENT_QUOTES, sfValidatorBase::getCharset());
+      $arguments["%$key%"] = $value === null ? '' : htmlspecialchars($value, ENT_QUOTES, sfValidatorBase::getCharset());
     }
 
     return $arguments;
@@ -117,7 +117,7 @@ class sfValidatorError extends Exception
    * error messages:
    *
    * $i18n->__($error->getMessageFormat(), $error->getArguments());
-   * 
+   *
    * If no message format has been set in the validator, the exception standard
    * message is returned.
    *
