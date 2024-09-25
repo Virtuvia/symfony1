@@ -23,6 +23,13 @@ class sfBrowser extends sfBrowserBase
     $context          = null,
     $currentException = null;
 
+    /**
+     * initialized in self::getContext
+     *
+     * @internal
+     */
+    public array $rawConfiguration;
+
   /**
    * Calls a request to a uri.
    */
