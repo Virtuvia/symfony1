@@ -45,10 +45,15 @@ class sfBrowser extends sfBrowserBase
 
     $this->resetCurrentException();
 
-    // dispatch our request
-    ob_start();
-    $this->context->getController()->dispatch();
-    $retval = ob_get_clean();
+    try {
+        // dispatch our request
+        ob_start();
+        $this->context->getController()->dispatch();
+        $retval = ob_get_clean();
+    } catch (\Throwable $e) {
+        ob_end_clean();
+        throw $e;
+    }
 
     // append retval to the response content
     $this->context->getResponse()->setContent($retval);
