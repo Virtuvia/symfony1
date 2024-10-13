@@ -26,8 +26,11 @@ class sfFrontWebController extends sfWebController
    * Dispatches a request.
    *
    * This will determine which module and action to use by request parameters specified by the user.
+   *
+   * @throws sfException
+   * @throws Throwable
    */
-  public function dispatch()
+  public function dispatch(): void
   {
     try
     {
@@ -47,13 +50,10 @@ class sfFrontWebController extends sfWebController
       // make the first request
       $this->forward($moduleName, $actionName);
     }
-    catch (sfException $e)
+    catch (sfException | sfError404Exception $e)
     {
+      // these two are special control flow exceptions, and should be handled immediately
       $e->printStackTrace();
-    }
-    catch (Exception $e)
-    {
-      sfException::createFromException($e)->printStackTrace();
     }
   }
 }

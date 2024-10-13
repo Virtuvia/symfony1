@@ -72,18 +72,7 @@ class sfContext implements ArrayAccess
     $this->configuration = $configuration;
     $this->dispatcher    = $configuration->getEventDispatcher();
 
-    try
-    {
-      $this->loadFactories();
-    }
-    catch (sfException $e)
-    {
-      $e->printStackTrace();
-    }
-    catch (Exception $e)
-    {
-      sfException::createFromException($e)->printStackTrace();
-    }
+    $this->loadFactories();
 
     $this->dispatcher->connect('template.filter_parameters', array($this, 'filterTemplateParameters'));
 
