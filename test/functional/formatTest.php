@@ -119,7 +119,8 @@ $b->
   end()
 ;
 
-$b->
-  getAndCheck('format', 'throwsException', null, 500)->
-  throwsException('Exception', '/message/')
-;
+try {
+    $b->getAndCheck('format', 'throwsException', null, 500);
+} catch (Exception $e) {
+}
+$b->throwsException($e ?? null, 'Exception', '/message/');

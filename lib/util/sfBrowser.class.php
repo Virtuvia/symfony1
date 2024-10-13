@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the symfony package.
  * (c) Fabien Potencier <fabien.potencier@symfony-project.com>
@@ -18,10 +20,9 @@
  */
 class sfBrowser extends sfBrowserBase
 {
-  protected
-    $listeners        = array(),
-    $context          = null,
-    $currentException = null;
+    private array $listeners = [];
+
+    private ?sfContext $context = null;
 
     /**
      * initialized in self::getContext
@@ -42,8 +43,6 @@ class sfBrowser extends sfBrowserBase
 
     // we register a fake rendering filter
     sfConfig::set('sf_rendering_filter', array('sfFakeRenderingFilter', null));
-
-    $this->resetCurrentException();
 
     try {
         // dispatch our request
@@ -85,7 +84,6 @@ class sfBrowser extends sfBrowserBase
       $configuration = ProjectConfiguration::getApplicationConfiguration($currentConfiguration->getApplication(), $currentConfiguration->getEnvironment(), $currentConfiguration->isDebug());
 
       // connect listeners
-      $configuration->getEventDispatcher()->connect('application.throw_exception', array($this, 'listenToException'));
       foreach ($this->listeners as $name => $listener)
       {
         $configuration->getEventDispatcher()->connect($name, $listener);
@@ -155,18 +153,6 @@ class sfBrowser extends sfBrowserBase
 
     // we remove all session data
     sfToolkit::clearDirectory(sfConfig::get('sf_test_cache_dir').'/sessions');
-  }
-
-  /**
-   * Listener for exceptions
-   *
-   * @param  sfEvent $event  The event to handle
-   *
-   * @return void
-   */
-  public function listenToException(sfEvent $event)
-  {
-    $this->setCurrentException($event->getSubject());
   }
 }
 

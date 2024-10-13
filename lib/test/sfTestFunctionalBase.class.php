@@ -376,10 +376,8 @@ abstract class sfTestFunctionalBase
    *
    * @return sfTestFunctionalBase The current sfTestFunctionalBase instance
    */
-  public function throwsException($class = null, $message = null)
+  public function throwsException(?\Throwable $e, $class = null, $message = null)
   {
-    $e = $this->browser->getCurrentException();
-
     if (null === $e)
     {
       $this->test()->fail('response returns an exception');

@@ -32,7 +32,6 @@ abstract class sfBrowserBase
     $vars               = array(),
     $defaultServerArray = array(),
     $headers            = array(),
-    $currentException   = null,
     $domCssSelector     = null;
 
   /**
@@ -215,9 +214,6 @@ abstract class sfBrowserBase
    */
   public function call($uri, $method = 'get', $parameters = array(), $changeStack = true)
   {
-    // check that the previous call() hasn't returned an uncatched exception
-    $this->checkCurrentExceptionIsEmpty();
-
     $uri = $this->fixUri($uri);
 
     // add uri to the stack
@@ -493,45 +489,6 @@ abstract class sfBrowserBase
    * @return sfUser
    */
   abstract public function getUser();
-
-  /**
-   * Gets the current exception.
-   *
-   * @return Exception
-   */
-  public function getCurrentException()
-  {
-    return $this->currentException;
-  }
-
-  /**
-   * Sets the current exception.
-   *
-   * @param Exception $exception An Exception instance
-   */
-  public function setCurrentException(Exception $exception)
-  {
-    $this->currentException = $exception;
-  }
-
-  /**
-   * Resets the current exception.
-   */
-  public function resetCurrentException()
-  {
-    $this->currentException = null;
-    sfException::clearLastException();
-  }
-
-  /**
-   * Test for an uncaught exception.
-   *
-   * @return  boolean
-   */
-  public function checkCurrentExceptionIsEmpty()
-  {
-    return null === $this->getCurrentException() || $this->getCurrentException() instanceof sfError404Exception;
-  }
 
   /**
    * Follow redirects?
@@ -981,7 +938,6 @@ abstract class sfBrowserBase
    */
   public function shutdown()
   {
-    $this->checkCurrentExceptionIsEmpty();
   }
 
   /**
