@@ -50,7 +50,7 @@ class sfFrontWebController extends sfWebController
       // make the first request
       $this->forward($moduleName, $actionName);
     }
-    catch (sfException | sfError404Exception $e)
+    catch (sfStopException | sfError404Exception $e)
     {
       // these two are special control flow exceptions, and should be handled immediately
       $e->printStackTrace();
