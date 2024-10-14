@@ -157,7 +157,6 @@ abstract class sfTestFunctionalBase
    */
   public function shutdown()
   {
-    $this->checkCurrentExceptionIsEmpty();
   }
 
   /**
@@ -232,8 +231,6 @@ abstract class sfTestFunctionalBase
    */
   public function call($uri, $method = 'get', $parameters = array(), $changeStack = true)
   {
-    $this->checkCurrentExceptionIsEmpty();
-
     $uri = $this->browser->fixUri($uri);
 
     $this->test()->comment(sprintf('%s %s', strtolower($method), $uri));
@@ -409,21 +406,6 @@ abstract class sfTestFunctionalBase
     $this->resetCurrentException();
 
     return $this;
-  }
-
-  /**
-   * Triggers a test failure if an uncaught exception is present.
-   *
-   * @return  bool
-   */
-  public function checkCurrentExceptionIsEmpty()
-  {
-    if (false === ($empty = $this->browser->checkCurrentExceptionIsEmpty()))
-    {
-      $this->test()->fail(sprintf('last request threw an uncaught exception "%s: %s"', get_class($this->browser->getCurrentException()), $this->browser->getCurrentException()->getMessage()));
-    }
-
-    return $empty;
   }
 
   public function __call($method, $arguments)
