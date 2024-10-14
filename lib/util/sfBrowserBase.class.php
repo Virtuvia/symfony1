@@ -983,6 +983,6 @@ abstract class sfBrowserBase
    */
   protected function newSession()
   {
-    $this->defaultServerArray['session_id'] = $_SERVER['session_id'] = md5(uniqid(rand(), true));
+    $this->defaultServerArray['session_id'] = $_SERVER['session_id'] = bin2hex(random_bytes(16));
   }
 }
