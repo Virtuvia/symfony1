@@ -403,8 +403,6 @@ abstract class sfTestFunctionalBase
       }
     }
 
-    $this->resetCurrentException();
-
     return $this;
   }
 
