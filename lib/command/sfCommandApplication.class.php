@@ -365,10 +365,8 @@ abstract class sfCommandApplication
 
   /**
    * Renders an exception.
-   *
-   * @param Exception $e An exception object
    */
-  public function renderException($e)
+  public function renderException(\Throwable $e)
   {
     $title = sprintf('  [%s]  ', get_class($e));
     $len = $this->strlen($title);
