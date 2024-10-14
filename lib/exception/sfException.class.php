@@ -252,7 +252,7 @@ class sfException extends Exception
     $template = sprintf('%s.%s.php', $debug ? 'exception' : 'error', $format);
     foreach ($templatePaths as $path)
     {
-      if (null !== $path && is_readable($file = $path.'/'.$template))
+      if (null !== $path && @is_readable($file = $path.'/'.$template))
       {
         return $file;
       }
