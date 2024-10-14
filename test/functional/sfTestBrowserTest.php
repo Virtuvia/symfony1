@@ -41,56 +41,49 @@ $b->
   with('response')->begin()->
     isStatusCode(200)->
     matches('/foo/')->
-  end()->
+  end();
 
-  get('/exception/throwsException')->
-  with('request')->begin()->
-    isParameter('module', 'exception')->
-    isParameter('action', 'throwsException')->
-  end()->
-  with('response')->isStatusCode(500)->
-  throwsException('Exception')->
+try {
+    $e = null;
+    $b->get('/exception/throwsException');
+} catch (Throwable $e) {
+}
+$b->throwsException($e, 'Exception');
 
-  get('/exception/throwsException')->
-  with('request')->begin()->
-    isParameter('module', 'exception')->
-    isParameter('action', 'throwsException')->
-  end()->
-  with('response')->isStatusCode(500)->
-  throwsException('Exception', '/Exception message/')->
+try {
+    $e = null;
+    $b->get('/exception/throwsException');
+} catch (Throwable $e) {
+}
+$b->throwsException($e, 'Exception', '/Exception message/');
 
-  get('/exception/throwsException')->
-  with('request')->begin()->
-    isParameter('module', 'exception')->
-    isParameter('action', 'throwsException')->
-  end()->
-  with('response')->isStatusCode(500)->
-  throwsException('Exception', '/message/')->
+try {
+    $e = null;
+    $b->get('/exception/throwsException');
+} catch (Throwable $e) {
+}
+$b->throwsException($e, 'Exception', '/message/');
 
-  get('/exception/throwsException')->
-  with('request')->begin()->
-    isParameter('module', 'exception')->
-    isParameter('action', 'throwsException')->
-  end()->
-  with('response')->isStatusCode(500)->
-  throwsException(null, '!/sfException/')->
+try {
+    $e = null;
+    $b->get('/exception/throwsException');
+} catch (Throwable $e) {
+}
+$b->throwsException($e, null, '!/sfException/');
 
-  get('/exception/throwsSfException')->
-  with('request')->begin()->
-    isParameter('module', 'exception')->
-    isParameter('action', 'throwsSfException')->
-  end()->
-  with('response')->isStatusCode(500)->
-  throwsException('sfException')->
+try {
+    $e = null;
+    $b->get('/exception/throwsSfException');
+} catch (Throwable $e) {
+}
+$b->throwsException($e, 'sfException');
 
-  get('/exception/throwsSfException')->
-  with('request')->begin()->
-    isParameter('module', 'exception')->
-    isParameter('action', 'throwsSfException')->
-  end()->
-  with('response')->isStatusCode(500)->
-  throwsException('sfException', 'sfException message')
-;
+try {
+    $e = null;
+    $b->get('/exception/throwsSfException');
+} catch (Throwable $e) {
+}
+$b->throwsException($e, 'sfException', 'sfException message');
 
 $b->
   get('/browser')->
