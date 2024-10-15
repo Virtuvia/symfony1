@@ -66,19 +66,6 @@ class sfTesterMailer extends sfTester
   }
 
   /**
-   * Outputs some debug information about mails sent during the current request.
-   */
-  public function debug()
-  {
-    foreach ($this->logger->getMessages() as $message)
-    {
-      echo $message->toString()."\n\n";
-    }
-
-    exit(1);
-  }
-
-  /**
    * Changes the context to use the email corresponding to the given criteria.
    *
    * @param string|array $to       the email or array(email => alias)

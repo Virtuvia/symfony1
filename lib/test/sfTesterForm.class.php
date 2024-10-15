@@ -180,24 +180,6 @@ class sfTesterForm extends sfTester
   }
 
   /**
-   * Outputs some debug information about the current submitted form.
-   */
-  public function debug()
-  {
-    if (null === $this->form)
-    {
-      throw new LogicException('no form has been submitted.');
-    }
-
-    print $this->tester->error('Form debug');
-
-    print sprintf("Submitted values: %s\n", str_replace("\n", '', var_export($this->form->getTaintedValues(), true)));
-    print sprintf("Errors: %s\n", $this->form->getErrorSchema());
-
-    exit(1);
-  }
-
-  /**
    * Listens to the template.filter_parameters event to get the submitted form object.
    *
    * @param sfEvent $event      The event
