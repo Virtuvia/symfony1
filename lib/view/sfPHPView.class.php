@@ -76,7 +76,7 @@ class sfPHPView extends sfView
     {
       require($_sfFile);
     }
-    catch (Exception $e)
+    catch (Throwable $e)
     {
       while (ob_get_level() > $ob_level) {
         // need to end output buffering before throwing the exception #7596
