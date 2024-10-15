@@ -127,12 +127,6 @@ class sfException extends Exception
         $dispatcher->notify(new sfEvent($exception, 'application.log', array($exception->getMessage(), 'priority' => sfLogger::ERR)));
       }
 
-      $event = $dispatcher->notifyUntil(new sfEvent($exception, 'application.throw_exception'));
-      if ($event->isProcessed())
-      {
-        return;
-      }
-
       if ($response->getStatusCode() < 300)
       {
         // status code has already been sent, but is included here for the purpose of testing
