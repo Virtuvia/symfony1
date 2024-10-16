@@ -53,9 +53,6 @@ abstract class sfTestFunctionalBase
       'mailer'   => 'sfTesterMailer',
     ), $testers));
 
-    // register our shutdown function
-    register_shutdown_function(array($this, 'shutdown'));
-
     // register our error/exception handlers
     set_error_handler(array($this, 'handlePhpError'));
     set_exception_handler(array($this, 'handleException'));
@@ -150,15 +147,6 @@ abstract class sfTestFunctionalBase
     }
 
     $this->testers[$name] = $tester;
-  }
-
-  /**
-   * Shutdown function.
-   *
-   * @return void
-   */
-  public function shutdown()
-  {
   }
 
   /**
