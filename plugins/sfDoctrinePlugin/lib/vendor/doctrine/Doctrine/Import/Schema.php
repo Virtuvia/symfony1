@@ -169,7 +169,6 @@ class Doctrine_Import_Schema
      * getOption
      *
      * @param string $name
-     * @return void
      */
     public function getOption($name)
     {
@@ -180,8 +179,6 @@ class Doctrine_Import_Schema
 
     /**
      * getOptions
-     *
-     * @return void
      */
     public function getOptions()
     {
@@ -446,7 +443,6 @@ class Doctrine_Import_Schema
      * Sets the default type and sets some default values for certain types
      *
      * @param array $array
-     * @return void
      */
     protected function _processInheritance($array)
     {
@@ -552,7 +548,6 @@ class Doctrine_Import_Schema
      * for defining a relationship
      *
      * @param  array $array
-     * @return void
      */
     protected function _buildRelationships($array)
     {
@@ -725,7 +720,6 @@ class Doctrine_Import_Schema
      * Md5 hash of all the relationship parameters
      *
      * @param string $relation
-     * @return void
      */
     protected function _buildUniqueRelationKey($relation)
     {

@@ -109,7 +109,6 @@ class Doctrine_Data_Export extends Doctrine_Data
      * Dump the prepared data to the fixtures files
      *
      * @param string $array
-     * @return void
      */
     public function dumpData(array $data)
     {

@@ -97,8 +97,6 @@ class Doctrine_Data
      * getFormat
      *
      * Get the current format we are working with
-     *
-     * @return void
      */
     public function getFormat()
     {
@@ -109,8 +107,6 @@ class Doctrine_Data
      * getFormats
      *
      * Get array of available formats
-     *
-     * @return void
      */
     public function getFormats()
     {
@@ -133,8 +129,6 @@ class Doctrine_Data
      * getDirectory
      *
      * Get directory for dumping/loading data from and to
-     *
-     * @return void
      */
     public function getDirectory()
     {
@@ -158,8 +152,6 @@ class Doctrine_Data
      * getModels
      *
      * Get the array of specified models to work with
-     *
-     * @return void
      */
     public function getModels()
     {
@@ -229,7 +221,6 @@ class Doctrine_Data
      *
      * @param string $Doctrine_Record
      * @param string $fieldName
-     * @return void
      */
     public function isRelation(Doctrine_Record $record, $fieldName)
     {

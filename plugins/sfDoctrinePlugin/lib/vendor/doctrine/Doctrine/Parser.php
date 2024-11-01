@@ -62,7 +62,6 @@ abstract class Doctrine_Parser
      * Get instance of the specified parser
      *
      * @param string $type
-     * @return void
      * @author Jonathan H. Wage
      */
     public static function getParser($type)
@@ -79,7 +78,6 @@ abstract class Doctrine_Parser
      *
      * @param string $path
      * @param string $type
-     * @return void
      * @author Jonathan H. Wage
      */
     public static function load($path, $type = 'xml')
@@ -115,7 +113,6 @@ abstract class Doctrine_Parser
      * Either should allow php code in it.
      *
      * @param string $path
-     * @return void
      */
     public function doLoad($path)
     {

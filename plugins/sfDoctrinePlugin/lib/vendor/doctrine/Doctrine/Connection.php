@@ -367,8 +367,6 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
      * getDriverName
      *
      * Gets the name of the instance driver
-     *
-     * @return void
      */
     public function getDriverName()
     {

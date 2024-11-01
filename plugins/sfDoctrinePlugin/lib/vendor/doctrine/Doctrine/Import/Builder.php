@@ -490,7 +490,6 @@ EOF;
      * buildColumns
      *
      * @param string $array
-     * @return void
      */
     public function buildColumns(array $columns)
     {
@@ -885,7 +884,6 @@ EOF;
      * buildAttributes
      *
      * @param string $array
-     * @return void
      */
     public function buildAttributes(array $attributes)
     {
@@ -921,7 +919,6 @@ EOF;
      * buildTableOptions
      *
      * @param string $array
-     * @return void
      */
     public function buildOptions(array $options)
     {
@@ -937,7 +934,6 @@ EOF;
      * buildIndexes
      *
      * @param string $array
-     * @return void
      */
     public function buildIndexes(array $indexes)
     {

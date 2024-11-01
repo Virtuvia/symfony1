@@ -497,7 +497,6 @@ class Doctrine_Core
      * Turn on/off the debugging setting
      *
      * @param string $bool
-     * @return void
      */
     public static function debug($bool = null)
     {
@@ -580,7 +579,6 @@ class Doctrine_Core
      * Get the directory where your models are located for PEAR style naming
      * convention autoloading
      *
-     * @return void
      * @author Jonathan Wage
      */
     public static function getModelsDirectory()
