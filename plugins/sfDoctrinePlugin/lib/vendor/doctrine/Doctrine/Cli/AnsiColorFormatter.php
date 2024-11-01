@@ -128,7 +128,7 @@ class Doctrine_Cli_AnsiColorFormatter extends Doctrine_Cli_Formatter
     public function excerpt($text, $size = null)
     {
         if (! $size) {
-            $size = $this->size;
+            $size = $this->_size;
         }
 
         if (strlen($text) < $size) {
