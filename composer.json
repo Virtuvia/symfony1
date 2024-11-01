@@ -12,7 +12,8 @@
     },
     "autoload": {
         "classmap": [
-            "lib/"
+            "lib",
+            "plugins/sfDoctrinePlugin/lib"
         ],
         "files": [
             "symfony_version.php",
