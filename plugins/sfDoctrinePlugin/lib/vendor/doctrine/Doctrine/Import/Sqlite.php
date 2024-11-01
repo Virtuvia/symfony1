@@ -176,7 +176,7 @@ class Doctrine_Import_Sqlite extends Doctrine_Import
     public function listTableViews($table)
     {
         $query = "SELECT name, sql FROM sqlite_master WHERE type='view' AND sql NOT NULL";
-        $views = $db->fetchAll($query);
+        $views = $this->conn->fetchAll($query);
 
         $result = [];
         foreach ($views as $row) {
