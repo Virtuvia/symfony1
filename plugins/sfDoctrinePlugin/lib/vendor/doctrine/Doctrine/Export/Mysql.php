@@ -57,9 +57,8 @@ class Doctrine_Export_Mysql extends Doctrine_Export
      * createDatabaseSql
      *
      * @param string $name
-     * @return void
      */
-    public function createDatabaseSql($name)
+    public function createDatabaseSql($name): string
     {
         return 'CREATE DATABASE ' . $this->conn->quoteIdentifier($name, true);
     }
@@ -68,9 +67,9 @@ class Doctrine_Export_Mysql extends Doctrine_Export
      * drop an existing database
      *
      * @param string $name name of the database that should be dropped
-     * @return string
+     * @return string[]
      */
-    public function dropDatabaseSql($name)
+    public function dropDatabaseSql($name): array
     {
         return [
             'SET FOREIGN_KEY_CHECKS = 0',
@@ -113,7 +112,7 @@ class Doctrine_Export_Mysql extends Doctrine_Export
      *
      * @return string[]
      */
-    public function createTableSql($name, array $fields, array $options = [])
+    public function createTableSql($name, array $fields, array $options = []): array
     {
         if (! $name) {
             throw new Doctrine_Export_Exception('no valid table name specified');
@@ -364,7 +363,7 @@ class Doctrine_Export_Mysql extends Doctrine_Export
      *                           actually perform them otherwise.
      * @return bool
      */
-    public function alterTableSql($name, array $changes, $check = false)
+    public function alterTableSql($name, array $changes, $check = false): ?string
     {
         if (! $name) {
             throw new Doctrine_Export_Exception('no valid table name specified');
@@ -383,7 +382,7 @@ class Doctrine_Export_Mysql extends Doctrine_Export
         }
 
         if ($check) {
-            return true;
+            return null;
         }
 
         $query = '';
@@ -448,7 +447,7 @@ class Doctrine_Export_Mysql extends Doctrine_Export
         }
 
         if (! $query) {
-            return false;
+            return null;
         }
 
         $name = $this->conn->quoteIdentifier($name, true);
@@ -488,9 +487,8 @@ class Doctrine_Export_Mysql extends Doctrine_Export
      *                                        )
      *                                    )
      * @throws PDOException
-     * @return void
      */
-    public function createIndexSql($table, $name, array $definition)
+    public function createIndexSql($table, $name, array $definition): string
     {
         $table  = $table;
         $table  = $this->conn->quoteIdentifier($table, true);
@@ -684,9 +682,8 @@ class Doctrine_Export_Mysql extends Doctrine_Export
      *
      * @param string    $table          name of table that should be used in method
      * @param string    $name           name of the index to be dropped
-     * @return void
      */
-    public function dropIndexSql($table, $name)
+    public function dropIndexSql($table, $name): string
     {
         $table  = $this->conn->quoteIdentifier($table, true);
         $name   = $this->conn->quoteIdentifier($this->conn->formatter->getIndexName($name), true);
@@ -698,9 +695,8 @@ class Doctrine_Export_Mysql extends Doctrine_Export
      *
      * @param string    $table          name of table that should be dropped from the database
      * @throws PDOException
-     * @return void
      */
-    public function dropTableSql($table)
+    public function dropTableSql($table): string
     {
         $table  = $this->conn->quoteIdentifier($table, true);
         return 'DROP TABLE ' . $table;

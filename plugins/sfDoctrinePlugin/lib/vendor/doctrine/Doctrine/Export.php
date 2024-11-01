@@ -65,9 +65,9 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      * (this method is implemented by the drivers)
      *
      * @param string $name name of the database that should be dropped
-     * @return void
+     * @return string[]
      */
-    public function dropDatabaseSql($database)
+    public function dropDatabaseSql($database): array
     {
         throw new Doctrine_Export_Exception('Drop database not supported by this driver.');
     }
@@ -77,9 +77,8 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      * drop an existing table
      *
      * @param string $table           name of table that should be dropped from the database
-     * @return string
      */
-    public function dropTableSql($table)
+    public function dropTableSql($table): string
     {
         return 'DROP TABLE ' . $this->conn->quoteIdentifier($table);
     }
@@ -111,9 +110,8 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      *
      * @param string    $table        name of table that should be used in method
      * @param string    $name         name of the index to be dropped
-     * @return string                 SQL that is used for dropping an index
      */
-    public function dropIndexSql($table, $name)
+    public function dropIndexSql($table, $name): string
     {
         $name = $this->conn->quoteIdentifier($this->conn->formatter->getIndexName($name));
 
@@ -162,9 +160,8 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      * (this method is implemented by the drivers)
      *
      * @param string $name name of the database that should be created
-     * @return string
      */
-    public function createDatabaseSql($database)
+    public function createDatabaseSql($database): string
     {
         throw new Doctrine_Export_Exception('Create database not supported by this driver.');
     }
@@ -197,7 +194,7 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      *
      * @return string[]
      */
-    public function createTableSql($name, array $fields, array $options = [])
+    public function createTableSql($name, array $fields, array $options = []): array
     {
         if (! $name) {
             throw new Doctrine_Export_Exception('no valid table name specified');
@@ -323,9 +320,8 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      *                                            'last_login' => array()
      *                                        )
      *                                    )
-     * @return void
      */
-    public function createConstraintSql($table, $name, $definition)
+    public function createConstraintSql($table, $name, $definition): string
     {
         $table = $this->conn->quoteIdentifier($table);
         $name  = $this->conn->quoteIdentifier($this->conn->formatter->getIndexName($name));
@@ -388,9 +384,8 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      * @param string    $name          name of the index to be created
      * @param array     $definition    associative array that defines properties of the index to be created.
      * @see Doctrine_Export::createIndex()
-     * @return string
      */
-    public function createIndexSql($table, $name, array $definition)
+    public function createIndexSql($table, $name, array $definition): string
     {
         $table  = $this->conn->quoteIdentifier($table);
         $name   = $this->conn->quoteIdentifier($name);
@@ -423,9 +418,8 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      *
      * @param string    $table         name of the table on which the foreign key is to be created
      * @param array     $definition    associative array that defines properties of the foreign key to be created.
-     * @return string
      */
-    public function createForeignKeySql($table, array $definition)
+    public function createForeignKeySql($table, array $definition): string
     {
         $table = $this->conn->quoteIdentifier($table);
         $query = 'ALTER TABLE ' . $table . ' ADD ' . $this->getForeignKeyDeclaration($definition);
@@ -554,9 +548,8 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      *                              can perform the requested table alterations if the value is true or
      *                              actually perform them otherwise.
      * @see Doctrine_Export::alterTable()
-     * @return string
      */
-    public function alterTableSql($name, array $changes, $check = false)
+    public function alterTableSql($name, array $changes, $check = false): ?string
     {
         throw new Doctrine_Export_Exception('Alter table not supported by this driver.');
     }

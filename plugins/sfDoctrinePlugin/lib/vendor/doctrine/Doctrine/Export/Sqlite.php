@@ -96,9 +96,8 @@ class Doctrine_Export_Sqlite extends Doctrine_Export
      *                                        )
      *                                    )
      * @throws PDOException
-     * @return void
      */
-    public function createIndexSql($table, $name, array $definition)
+    public function createIndexSql($table, $name, array $definition): string
     {
         $name  = $this->conn->formatter->getIndexName($name);
         $name  = $this->conn->quoteIdentifier($name);
@@ -184,7 +183,7 @@ class Doctrine_Export_Sqlite extends Doctrine_Export
      *
      * @return string[]
      */
-    public function createTableSql($name, array $fields, array $options = [])
+    public function createTableSql($name, array $fields, array $options = []): array
     {
         if (! $name) {
             throw new Doctrine_Export_Exception('no valid table name specified');
@@ -264,7 +263,7 @@ class Doctrine_Export_Sqlite extends Doctrine_Export
         return $query;
     }
 
-    public function alterTableSql($name, array $changes, $check = false)
+    public function alterTableSql($name, array $changes, $check = false): ?string
     {
         if (! $name) {
             throw new Doctrine_Export_Exception('no valid table name specified');
