@@ -143,7 +143,7 @@ class Doctrine_Data_Export extends Doctrine_Data
      *
      * Prepare the raw data to be exported with the parser
      *
-     * @param string $data
+     * @param array<string, Doctrine_Collection> $data
      * @return array
      */
     public function prepareData($data)

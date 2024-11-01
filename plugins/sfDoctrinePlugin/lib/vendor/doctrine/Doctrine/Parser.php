@@ -63,7 +63,7 @@ abstract class Doctrine_Parser
      * @param string $type
      * @author Jonathan H. Wage
      */
-    public static function getParser($type)
+    public static function getParser(string $type): static
     {
         $class = 'Doctrine_Parser_' . ucfirst($type);
 
