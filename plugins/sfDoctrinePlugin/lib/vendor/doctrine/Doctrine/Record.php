@@ -1631,7 +1631,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             $array = $data;
         }
 
-        return $this->fromArray($array, $deep);
+        $this->fromArray($array, $deep);
     }
 
     /**
