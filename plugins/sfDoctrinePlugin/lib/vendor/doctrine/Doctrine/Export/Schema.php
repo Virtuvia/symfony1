@@ -130,24 +130,4 @@ class Doctrine_Export_Schema
 
         return $array;
     }
-
-    /**
-     * exportSchema
-     *
-     * @param  string $schema
-     * @param  string $directory
-     * @param string $string of data in the specified format
-     * @param int $modelLoading The model loading strategy to use to load the models from the passed directory
-     * @return void
-     */
-    public function exportSchema($schema, $format = 'yml', $directory = null, $models = [], $modelLoading = null)
-    {
-        $array = $this->buildSchema($directory, $models, $modelLoading);
-
-        if (is_dir($schema)) {
-            $schema = $schema . DIRECTORY_SEPARATOR . 'schema.' . $format;
-        }
-
-        return Doctrine_Parser::dump($array, $format, $schema);
-    }
 }

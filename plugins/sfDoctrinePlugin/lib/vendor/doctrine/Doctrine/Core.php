@@ -438,13 +438,6 @@ class Doctrine_Core
     private static $_path;
 
     /**
-     * Path to the Doctrine extensions directory
-     *
-     * @var string $extensionsPath
-     */
-    private static $_extensionsPath;
-
-    /**
      * Debug bool true/false option
      *
      * @var bool $_debug
@@ -457,13 +450,6 @@ class Doctrine_Core
      * @var array
      */
     private static $_loadedModelFiles = [];
-
-    /**
-     * Array of all the loaded validators
-     *
-     * @var array
-     */
-    private static $_validators = [];
 
     /**
      * Path to the models directory
@@ -530,27 +516,6 @@ class Doctrine_Core
         }
 
         return self::$_path;
-    }
-
-    /**
-     * Set the path to autoload extension classes from
-     *
-     * @param string $extensionsPath
-     * @return void
-     */
-    public static function setExtensionsPath($extensionsPath)
-    {
-        self::$_extensionsPath = $extensionsPath;
-    }
-
-    /**
-     * Get the path to load extension classes from
-     *
-     * @return string $extensionsPath
-     */
-    public static function getExtensionsPath()
-    {
-        return self::$_extensionsPath;
     }
 
     /**
@@ -796,49 +761,6 @@ class Doctrine_Core
     }
 
     /**
-     * Method for importing existing schema to Doctrine_Record classes
-     *
-     * @param string $directory Directory to write your models to
-     * @param array $connections Array of connection names to generate models for
-     * @param array $options Array of options
-     * @return bool
-     * @throws Exception
-     */
-    public static function generateModelsFromDb($directory, array $connections = [], array $options = [])
-    {
-        return Doctrine_Manager::connection()->import->importSchema($directory, $connections, $options);
-    }
-
-    /**
-     * Generates models from database to temporary location then uses those models to generate a yaml schema file.
-     * This should probably be fixed. We should write something to generate a yaml schema file directly from the database.
-     *
-     * @param string $yamlPath Path to write oyur yaml schema file to
-     * @param array $connections Array of connection names to generate yaml for
-     * @param array  $options Array of options
-     * @return void
-     */
-    public static function generateYamlFromDb($yamlPath, array $connections = [], array $options = [])
-    {
-        $directory = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp_doctrine_models';
-
-        $options['generateBaseClasses'] = isset($options['generateBaseClasses']) ? $options['generateBaseClasses'] : false;
-        $result = Doctrine_Core::generateModelsFromDb($directory, $connections, $options);
-
-        if (empty($result) && ! is_dir($directory)) {
-            throw new Doctrine_Exception('No models generated from your databases');
-        }
-
-        $export = new Doctrine_Export_Schema();
-
-        $result = $export->exportSchema($yamlPath, 'yml', $directory, [], Doctrine_Core::MODEL_LOADING_AGGRESSIVE);
-
-        Doctrine_Lib::removeDirectories($directory);
-
-        return $result;
-    }
-
-    /**
      * Generate a yaml schema file from an existing directory of models
      *
      * @param string $yamlPath Path to your yaml schema files
@@ -852,17 +774,6 @@ class Doctrine_Core
         $import->setOptions($options);
 
         return $import->importSchema($yamlPath, 'yml', $directory);
-    }
-
-    /**
-     * Creates database tables for the models in the specified directory
-     *
-     * @param string $directory Directory containing your models
-     * @return void
-     */
-    public static function createTablesFromModels($directory = null)
-    {
-        return Doctrine_Manager::connection()->export->exportSchema($directory);
     }
 
     /**
@@ -897,42 +808,6 @@ class Doctrine_Core
     }
 
     /**
-     * Generate yaml schema file for the models in the specified directory
-     *
-     * @param string $yamlPath Path to your yaml schema files
-     * @param string $directory Directory to generate your models in
-     * @return void
-     */
-    public static function generateYamlFromModels($yamlPath, $directory)
-    {
-        $export = new Doctrine_Export_Schema();
-
-        return $export->exportSchema($yamlPath, 'yml', $directory);
-    }
-
-    /**
-     * Creates databases for connections
-     *
-     * @param string $specifiedConnections Array of connections you wish to create the database for
-     * @return void
-     */
-    public static function createDatabases($specifiedConnections = [])
-    {
-        return Doctrine_Manager::getInstance()->createDatabases($specifiedConnections);
-    }
-
-    /**
-     * Drops databases for connections
-     *
-     * @param string $specifiedConnections Array of connections you wish to drop the database for
-     * @return void
-     */
-    public static function dropDatabases($specifiedConnections = [])
-    {
-        return Doctrine_Manager::getInstance()->dropDatabases($specifiedConnections);
-    }
-
-    /**
      * Dump data to a yaml fixtures file
      *
      * @param string $yamlPath Path to write the yaml data fixtures to
@@ -959,79 +834,6 @@ class Doctrine_Core
         $data = new Doctrine_Data();
 
         return $data->importData($yamlPath, 'yml', [], $append);
-    }
-
-    /**
-     * Migrate database to specified $to version. Migrates from current to latest if you do not specify.
-     *
-     * @param string $migrationsPath Path to migrations directory which contains your migration classes
-     * @param string $to Version you wish to migrate to.
-     * @return bool true
-     * @throws new Doctrine_Migration_Exception
-     */
-    public static function migrate($migrationsPath, $to = null)
-    {
-        $migration = new Doctrine_Migration($migrationsPath);
-
-        return $migration->migrate($to);
-    }
-
-    /**
-     * Generate new migration class skeleton
-     *
-     * @param string $className Name of the Migration class to generate
-     * @param string $migrationsPath Path to directory which contains your migration classes
-     */
-    public static function generateMigrationClass($className, $migrationsPath)
-    {
-        $builder = new Doctrine_Migration_Builder($migrationsPath);
-
-        return $builder->generateMigrationClass($className);
-    }
-
-    /**
-     * Generate a set of migration classes from an existing database
-     *
-     * @param string $migrationsPath
-     * @return void
-     * @throws new Doctrine_Migration_Exception
-     */
-    public static function generateMigrationsFromDb($migrationsPath)
-    {
-        $builder = new Doctrine_Migration_Builder($migrationsPath);
-
-        return $builder->generateMigrationsFromDb();
-    }
-
-    /**
-     * Generate a set of migration classes from an existing set of models
-     *
-     * @param string  $migrationsPath Path to your Doctrine migration classes
-     * @param string  $modelsPath     Path to your Doctrine model classes
-     * @param int $modelLoading   Style of model loading to use for loading the models in order to generate migrations
-     * @return void
-     */
-    public static function generateMigrationsFromModels($migrationsPath, $modelsPath = null, $modelLoading = null)
-    {
-        $builder = new Doctrine_Migration_Builder($migrationsPath);
-
-        return $builder->generateMigrationsFromModels($modelsPath, $modelLoading);
-    }
-
-    /**
-     * Generate a set of migration classes by generating differences between two sets
-     * of schema information
-     *
-     * @param  string $migrationsPath   Path to your Doctrine migration classes
-     * @param  string $from             From schema information
-     * @param  string $to               To schema information
-     * @return array $changes
-     */
-    public static function generateMigrationsFromDiff($migrationsPath, $from, $to)
-    {
-        $diff = new Doctrine_Migration_Diff($from, $to, $migrationsPath);
-
-        return $diff->generateMigrationClasses();
     }
 
     /**
@@ -1070,69 +872,5 @@ class Doctrine_Core
         }
 
         return false;
-    }
-
-    /**
-     * Load classes from the Doctrine extensions directory/path
-     *
-     * @param string $className
-     * @return bool
-     */
-    public static function extensionsAutoload($className)
-    {
-        if (class_exists($className, false) || interface_exists($className, false)) {
-            return false;
-        }
-
-        $extensions = Doctrine_Manager::getInstance()
-            ->getExtensions();
-
-        foreach ($extensions as $name => $path) {
-            $class = $path . DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-
-            if (file_exists($class)) {
-                require $class;
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * dumps a given variable
-     *
-     * @param mixed $var        a variable of any type
-     * @param bool $output   whether to output the content
-     * @param string $indent    indention string
-     * @return void|string
-     */
-    public static function dump($var, $output = true, $indent = "")
-    {
-        $ret = [];
-        switch (gettype($var)) {
-            case 'array':
-                $ret[] = 'Array(';
-                $indent .= "    ";
-                foreach ($var as $k => $v) {
-
-                    $ret[] = $indent . $k . ' : ' . self::dump($v, false, $indent);
-                }
-                $indent = substr($indent, 0, -4);
-                $ret[] = $indent . ")";
-                break;
-            case 'object':
-                $ret[] = 'Object(' . get_class($var) . ')';
-                break;
-            default:
-                $ret[] = var_export($var, true);
-        }
-
-        if ($output) {
-            print implode("\n", $ret);
-        }
-
-        return implode("\n", $ret);
     }
 }

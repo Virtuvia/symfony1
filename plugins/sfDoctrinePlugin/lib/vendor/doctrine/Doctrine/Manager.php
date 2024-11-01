@@ -632,50 +632,6 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
     }
 
     /**
-     * Creates databases for all existing connections
-     *
-     * @param string $specifiedConnections Array of connections you wish to create the database for
-     * @return void
-     * @todo package:dbal
-     */
-    public function createDatabases($specifiedConnections = [])
-    {
-        if (! is_array($specifiedConnections)) {
-            $specifiedConnections = (array) $specifiedConnections;
-        }
-
-        foreach ($this as $name => $connection) {
-            if (! empty($specifiedConnections) && ! in_array($name, $specifiedConnections)) {
-                continue;
-            }
-
-            $connection->createDatabase();
-        }
-    }
-
-    /**
-     * Drops databases for all existing connections
-     *
-     * @param string $specifiedConnections Array of connections you wish to drop the database for
-     * @return void
-     * @todo package:dbal
-     */
-    public function dropDatabases($specifiedConnections = [])
-    {
-        if (! is_array($specifiedConnections)) {
-            $specifiedConnections = (array) $specifiedConnections;
-        }
-
-        foreach ($this as $name => $connection) {
-            if (! empty($specifiedConnections) && ! in_array($name, $specifiedConnections)) {
-                continue;
-            }
-
-            $connection->dropDatabase();
-        }
-    }
-
-    /**
      * Get available doctrine validators
      *
      * @return array $validators
@@ -750,40 +706,5 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
     public function registerConnectionDriver($name, $class)
     {
         $this->_connectionDrivers[$name] = $class;
-    }
-
-    /**
-     * Get all the available connection drivers
-     *
-     * @return array $connectionDrivers
-     */
-    public function getConnectionDrivers()
-    {
-        return $this->_connectionsDrivers;
-    }
-
-    /**
-     * Register a Doctrine extension for extensionsAutoload() method
-     *
-     * @param string $name
-     * @param string $path
-     * @return void
-     */
-    public function registerExtension($name, $path = null)
-    {
-        if (is_null($path)) {
-            $path = Doctrine_Core::getExtensionsPath() . '/' . $name . '/lib';
-        }
-        $this->_extensions[$name] = $path;
-    }
-
-    /**
-     * Get all registered Doctrine extensions
-     *
-     * @return $extensions
-     */
-    public function getExtensions()
-    {
-        return $this->_extensions;
     }
 }

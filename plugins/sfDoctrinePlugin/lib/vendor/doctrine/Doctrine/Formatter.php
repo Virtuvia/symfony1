@@ -33,35 +33,6 @@
 class Doctrine_Formatter extends Doctrine_Connection_Module
 {
     /**
-     * Quotes pattern (% and _) characters in a string)
-     *
-     * EXPERIMENTAL
-     *
-     * WARNING: this function is experimental and may change signature at
-     * any time until labelled as non-experimental
-     *
-     * @param   string  the input string to quote
-     *
-     * @return  string  quoted string
-     */
-    public function escapePattern($text)
-    {
-        if (! $this->string_quoting['escape_pattern']) {
-            return $text;
-        }
-        $tmp = $this->conn->string_quoting;
-
-        $text = str_replace($tmp['escape_pattern'],
-            $tmp['escape_pattern'] .
-            $tmp['escape_pattern'], $text);
-
-        foreach ($this->wildcards as $wildcard) {
-            $text = str_replace($wildcard, $tmp['escape_pattern'] . $wildcard, $text);
-        }
-        return $text;
-    }
-
-    /**
      * convertBooleans
      * some drivers need the boolean values to be converted into integers
      * when using DQL API

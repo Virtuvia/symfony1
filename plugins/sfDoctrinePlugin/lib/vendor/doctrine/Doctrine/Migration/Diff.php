@@ -379,28 +379,19 @@ class Doctrine_Migration_Diff
             'generateBaseClasses' => false,
         ];
 
-        if (is_string($item) && file_exists($item)) {
-            $extension = $this->_getItemExtension($item);
+        $extension = $this->_getItemExtension($item);
 
-            if ($extension === 'yml') {
-                Doctrine_Core::generateModelsFromYaml($item, $path, $options);
+        if ($extension === 'yml') {
+            Doctrine_Core::generateModelsFromYaml($item, $path, $options);
 
-                return $path;
-            } elseif ($extension === 'php') {
-                Doctrine_Lib::copyDirectory($item, $path);
+            return $path;
+        } elseif ($extension === 'php') {
+            Doctrine_Lib::copyDirectory($item, $path);
 
-                return $path;
-            } else {
-                throw new Doctrine_Migration_Exception('No php or yml files found at path: "' . $item . '"');
-            }
-        } else {
-            try {
-                Doctrine_Core::generateModelsFromDb($path, (array) $item, $options);
-                return $path;
-            } catch (Exception $e) {
-                throw new Doctrine_Migration_Exception('Could not generate models from connection: ' . $e->getMessage());
-            }
+            return $path;
         }
+
+        throw new Doctrine_Migration_Exception('No php or yml files found at path: "' . $item . '"');
     }
 
     /**

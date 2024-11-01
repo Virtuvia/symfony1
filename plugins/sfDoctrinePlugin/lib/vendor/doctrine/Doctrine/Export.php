@@ -1005,32 +1005,6 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
         return '';
     }
 
-    /**
-     * exportSchema
-     * method for exporting Doctrine_Record classes to a schema
-     *
-     * if the directory parameter is given this method first iterates
-     * recursively trhough the given directory in order to find any model classes
-     *
-     * Then it iterates through all declared classes and creates tables for the ones
-     * that extend Doctrine_Record and are not abstract classes
-     *
-     * @throws Doctrine_Connection_Exception    if some error other than Doctrine_Core::ERR_ALREADY_EXISTS
-     *                                          occurred during the create table operation
-     * @param string $directory     optional directory parameter
-     * @return void
-     */
-    public function exportSchema($directory = null)
-    {
-        if ($directory !== null) {
-            $models = Doctrine_Core::filterInvalidModels(Doctrine_Core::loadModels($directory));
-        } else {
-            $models = Doctrine_Core::getLoadedModels();
-        }
-
-        $this->exportClasses($models);
-    }
-
     protected function exportSortedClassesSql(array $classes, bool $groupByConnection = true): array
     {
         $connections = [];

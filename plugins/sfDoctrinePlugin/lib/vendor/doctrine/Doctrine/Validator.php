@@ -139,16 +139,6 @@ class Doctrine_Validator
     }
 
     /**
-     * Whether or not errors exist on this validator
-     *
-     * @return bool True/false for whether or not this validate instance has error
-     */
-    public function hasErrors()
-    {
-        return (count($this->stack) > 0);
-    }
-
-    /**
      * Validate the type of the passed variable
      *
      * @param  mixed  $var   Variable to validate
