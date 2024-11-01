@@ -39,9 +39,8 @@ class Doctrine_Export_Mysql extends Doctrine_Export
      * @param string    $table        name of table that should be used in method
      * @param string    $name         name of the constraint to be dropped
      * @param string    $primary      hint if the constraint is primary
-     * @return void
      */
-    public function dropConstraint($table, $name, $primary = false)
+    public function dropConstraint($table, $name, $primary = false): void
     {
         $table = $this->conn->quoteIdentifier($table);
 
@@ -51,7 +50,7 @@ class Doctrine_Export_Mysql extends Doctrine_Export
             $name = 'PRIMARY KEY';
         }
 
-        return $this->conn->exec('ALTER TABLE ' . $table . ' DROP ' . $name);
+        $this->conn->exec('ALTER TABLE ' . $table . ' DROP ' . $name);
     }
 
     /**
@@ -712,14 +711,13 @@ class Doctrine_Export_Mysql extends Doctrine_Export
      *
      * @param string    $table        name of table that should be used in method
      * @param string    $name         name of the foreign key to be dropped
-     * @return void
      */
-    public function dropForeignKey($table, $name)
+    public function dropForeignKey($table, $name): void
     {
         $table = $this->conn->quoteIdentifier($table);
         $name  = $this->conn->quoteIdentifier($this->conn->formatter->getForeignKeyName($name));
 
-        return $this->conn->exec('ALTER TABLE ' . $table . ' DROP FOREIGN KEY ' . $name);
+        $this->conn->exec('ALTER TABLE ' . $table . ' DROP FOREIGN KEY ' . $name);
     }
 
     protected function exportSortedClassesSql(array $classes, bool $groupByConnection = true): array

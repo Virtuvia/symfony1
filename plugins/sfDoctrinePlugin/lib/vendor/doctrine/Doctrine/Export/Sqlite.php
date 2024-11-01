@@ -41,9 +41,8 @@ class Doctrine_Export_Sqlite extends Doctrine_Export
      * @param string $databaseFile          Path of the database that should be dropped
      * @throws Doctrine_Export_Exception    if the database file does not exist
      * @throws Doctrine_Export_Exception    if something failed during the removal of the database file
-     * @return void
      */
-    public function dropDatabase($databaseFile)
+    public function dropDatabase($databaseFile): void
     {
         if (! @file_exists($databaseFile)) {
             throw new Doctrine_Export_Exception('database does not exist');
@@ -62,11 +61,10 @@ class Doctrine_Export_Sqlite extends Doctrine_Export
      * Create sqlite database file
      *
      * @param string $databaseFile  Path of the database that should be dropped
-     * @return void
      */
-    public function createDatabase($databaseFile)
+    public function createDatabase($databaseFile): void
     {
-        return new PDO('sqlite:' . $databaseFile);
+        new PDO('sqlite:' . $databaseFile);
     }
 
     /**
@@ -355,10 +353,8 @@ class Doctrine_Export_Sqlite extends Doctrine_Export
      *
      * @param string    $table         name of the table on which the foreign key is to be created
      * @param array     $definition    associative array that defines properties of the foreign key to be created.
-     * @return string
      */
-    public function createForeignKey($table, array $definition)
+    public function createForeignKey($table, array $definition): void
     {
-        return false;
     }
 }

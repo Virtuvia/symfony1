@@ -52,9 +52,8 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      * (this method is implemented by the drivers)
      *
      * @param string $name name of the database that should be dropped
-     * @return void
      */
-    public function dropDatabase($database)
+    public function dropDatabase($database): void
     {
         foreach ((array) $this->dropDatabaseSql($database) as $query) {
             $this->conn->execute($query);
@@ -90,9 +89,8 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      * drop an existing table
      *
      * @param string $table           name of table that should be dropped from the database
-     * @return void
      */
-    public function dropTable($table)
+    public function dropTable($table): void
     {
         $this->conn->execute($this->dropTableSql($table));
     }
@@ -102,11 +100,10 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      *
      * @param string    $table        name of table that should be used in method
      * @param string    $name         name of the index to be dropped
-     * @return void
      */
-    public function dropIndex($table, $name)
+    public function dropIndex($table, $name): void
     {
-        return $this->conn->exec($this->dropIndexSql($table, $name));
+        $this->conn->exec($this->dropIndexSql($table, $name));
     }
 
     /**
@@ -129,14 +126,13 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      * @param string    $table        name of table that should be used in method
      * @param string    $name         name of the constraint to be dropped
      * @param string    $primary      hint if the constraint is primary
-     * @return void
      */
-    public function dropConstraint($table, $name, $primary = false)
+    public function dropConstraint($table, $name, $primary = false): void
     {
         $table = $this->conn->quoteIdentifier($table);
         $name  = $this->conn->quoteIdentifier($name);
 
-        return $this->conn->exec('ALTER TABLE ' . $table . ' DROP CONSTRAINT ' . $name);
+        $this->conn->exec('ALTER TABLE ' . $table . ' DROP CONSTRAINT ' . $name);
     }
 
     /**
@@ -144,11 +140,10 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      *
      * @param string    $table        name of table that should be used in method
      * @param string    $name         name of the foreign key to be dropped
-     * @return void
      */
-    public function dropForeignKey($table, $name)
+    public function dropForeignKey($table, $name): void
     {
-        return $this->dropConstraint($table, $this->conn->formatter->getForeignKeyName($name));
+        $this->dropConstraint($table, $this->conn->formatter->getForeignKeyName($name));
     }
 
     /**
@@ -156,9 +151,8 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      * (this method is implemented by the drivers)
      *
      * @param string $name name of the database that should be created
-     * @return void
      */
-    public function createDatabase($database)
+    public function createDatabase($database): void
     {
         $this->conn->execute($this->createDatabaseSql($database));
     }
@@ -260,10 +254,8 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      * @param array $fields  Associative array that contains the definition of each field of the new table
      * @param array $options  An associative array of table options:
      * @see Doctrine_Export::createTableSql()
-     *
-     * @return void
      */
-    public function createTable($name, array $fields, array $options = [])
+    public function createTable($name, array $fields, array $options = []): void
     {
         // Build array of the primary keys if any of the individual field definitions
         // specify primary => true
@@ -304,13 +296,12 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      *                                            'last_login' => array()
      *                                        )
      *                                    )
-     * @return void
      */
-    public function createConstraint($table, $name, $definition)
+    public function createConstraint($table, $name, $definition): void
     {
         $sql = $this->createConstraintSql($table, $name, $definition);
 
-        return $this->conn->exec($sql);
+        $this->conn->exec($sql);
     }
 
     /**
@@ -384,11 +375,10 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      *                                            'last_login' => array()
      *                                        )
      *                                    )
-     * @return void
      */
-    public function createIndex($table, $name, array $definition)
+    public function createIndex($table, $name, array $definition): void
     {
-        return $this->conn->execute($this->createIndexSql($table, $name, $definition));
+        $this->conn->execute($this->createIndexSql($table, $name, $definition));
     }
 
     /**
@@ -448,13 +438,12 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      *
      * @param string    $table         name of the table on which the foreign key is to be created
      * @param array     $definition    associative array that defines properties of the foreign key to be created.
-     * @return string
      */
-    public function createForeignKey($table, array $definition)
+    public function createForeignKey($table, array $definition): void
     {
         $sql = $this->createForeignKeySql($table, $definition);
 
-        return $this->conn->execute($sql);
+        $this->conn->execute($sql);
     }
 
     /**
@@ -546,7 +535,7 @@ abstract class Doctrine_Export extends Doctrine_Connection_Module
      *                             actually perform them otherwise.
      * @return void
      */
-    public function alterTable($name, array $changes, $check = false)
+    public function alterTable($name, array $changes, $check = false): void
     {
         $sql = $this->alterTableSql($name, $changes, $check);
 
