@@ -183,16 +183,15 @@ class Doctrine_Data
      * @param string $format
      * @param string $models
      * @param string $_exportIndividualFiles
-     * @return void
      */
-    public function exportData($directory, $format = 'yml', $models = [], $_exportIndividualFiles = false)
+    public function exportData($directory, $format = 'yml', $models = [], $_exportIndividualFiles = false): void
     {
         $export = new Doctrine_Data_Export($directory);
         $export->setFormat($format);
         $export->setModels($models);
         $export->exportIndividualFiles($_exportIndividualFiles);
 
-        return $export->doExport();
+        $export->doExport();
     }
 
     /**

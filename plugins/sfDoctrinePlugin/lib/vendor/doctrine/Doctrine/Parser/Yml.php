@@ -41,16 +41,14 @@ class Doctrine_Parser_Yml extends Doctrine_Parser
      * @param  string $array Array of data to dump to yaml
      * @param  string $path  Path to dump the yaml to
      * @return string $yaml
-     * @return void
      */
-    public function dumpData($array, $path = null, $charset = null)
+    public function dumpData($array, string $path, $charset = null): void
     {
 
         try {
             $data = sfYaml::dump($array, 6);
 
-            return $this->doDump($data, $path);
-
+            $this->doDump($data, $path);
         } catch (InvalidArgumentException $e) {
             // rethrow the exceptions
             $rethrowed_exception = new Doctrine_Parser_Exception($e->getMessage(), $e->getCode());

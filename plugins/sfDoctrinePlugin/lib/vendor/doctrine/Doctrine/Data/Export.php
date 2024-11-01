@@ -100,7 +100,7 @@ class Doctrine_Data_Export extends Doctrine_Data
 
         $data = $this->prepareData($data);
 
-        return $this->dumpData($data);
+        $this->dumpData($data);
     }
 
     /**
@@ -110,7 +110,7 @@ class Doctrine_Data_Export extends Doctrine_Data
      *
      * @param string $array
      */
-    public function dumpData(array $data)
+    public function dumpData(array $data): void
     {
         $directory = $this->getDirectory();
         $format = $this->getFormat();
@@ -133,7 +133,7 @@ class Doctrine_Data_Export extends Doctrine_Data
             }
 
             if (! empty($data)) {
-                return Doctrine_Parser::dump($data, $format, $directory);
+                Doctrine_Parser::dump($data, $format, $directory);
             }
         }
     }

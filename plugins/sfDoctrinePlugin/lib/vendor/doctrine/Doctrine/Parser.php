@@ -48,13 +48,12 @@ abstract class Doctrine_Parser
      *
      * Override in the parser driver
      *
-     * @param string $array
+     * @param mixed $array
      * @param string $path
-     * @param string $charset The charset of the data being dumped
-     * @return void
+     * @param ?string $charset The charset of the data being dumped
      * @author Jonathan H. Wage
      */
-    abstract public function dumpData($array, $path = null, $charset = null);
+    abstract public function dumpData(mixed $array, string $path, ?string $charset = null): void;
 
     /**
      * getParser
@@ -92,18 +91,16 @@ abstract class Doctrine_Parser
      *
      * Interface for pulling and dumping data to a file
      *
-     * @param string $array
+     * @param mixed $array
      * @param string $path
      * @param string $type
-     * @param string $charset The charset of the data being dumped
-     * @return void
-     * @author Jonathan H. Wage
+     * @param ?string $charset The charset of the data being dumped
      */
-    public static function dump($array, $type = 'xml', $path = null, $charset = null)
+    public static function dump(mixed $array, string $type, string $path, ?string $charset = null): void
     {
         $parser = self::getParser($type);
 
-        return $parser->dumpData($array, $path, $charset);
+        $parser->dumpData($array, $path, $charset);
     }
 
     /**
@@ -132,19 +129,8 @@ abstract class Doctrine_Parser
         return $contents;
     }
 
-    /**
-     * doDump
-     *
-     * @param string $data
-     * @param string $path
-     * @return void
-     */
-    public function doDump($data, $path = null)
+    public function doDump(string $data, string $path): void
     {
-        if ($path !== null) {
-            return file_put_contents($path, $data);
-        } else {
-            return $data;
-        }
+        file_put_contents($path, $data);
     }
 }

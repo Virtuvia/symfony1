@@ -812,13 +812,12 @@ class Doctrine_Core
      *
      * @param string $yamlPath Path to write the yaml data fixtures to
      * @param string $individualFiles Whether or not to dump data to individual fixtures files
-     * @return void
      */
-    public static function dumpData($yamlPath, $individualFiles = false)
+    public static function dumpData($yamlPath, $individualFiles = false): void
     {
         $data = new Doctrine_Data();
 
-        return $data->exportData($yamlPath, 'yml', [], $individualFiles);
+        $data->exportData($yamlPath, 'yml', [], $individualFiles);
     }
 
     /**
