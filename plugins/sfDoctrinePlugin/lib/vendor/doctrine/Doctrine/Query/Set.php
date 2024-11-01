@@ -30,7 +30,7 @@
  * @version     $Revision: 7490 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
-class Doctrine_Query_Set extends Doctrine_Query_Part
+class Doctrine_Query_Set extends Doctrine_Query_Condition
 {
     public function parse($dql)
     {
