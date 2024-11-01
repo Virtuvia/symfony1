@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /*
  *  $Id: Doctrine.php 7490 2010-03-29 19:53:27Z jwage $
  *
@@ -30,7 +33,9 @@
  * @link        www.doctrine-project.org
  * @since       1.0
  * @version     $Revision: 7490 $
+ * @deprecated use Doctrine_Core
+ * @see Doctrine_Core
  */
-class Doctrine extends Doctrine_Core
+final class Doctrine extends Doctrine_Core
 {
 }
