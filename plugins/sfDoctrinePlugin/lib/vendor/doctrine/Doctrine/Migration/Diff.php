@@ -343,7 +343,7 @@ class Doctrine_Migration_Diff
      * @param string $item
      * @return string $extension
      */
-    protected function _getItemExtension($item)
+    protected function _getItemExtension(string $item)
     {
         if (is_dir($item)) {
             $files = glob($item . DIRECTORY_SEPARATOR . '*');
@@ -371,7 +371,7 @@ class Doctrine_Migration_Diff
      * @return string $path    The path where the models were generated
      * @throws Doctrine_Migration_Exception $e
      */
-    protected function _generateModels($prefix, $item)
+    protected function _generateModels(string $prefix, string $item)
     {
         $path = $this->_tmpPath . DIRECTORY_SEPARATOR . strtolower($prefix) . '_doctrine_tmp_dirs';
         $options = [
