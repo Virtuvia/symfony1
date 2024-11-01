@@ -1047,21 +1047,6 @@ class Doctrine_Core
         return Doctrine_Manager::getInstance()->getConnectionForComponent($componentName)->getTable($componentName);
     }
 
-    /**
-     * Method for making a single file of most used doctrine runtime components
-     * including the compiled file instead of multiple files (in worst
-     * cases dozens of files) can improve performance by an order of magnitude
-     *
-     * @param string $target
-     * @param array  $includedDrivers
-     * @throws Doctrine_Exception
-     * @return void
-     */
-    public static function compile($target = null, $includedDrivers = [])
-    {
-        return Doctrine_Compiler::compile($target, $includedDrivers);
-    }
-
     public static function modelsAutoload($className)
     {
         if (class_exists($className, false) || interface_exists($className, false)) {
