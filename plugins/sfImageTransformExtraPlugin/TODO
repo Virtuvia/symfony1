@@ -1,0 +1,8 @@
+ * write functional tests
+ * reorganise and complete tests for sources
+ * write more tests to produce image urls
+ * implement configurable 404 fallback
+ * reach 100% code coverage
+ * implement StreamHitching
+ * test ImageMagick adapter
+ * make cache configuraable independantly

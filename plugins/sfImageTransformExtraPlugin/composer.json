@@ -1,0 +1,15 @@
+{
+    "name": "caefer/sf-image-transform-extra-plugin",
+    "type": "symfony1-plugin",
+    "description": "Image manipulation made even easier! Separate code and design the right way.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Schaefer",
+            "email": "caefer@ical.ly"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
