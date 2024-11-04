@@ -20,7 +20,8 @@
             "plugins/sfDoctrineGuardPlugin/modules",
             "plugins/sfFormExtraPlugin/lib",
             "plugins/sfImageTransformExtraPlugin/lib",
-            "plugins/sfImageTransformExtraPlugin/modules"
+            "plugins/sfImageTransformExtraPlugin/modules",
+            "plugins/sfImageTransformPlugin/lib"
         ],
         "files": [
             "symfony_version.php",
