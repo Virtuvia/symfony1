@@ -1,0 +1,15 @@
+{
+    "name": "virtuvia/sf-jquery-reloaded-plugin",
+    "type": "symfony1-plugin",
+    "description": "Easy integration of jQuery",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fourat ZOUARI",
+            "email": "fourat@gmail.com"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
