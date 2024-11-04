@@ -8,4 +8,4 @@
  * file that was distributed with this source code.
  */
 
-require_once dirname(__DIR__, 4) . '/test/bootstrap/Doctrine.php';
+require_once dirname(__DIR__, 7) . '/test/bootstrap/Doctrine.php';

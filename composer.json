@@ -15,7 +15,9 @@
             "lib",
             "plugins/sfDoctrinePlugin/lib",
             "plugins/csDoctrineActAsSortablePlugin/lib",
-            "plugins/sfDoctrineActAsTaggablePlugin/lib"
+            "plugins/sfDoctrineActAsTaggablePlugin/lib",
+            "plugins/sfDoctrineGuardPlugin/lib",
+            "plugins/sfDoctrineGuardPlugin/modules"
         ],
         "files": [
             "symfony_version.php",
