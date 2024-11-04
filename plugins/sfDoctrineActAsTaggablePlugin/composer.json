@@ -1,0 +1,14 @@
+{
+    "name": "virtuvia/sf-doctrine-act-as-taggable-plugin",
+    "type": "symfony1-plugin",
+    "description": "This behavior allows tags to be attached to Doctrine objects. It includes tag-cloud generation and helpers to display these clouds. It also offers optional typeahead features for entering tags.",
+    "authors": [
+        {
+            "name": "Alex Gilbert",
+            "email": "alex@punkave.com"
+        }
+    ],
+    "require": {
+        "composer/installers": "^1.0"
+    }
+}
