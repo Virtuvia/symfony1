@@ -1,0 +1,14 @@
+{
+    "name": "virtuvia/sf-form-extra-plugin",
+    "type": "symfony1-plugin",
+    "description": "The sfFormExtraPlugin packages useful validators, widgets, and forms.",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien.potencier@symfony-project.com"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
