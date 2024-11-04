@@ -1,0 +1,15 @@
+{
+    "name": "virtuvia/sf-doctrine-guard-plugin",
+    "type": "symfony1-plugin",
+    "description": "Identity management plugin.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jonathan H. Wage",
+            "email": "jonwage@gmail.com"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
