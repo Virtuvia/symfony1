@@ -1,0 +1,15 @@
+{
+    "name": "virtuvia/sf-image-transform-plugin",
+    "type": "symfony1-plugin",
+    "description": "Powerful but simple to use image manipulation plugin.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stuart Lowes",
+            "email": "stuart.lowes@gmail.com"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
