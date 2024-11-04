@@ -9,6 +9,6 @@
  */
 
 /** @var Composer\Autoload\ClassLoader $classLoader */
-$classLoader = require dirname(__DIR__, 3) . '/vendor/autoload.php';
+$classLoader = require dirname(__DIR__, 5) . '/autoload.php';
 
-require_once dirname(__DIR__, 3) . '/vendor/symfony/symfony1/lib/vendor/lime/lime.php';
+require_once dirname(__DIR__, 3) . '/lib/vendor/lime/lime.php';
