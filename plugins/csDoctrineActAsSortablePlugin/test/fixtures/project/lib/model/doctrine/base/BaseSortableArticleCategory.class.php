@@ -44,9 +44,9 @@ abstract class BaseSortableArticleCategory extends sfDoctrineRecord
     public function setUp()
     {
         parent::setUp();
-        $this->hasMany('SortableArticleUniqueBy', array(
+        $this->hasMany('SortableArticleUniqueBy', [
              'local' => 'id',
-             'foreign' => 'category_id'));
+             'foreign' => 'category_id']);
     }
 
 }

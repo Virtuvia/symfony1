@@ -51,9 +51,9 @@ abstract class BaseSortableArticleUniqueBy extends sfDoctrineRecord
     public function setUp()
     {
         parent::setUp();
-        $this->hasOne('SortableArticleCategory as Category', array(
+        $this->hasOne('SortableArticleCategory as Category', [
              'local' => 'category_id',
-             'foreign' => 'id'));
+             'foreign' => 'id']);
 
         $sortable0 = new Doctrine_Template_Sortable(array(
              'uniqueBy' =>

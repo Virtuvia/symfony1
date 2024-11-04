@@ -12,13 +12,13 @@ abstract class BaseSortableArticleCategoryFormFilter extends BaseFormFilterDoctr
 {
     public function setup()
     {
-        $this->setWidgets(array(
+        $this->setWidgets([
             'name' => new sfWidgetFormFilterInput(),
-        ));
+        ]);
 
-        $this->setValidators(array(
-            'name' => new sfValidatorPass(array('required' => false)),
-        ));
+        $this->setValidators([
+            'name' => new sfValidatorPass(['required' => false]),
+        ]);
 
         $this->widgetSchema->setNameFormat('sortable_article_category_filters[%s]');
 
@@ -36,9 +36,9 @@ abstract class BaseSortableArticleCategoryFormFilter extends BaseFormFilterDoctr
 
     public function getFields()
     {
-        return array(
+        return [
             'id'   => 'Number',
             'name' => 'Text',
-        );
+        ];
     }
 }

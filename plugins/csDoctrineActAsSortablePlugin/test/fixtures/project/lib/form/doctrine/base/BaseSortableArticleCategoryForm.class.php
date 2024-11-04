@@ -15,15 +15,15 @@ abstract class BaseSortableArticleCategoryForm extends BaseFormDoctrine
 {
     public function setup()
     {
-        $this->setWidgets(array(
+        $this->setWidgets([
             'id'   => new sfWidgetFormInputHidden(),
             'name' => new sfWidgetFormInputText(),
-        ));
+        ]);
 
-        $this->setValidators(array(
-            'id'   => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
-            'name' => new sfValidatorString(array('max_length' => 100, 'required' => false)),
-        ));
+        $this->setValidators([
+            'id'   => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]),
+            'name' => new sfValidatorString(['max_length' => 100, 'required' => false]),
+        ]);
 
         $this->widgetSchema->setNameFormat('sortable_article_category[%s]');
 
