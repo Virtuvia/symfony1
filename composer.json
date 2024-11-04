@@ -18,7 +18,9 @@
             "plugins/sfDoctrineActAsTaggablePlugin/lib",
             "plugins/sfDoctrineGuardPlugin/lib",
             "plugins/sfDoctrineGuardPlugin/modules",
-            "plugins/sfFormExtraPlugin/lib"
+            "plugins/sfFormExtraPlugin/lib",
+            "plugins/sfImageTransformExtraPlugin/lib",
+            "plugins/sfImageTransformExtraPlugin/modules"
         ],
         "files": [
             "symfony_version.php",
