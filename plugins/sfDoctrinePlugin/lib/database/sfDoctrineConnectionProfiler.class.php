@@ -69,8 +69,7 @@ class sfDoctrineConnectionProfiler extends Doctrine_Connection_Profiler
 
         sfTimerManager::getTimer('Database (Doctrine)');
 
-        $args = func_get_args();
-        $this->__call(__FUNCTION__, $args);
+        $this->timeEvent(__FUNCTION__, $event);
     }
 
     /**
@@ -82,8 +81,7 @@ class sfDoctrineConnectionProfiler extends Doctrine_Connection_Profiler
     {
         sfTimerManager::getTimer('Database (Doctrine)', false)->addTime();
 
-        $args = func_get_args();
-        $this->__call(__FUNCTION__, $args);
+        $this->timeEvent(__FUNCTION__, $event);
 
         if ($event->getElapsedSecs() > $this->options['slow_query_threshold']) {
             $event->slowQuery = true;
@@ -103,8 +101,7 @@ class sfDoctrineConnectionProfiler extends Doctrine_Connection_Profiler
 
         sfTimerManager::getTimer('Database (Doctrine)');
 
-        $args = func_get_args();
-        $this->__call(__FUNCTION__, $args);
+        $this->timeEvent(__FUNCTION__, $event);
     }
 
     /**
@@ -116,8 +113,7 @@ class sfDoctrineConnectionProfiler extends Doctrine_Connection_Profiler
     {
         sfTimerManager::getTimer('Database (Doctrine)', false)->addTime();
 
-        $args = func_get_args();
-        $this->__call(__FUNCTION__, $args);
+        $this->timeEvent(__FUNCTION__, $event);
 
         if ($event->getElapsedSecs() > $this->options['slow_query_threshold']) {
             $event->slowQuery = true;
@@ -137,8 +133,7 @@ class sfDoctrineConnectionProfiler extends Doctrine_Connection_Profiler
 
         sfTimerManager::getTimer('Database (Doctrine)');
 
-        $args = func_get_args();
-        $this->__call(__FUNCTION__, $args);
+        $this->timeEvent(__FUNCTION__, $event);
     }
 
     /**
@@ -150,8 +145,7 @@ class sfDoctrineConnectionProfiler extends Doctrine_Connection_Profiler
     {
         sfTimerManager::getTimer('Database (Doctrine)', false)->addTime();
 
-        $args = func_get_args();
-        $this->__call(__FUNCTION__, $args);
+        $this->timeEvent(__FUNCTION__, $event);
 
         if ($event->getElapsedSecs() > $this->options['slow_query_threshold']) {
             $event->slowQuery = true;

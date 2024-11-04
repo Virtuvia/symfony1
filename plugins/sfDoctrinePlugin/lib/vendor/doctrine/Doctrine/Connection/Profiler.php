@@ -55,22 +55,27 @@ class Doctrine_Connection_Profiler implements Doctrine_Overloadable, IteratorAgg
     public function __call($m, $a)
     {
         // first argument should be an instance of Doctrine_Event
-        if (! ($a[0] instanceof Doctrine_Event)) {
+        if (!($a[0] instanceof Doctrine_Event)) {
             throw new Doctrine_Connection_Profiler_Exception("Couldn't listen event. Event should be an instance of Doctrine_Event.");
         }
 
-        if (substr($m, 0, 3) === 'pre') {
-            // pre-event listener found
-            $a[0]->start();
+        $this->timeEvent($m, $a[0]);
+    }
 
-            $eventSequence = $a[0]->getSequence();
+    protected function timeEvent(string $methodName, \Doctrine_Event $event)
+    {
+        if (substr($methodName, 0, 3) === 'pre') {
+            // pre-event listener found
+            $event->start();
+
+            $eventSequence = $event->getSequence();
             if (! isset($this->eventSequences[$eventSequence])) {
-                $this->events[] = $a[0];
+                $this->events[] = $event;
                 $this->eventSequences[$eventSequence] = true;
             }
         } else {
             // after-event listener found
-            $a[0]->end();
+            $event->end();
         }
     }
 
