@@ -21,7 +21,8 @@
             "plugins/sfFormExtraPlugin/lib",
             "plugins/sfImageTransformExtraPlugin/lib",
             "plugins/sfImageTransformExtraPlugin/modules",
-            "plugins/sfImageTransformPlugin/lib"
+            "plugins/sfImageTransformPlugin/lib",
+            "plugins/sfJqueryReloadedPlugin/lib"
         ],
         "files": [
             "symfony_version.php",
