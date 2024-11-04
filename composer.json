@@ -13,7 +13,8 @@
     "autoload": {
         "classmap": [
             "lib",
-            "plugins/sfDoctrinePlugin/lib"
+            "plugins/sfDoctrinePlugin/lib",
+            "plugins/csDoctrineActAsSortablePlugin/lib"
         ],
         "files": [
             "symfony_version.php",

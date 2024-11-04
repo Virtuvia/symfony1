@@ -9,7 +9,7 @@
  */
 
 /** @var Composer\Autoload\ClassLoader $classLoader */
-$classLoader = require dirname(__DIR__, 4) . '/vendor/autoload.php';
+$classLoader = require dirname(__DIR__, 6) . '/autoload.php';
 $classLoader->addClassMap([
     'ProjectConfiguration' => dirname(__DIR__) . '/fixtures/config/ProjectConfiguration.class.php',
 ]);
@@ -31,7 +31,7 @@ unset($classes['actions']);
 ksort($classes);
 $classLoader->addClassMap($classes);
 
-define('SYMFONY_LIB_DIR', dirname(__DIR__, 4) . '/vendor/symfony/symfony1/lib');
+define('SYMFONY_LIB_DIR', dirname(__DIR__, 4) . '/lib');
 
 require(SYMFONY_LIB_DIR . '/vendor/lime/lime.php');
 
