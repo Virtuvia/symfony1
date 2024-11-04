@@ -14,7 +14,8 @@
         "classmap": [
             "lib",
             "plugins/sfDoctrinePlugin/lib",
-            "plugins/csDoctrineActAsSortablePlugin/lib"
+            "plugins/csDoctrineActAsSortablePlugin/lib",
+            "plugins/sfDoctrineActAsTaggablePlugin/lib"
         ],
         "files": [
             "symfony_version.php",

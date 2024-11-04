@@ -10,7 +10,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-require_once dirname(__DIR__, 4) . '/config/autoload.php';
+require_once dirname(__DIR__, 7) . '/config/autoload.php';
 
 $manager = Doctrine_Manager::getInstance();
 $manager->setAttribute(Doctrine_Core::ATTR_AUTOLOAD_TABLE_CLASSES, true);
