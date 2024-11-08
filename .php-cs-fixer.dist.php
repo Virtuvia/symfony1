@@ -2,14 +2,21 @@
 
 declare(strict_types=1);
 
-$finder = (new PhpCsFixer\Finder())
+use Symfony\Component\Finder\Finder;
+
+$finder = (new Finder())
+    ->files()
+    ->name('/\.php$/')
     ->in(__DIR__)
-    ->in(__DIR__.'/lib/vendor')
     ->exclude([
-        'data/generator',
-        'test/functional/fixtures/lib/model',
-        'test/functional/fixtures/lib/filter',
-        'test/functional/fixtures/lib/form',
+        'test/unit/config/fixtures/sfDefineEnvironmentConfigHandler',
+        'test/unit/config/fixtures/sfFilterConfigHandler',
+        'plugins/sfDoctrinePlugin/data/generator',
+        'plugins/csDoctrineActAsSortablePlugin/test/fixtures/project/lib/model/doctrine',
+        'plugins/sfDoctrinePlugin/test/functional/fixtures/lib/model/doctrine',
+        'plugins/sfDoctrinePlugin/test/functional/fixtures/lib/model/doctrine',
+        'plugins/sfDoctrinePlugin/test/functional/fixtures/lib/filter',
+        'plugins/sfDoctrinePlugin/test/functional/fixtures/lib/form',
     ])
 ;
 
