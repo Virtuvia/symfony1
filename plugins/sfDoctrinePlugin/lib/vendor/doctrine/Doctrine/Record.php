@@ -34,11 +34,7 @@
 abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Countable, IteratorAggregate, Doctrine_Record_States
 {
     use Doctrine_NullInjectable;
-
-    /**
-     * @var null|Doctrine_Node_Interface        node object
-     */
-    protected $_node;
+    use Doctrine_Record_TreeNodeTrait;
 
     /**
      * @var int $_id                    the primary keys of this object
@@ -1876,24 +1872,6 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     }
 
     /**
-     * getter for node associated with this record
-     *
-     * @return Doctrine_Node_Interface    false if component is not a Tree
-     */
-    public function getNode()
-    {
-        if (! $this->_table->isTree()) {
-            return false;
-        }
-
-        if (! isset($this->_node)) {
-            $this->_node = new Doctrine_Node_NestedSet($this, $this->getTable()->getOption('treeOptions'));
-        }
-
-        return $this->_node;
-    }
-
-    /**
      * unlink
      * removes links from this record to given records
      * if no ids are given, it removes all links
@@ -2134,15 +2112,6 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         }
 
         throw new Doctrine_Record_UnknownPropertyException(sprintf('Unknown method %s::%s', get_class($this), $method));
-    }
-
-    /**
-     * used to delete node from tree - MUST BE USE TO DELETE RECORD IF TABLE ACTS AS TREE
-     *
-     */
-    public function deleteNode()
-    {
-        $this->getNode()->delete();
     }
 
     /**
