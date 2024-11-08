@@ -57,7 +57,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
     /**
      * @var Doctrine_Connection $conn                   Doctrine_Connection object that created this table
      */
-    protected $_conn;
+    readonly protected Doctrine_Connection $_conn;
 
     /**
      * @var array $identityMap                          first level cache
@@ -1369,9 +1369,9 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
     /**
      * Returns the connection associated with this table (if any).
      *
-     * @return Doctrine_Connection|null     the connection object
+     * @return Doctrine_Connection     the connection object
      */
-    public function getConnection()
+    public function getConnection(): Doctrine_Connection
     {
         return $this->_conn;
     }
