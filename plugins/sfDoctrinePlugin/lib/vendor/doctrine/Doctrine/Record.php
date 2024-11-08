@@ -48,7 +48,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     /**
      * @var int $_id                    the primary keys of this object
      */
-    protected $_id           = [];
+    private $_id           = [];
 
     /**
      * each element is one of 3 following types:
@@ -58,54 +58,54 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      *
      * @var array $_data                    the record data
      */
-    protected $_data         = [];
+    private $_data         = [];
 
     /**
      * @var array $_values                  the values array, aggregate values and such are mapped into this array
      */
-    protected $_values       = [];
+    private $_values       = [];
 
     /**
      * @var int $_state                 the state of this record
      * @see STATE_* constants
      */
-    protected $_state;
+    private $_state;
 
     /**
      * @var array $_lastModified             an array containing field names that were modified in the previous transaction
      */
-    protected $_lastModified = [];
+    private $_lastModified = [];
 
     /**
      * @var array $_modified                an array containing field names that have been modified
      * @todo Better name? $_modifiedFields?
      */
-    protected $_modified     = [];
+    private $_modified     = [];
 
     /**
      * @var array $_oldValues               an array of the old values from set properties
      */
-    protected $_oldValues   = [];
+    private $_oldValues   = [];
 
 
     /**
      * @var array $_references              an array containing all the references
      */
-    protected $_references     = [];
+    private $_references     = [];
 
     /**
      * Doctrine_Collection of objects needing to be deleted on save
      *
      * @var array
      */
-    protected $_pendingDeletes = [];
+    private $_pendingDeletes = [];
 
     /**
      * Array of pending un links in format alias => keys to be executed after save
      *
      * @var array $_pendingUnlinks
      */
-    protected $_pendingUnlinks = [];
+    private $_pendingUnlinks = [];
 
     /**
      * @var int $index                  this index is used for creating object identifiers
