@@ -52,6 +52,8 @@
  * @version     $Revision: 7490 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Lukas Smith <smith@pooteeweet.org> (MDB2 library)
+ *
+ * @property-read Doctrine_Connection_UnitOfWork $unitOfWork
  */
 abstract class Doctrine_Connection extends Doctrine_Configurable implements Countable, IteratorAggregate
 {
@@ -211,6 +213,11 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
         $this->setAttribute(Doctrine_Core::ATTR_ERRMODE, Doctrine_Core::ERRMODE_EXCEPTION);
 
         $this->getAttribute(Doctrine_Core::ATTR_LISTENER)->onOpen($this);
+    }
+
+    public function getUnitOfWork(): Doctrine_Connection_UnitOfWork
+    {
+        return $this->unitOfWork;
     }
 
     /**
