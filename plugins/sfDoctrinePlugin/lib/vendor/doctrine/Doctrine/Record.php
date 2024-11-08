@@ -31,7 +31,7 @@
  * @since       1.0
  * @version     $Revision: 7673 $
  */
-abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Countable, IteratorAggregate, Doctrine_Record_States
+abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Countable, IteratorAggregate, Doctrine_Record_States, ArrayAccess
 {
     use Doctrine_NullInjectable;
     use Doctrine_Record_TreeNodeTrait;
@@ -39,6 +39,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     use Doctrine_Record_ListenerTrait;
     use Doctrine_Record_ErrorStackTrait;
     use Doctrine_Record_SaveHooksTrait;
+    use Doctrine_Record_ArrayAccessTrait;
+    use Doctrine_Record_PropertyAccessTrait;
     use Doctrine_Record_PersistanceTrait;
 
     /**
@@ -1032,7 +1034,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * @param string $name
      * @return void
      */
-    public function __unset($name)
+    final protected function remove($name)
     {
         if (array_key_exists($name, $this->_data)) {
             $this->_data[$name] = [];
