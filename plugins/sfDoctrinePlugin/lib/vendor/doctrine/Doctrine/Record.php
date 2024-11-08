@@ -35,6 +35,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
 {
     use Doctrine_NullInjectable;
     use Doctrine_Record_TreeNodeTrait;
+    use Doctrine_Record_ValidatorHooksTrait;
 
     /**
      * @var int $_id                    the primary keys of this object
@@ -333,33 +334,6 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         }
 
         return $valid;
-    }
-
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the validation procedure, doing any custom / specialized
-     * validations that are neccessary.
-     */
-    protected function validate()
-    {
-    }
-
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the validation procedure only when the record is going to be
-     * updated.
-     */
-    protected function validateOnUpdate()
-    {
-    }
-
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the validation procedure only when the record is going to be
-     * inserted into the data store the first time.
-     */
-    protected function validateOnInsert()
-    {
     }
 
     /**
