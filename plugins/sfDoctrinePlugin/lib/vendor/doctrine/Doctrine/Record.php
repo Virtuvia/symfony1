@@ -39,6 +39,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     use Doctrine_Record_ListenerTrait;
     use Doctrine_Record_ErrorStackTrait;
     use Doctrine_Record_SaveHooksTrait;
+    use Doctrine_Record_AbstractMutatorsTrait;
+    use Doctrine_Record_AbstractAccessorsTrait;
     use Doctrine_Record_ArrayAccessTrait;
     use Doctrine_Record_PropertyAccessTrait;
     use Doctrine_Record_PersistanceTrait;
@@ -725,12 +727,12 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     /**
      * returns a value of a property or a related component
      *
-     * @param mixed $fieldName                  name of the property or related component
+     * @param string $fieldName                  name of the property or related component
      * @param bool $load                     whether or not to invoke the loading procedure
      * @throws Doctrine_Record_Exception        if trying to get a value of unknown property / related component
      * @return mixed
      */
-    public function get($fieldName, $load = true)
+    public function get(string $fieldName, bool $load = true): mixed
     {
         $accessor = 'get' . Doctrine_Inflector::classify($fieldName);
 
@@ -811,24 +813,25 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     /**
      * alters mapped values, properties and related components.
      *
-     * @param mixed $name                   name of the property or reference
+     * @param string $fieldName                   name of the property or reference
      * @param mixed $value                  value of the property or reference
      * @param bool $load                 whether or not to refresh / load the uninitialized record data
      *
      * @throws Doctrine_Record_Exception    if trying to set a value for unknown property / related component
      * @throws Doctrine_Record_Exception    if trying to set a value of wrong type for related component
      *
-     * @return Doctrine_Record
      */
-    public function set($fieldName, $value, $load = true)
+    public function set(string $fieldName, mixed $value, bool $load = true): static
     {
         $mutator = 'set' . Doctrine_Inflector::classify($fieldName);
 
         if (method_exists($this, $mutator)) {
-            return $this->$mutator($value, $load, $fieldName);
+            $this->$mutator($value, $load, $fieldName);
+            return $this;
         }
 
-        return $this->_set($fieldName, $value, $load);
+        $this->_set($fieldName, $value, $load);
+        return $this;
     }
 
     protected function _set($fieldName, $value, $load = true)
