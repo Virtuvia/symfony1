@@ -36,6 +36,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     use Doctrine_NullInjectable;
     use Doctrine_Record_TreeNodeTrait;
     use Doctrine_Record_ValidatorHooksTrait;
+    use Doctrine_Record_SaveHooksTrait;
 
     /**
      * @var int $_id                    the primary keys of this object
@@ -102,13 +103,6 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * @var array $_pendingUnlinks
      */
     protected $_pendingUnlinks = [];
-
-    /**
-     * Array containing the save hooks and events that have been invoked
-     *
-     * @var array
-     */
-    protected $_invokedSaveHooks = false;
 
     /**
      * @var int $index                  this index is used for creating object identifiers
@@ -220,51 +214,6 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     public function getOid()
     {
         return $this->_oid;
-    }
-
-    /**
-     * calls a subclass hook. Idempotent until @see clearInvokedSaveHooks() is called.
-     *
-     * <code>
-     * $this->invokeSaveHooks('pre', 'save');
-     * </code>
-     *
-     * @param string $when           'post' or 'pre'
-     * @param string $type           save, delete, update, insert, validate, dqlSelect, dqlDelete, hydrate
-     * @param Doctrine_Event $event  event raised
-     * @return Doctrine_Event        the event generated using the type, if not specified
-     */
-    public function invokeSaveHooks($when, $type, $event = null)
-    {
-        $func = $when . ucfirst($type);
-
-        if (is_null($event)) {
-            $constant = constant('Doctrine_Event::RECORD_' . strtoupper($type));
-            $event = new Doctrine_Event($this, $constant);
-        }
-
-        if ($this->_invokedSaveHooks === false) {
-            $this->_invokedSaveHooks = [];
-        }
-
-        if (! isset($this->_invokedSaveHooks[$func])) {
-            $this->$func($event);
-            $this->getTable()->getRecordListener()->$func($event);
-
-            $this->_invokedSaveHooks[$func] = $event;
-        } else {
-            $event = $this->_invokedSaveHooks[$func];
-        }
-
-        return $event;
-    }
-
-    /**
-     * makes all the already used save hooks available again
-     */
-    public function clearInvokedSaveHooks()
-    {
-        $this->_invokedSaveHooks = [];
     }
 
     /**
