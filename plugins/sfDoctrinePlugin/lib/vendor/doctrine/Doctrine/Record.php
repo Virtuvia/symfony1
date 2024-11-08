@@ -819,7 +819,6 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      *
      * @throws Doctrine_Record_Exception    if trying to set a value for unknown property / related component
      * @throws Doctrine_Record_Exception    if trying to set a value of wrong type for related component
-     *
      */
     public function set(string $fieldName, mixed $value, bool $load = true): static
     {
@@ -949,7 +948,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * @param Doctrine_Record|Doctrine_Collection $value    object to be linked as a related component
      * @todo Refactor. What about composite keys?
      */
-    public function coreSetRelated($name, $value)
+    private function coreSetRelated($name, $value)
     {
         $rel = $this->_table->getRelation($name);
 
@@ -1527,7 +1526,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * @param string $name
      * @throws Doctrine_Record_Exception        if trying to get an unknown related component
      */
-    public function obtainReference($name)
+    private function obtainReference($name)
     {
         if (isset($this->_references[$name])) {
             return $this->_references[$name];
@@ -1552,7 +1551,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * @param string $name                          alias of the relation
      * @return void
      */
-    public function loadReference($name)
+    private function loadReference($name)
     {
         $rel = $this->_table->getRelation($name);
         $this->_references[$name] = $rel->fetchRelatedFor($this);
