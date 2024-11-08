@@ -36,6 +36,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     use Doctrine_NullInjectable;
     use Doctrine_Record_TreeNodeTrait;
     use Doctrine_Record_ValidatorHooksTrait;
+    use Doctrine_Record_ListenerTrait;
     use Doctrine_Record_ErrorStackTrait;
     use Doctrine_Record_SaveHooksTrait;
 
@@ -280,130 +281,6 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         }
 
         return $valid;
-    }
-
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the saving procedure.
-     */
-    public function preSave($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the saving procedure.
-     */
-    public function postSave($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the deletion procedure.
-     */
-    public function preDelete($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the deletion procedure.
-     */
-    public function postDelete($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the saving procedure only when the record is going to be
-     * updated.
-     */
-    public function preUpdate($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the saving procedure only when the record is going to be
-     * updated.
-     */
-    public function postUpdate($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the saving procedure only when the record is going to be
-     * inserted into the data store the first time.
-     */
-    public function preInsert($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the saving procedure only when the record is going to be
-     * inserted into the data store the first time.
-     */
-    public function postInsert($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the validation procedure. Useful for cleaning up data before
-     * validating it.
-     */
-    public function preValidate($event)
-    {
-    }
-    /**
-     * Empty template method to provide concrete Record classes with the possibility
-     * to hook into the validation procedure.
-     */
-    public function postValidate($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide Record classes with the ability to alter DQL select
-     * queries at runtime
-     */
-    public function preDqlSelect($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide Record classes with the ability to alter DQL update
-     * queries at runtime
-     */
-    public function preDqlUpdate($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide Record classes with the ability to alter DQL delete
-     * queries at runtime
-     */
-    public function preDqlDelete($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide Record classes with the ability to alter hydration
-     * before it runs
-     */
-    public function preHydrate($event)
-    {
-    }
-
-    /**
-     * Empty template method to provide Record classes with the ability to alter hydration
-     * after it runs
-     */
-    public function postHydrate($event)
-    {
     }
 
     /**
