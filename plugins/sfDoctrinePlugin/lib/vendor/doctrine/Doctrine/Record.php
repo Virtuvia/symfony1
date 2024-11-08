@@ -36,6 +36,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     use Doctrine_NullInjectable;
     use Doctrine_Record_TreeNodeTrait;
     use Doctrine_Record_ValidatorHooksTrait;
+    use Doctrine_Record_ErrorStackTrait;
     use Doctrine_Record_SaveHooksTrait;
 
     /**
@@ -80,10 +81,6 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      */
     protected $_oldValues   = [];
 
-    /**
-     * @var Doctrine_Validator_ErrorStack   error stack object
-     */
-    protected $_errorStack;
 
     /**
      * @var array $_references              an array containing all the references
@@ -407,43 +404,6 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      */
     public function postHydrate($event)
     {
-    }
-
-    /**
-     * Get the record error stack as a human readable string.
-     * Useful for outputting errors to user via web browser
-     *
-     * @return string $message
-     */
-    public function getErrorStackAsString()
-    {
-        $errorStack = $this->getErrorStack();
-
-        if (count($errorStack)) {
-            $message = sprintf("Validation failed in class %s\n\n", get_class($this));
-
-            $message .= "  " . count($errorStack) . " field" . (count($errorStack) > 1 ? 's' : null) . " had validation error" . (count($errorStack) > 1 ? 's' : null) . ":\n\n";
-            foreach ($errorStack as $field => $errors) {
-                $message .= "    * " . count($errors) . " validator" . (count($errors) > 1 ? 's' : null) . " failed on $field (" . implode(", ", $errors) . ")\n";
-            }
-            return $message;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * retrieves the ErrorStack. To be called after a failed validation attempt (@see isValid()).
-     *
-     * @return Doctrine_Validator_ErrorStack    returns the errorStack associated with this record
-     */
-    public function getErrorStack()
-    {
-        if (! $this->_errorStack) {
-            $this->_errorStack = new Doctrine_Validator_ErrorStack(get_class($this));
-        }
-
-        return $this->_errorStack;
     }
 
     /**
