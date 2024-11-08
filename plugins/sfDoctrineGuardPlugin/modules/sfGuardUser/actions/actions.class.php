@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__).'/../lib/sfGuardUserGeneratorConfiguration.class.php';
-require_once dirname(__FILE__).'/../lib/sfGuardUserGeneratorHelper.class.php';
+require_once dirname(__FILE__) . '/../lib/sfGuardUserGeneratorConfiguration.class.php';
+require_once dirname(__FILE__) . '/../lib/sfGuardUserGeneratorHelper.class.php';
 
 /**
  * sfGuardUser actions.

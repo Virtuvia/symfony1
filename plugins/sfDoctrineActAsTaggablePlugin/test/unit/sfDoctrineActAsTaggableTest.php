@@ -21,13 +21,12 @@ Doctrine_Core::createTablesFromArray([
 ]);
 
 if (!defined('TEST_CLASS') || !class_exists(TEST_CLASS)
-    || !defined('TEST_CLASS_2') || !class_exists(TEST_CLASS_2))
-{
-  // Don't run tests
-  $t = new lime_test(1, new lime_output_color());
-  $t->fail('test classes not configured');
+    || !defined('TEST_CLASS_2') || !class_exists(TEST_CLASS_2)) {
+    // Don't run tests
+    $t = new lime_test(1, new lime_output_color());
+    $t->fail('test classes not configured');
 
-  return;
+    return;
 }
 
 // clean the database
@@ -43,7 +42,7 @@ $t = new lime_test(66, new lime_output_color());
 $t->diag('tagging consistency');
 
 $object = _create_object();
-$t->ok($object->getTags() == array(), 'a new object has no tag.');
+$t->ok($object->getTags() == [], 'a new object has no tag.');
 
 $object->addTag('toto');
 $object_tags = $object->getTags();
@@ -145,7 +144,7 @@ $object_tags = $object->getTags();
 $object2_tags = $object2->getTags();
 $t->ok((count($object2_tags) == 2) && (count($object_tags) == 3), 'removing one tag as no effect on the other tags of the object, neither on the other objects.');
 
-$object2_tags = $object2->getTags(array('serialized' => true));
+$object2_tags = $object2->getTags(['serialized' => true]);
 $t->ok($object2_tags == 'clever age, symfony', 'tags can be retrieved in a serialized form.');
 
 $object->removeAllTags();
@@ -186,7 +185,7 @@ $object_tags = $object->getTags();
 $t->ok((count($object_tags) == 2) && $object->hasTag('titi') && $object->hasTag('tutu'), 'when adding tags using line breaks as separators, remove blank lines.');
 
 $object = _create_object();
-$object->addTag(array('titi', 'tutu'));
+$object->addTag(['titi', 'tutu']);
 $object_tags = $object->getTags();
 $t->ok((count($object_tags) == 2) && $object->hasTag('tutu') && $object->hasTag('titi'), 'tags can be added with an array.');
 
@@ -251,36 +250,36 @@ $object5->save();
 
 // getAllTagName() test
 $result = Doctrine_Core::getTable('Tag')->getAllTagName();
-$t->ok($result == array('tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7', 'tag8'), 'all tags can be retrieved with getAllTagName().');
+$t->ok($result == ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7', 'tag8'], 'all tags can be retrieved with getAllTagName().');
 
 // getAllTagNameWithCount() test
 $tags = Doctrine_Core::getTable('Tag')->getAllTagNameWithCount();
-$t->ok($tags == array('tag1' => 3, 'tag2' => 2, 'tag3' => 5, 'tag4' => 2, 'tag5' => 1, 'tag6' => 1, 'tag7' => 3, 'tag8' => 1), 'all tags can be retrieved with getAllTagName().');
+$t->ok($tags == ['tag1' => 3, 'tag2' => 2, 'tag3' => 5, 'tag4' => 2, 'tag5' => 1, 'tag6' => 1, 'tag7' => 3, 'tag8' => 1], 'all tags can be retrieved with getAllTagName().');
 
 // getPopulars() test
 $q = Doctrine_Query::create()->limit(3);
 $tags = Doctrine_Core::getTable('Tag')->getPopulars($q);
-$t->ok(array_keys($tags) == array('tag1', 'tag3', 'tag7'), 'most popular tags can be retrieved with getPopulars().');
+$t->ok(array_keys($tags) == ['tag1', 'tag3', 'tag7'], 'most popular tags can be retrieved with getPopulars().');
 $t->ok($tags['tag3'] >= $tags['tag1'], 'getPopulars() preserves tag importance.');
 
 // getRelatedTags() test
 $tags = Doctrine_Core::getTable('Tag')->getRelatedTags('tag8');
-$t->ok(array_keys($tags) == array('tag2', 'tag3', 'tag7'), 'related tags can be retrieved with getRelatedTags().');
+$t->ok(array_keys($tags) == ['tag2', 'tag3', 'tag7'], 'related tags can be retrieved with getRelatedTags().');
 
-$tags = Doctrine_Core::getTable('Tag')->getRelatedTags('tag2', array('limit' => 1));
-$t->ok(array_keys($tags) == array('tag3'), 'when a limit is set, only most popular related tags are returned by getRelatedTags().');
+$tags = Doctrine_Core::getTable('Tag')->getRelatedTags('tag2', ['limit' => 1]);
+$t->ok(array_keys($tags) == ['tag3'], 'when a limit is set, only most popular related tags are returned by getRelatedTags().');
 
 // getRelatedTags() test
 $tags = Doctrine_Core::getTable('Tag')->getRelatedTags('tag7');
-$t->ok(array_keys($tags) == array('tag1', 'tag2', 'tag3', 'tag4', 'tag8'), 'getRelatedTags() aggregates tags from different objects.');
+$t->ok(array_keys($tags) == ['tag1', 'tag2', 'tag3', 'tag4', 'tag8'], 'getRelatedTags() aggregates tags from different objects.');
 
 // getRelatedTags() test
-$tags = Doctrine_Core::getTable('Tag')->getRelatedTags(array('tag2', 'tag7'));
-$t->ok(array_keys($tags) == array('tag3', 'tag8'), 'getRelatedTags() can retrieve tags related to an array of tags.');
+$tags = Doctrine_Core::getTable('Tag')->getRelatedTags(['tag2', 'tag7']);
+$t->ok(array_keys($tags) == ['tag3', 'tag8'], 'getRelatedTags() can retrieve tags related to an array of tags.');
 
 // getRelatedTags() test
 $tags = Doctrine_Core::getTable('Tag')->getRelatedTags('tag2,tag7');
-$t->ok(array_keys($tags) == array('tag3', 'tag8'), 'getRelatedTags() also accepts a coma-separated string.');
+$t->ok(array_keys($tags) == ['tag3', 'tag8'], 'getRelatedTags() also accepts a coma-separated string.');
 
 // getObjectTaggedWith() tests
 $object_2_1 = _create_object_2();
@@ -297,11 +296,11 @@ $t->ok(count($tagged_with_tag4) == 2, 'getObjectTaggedWith() returns objects tag
 $tagged_with_tag7 = Doctrine_Core::getTable('Tag')->getObjectTaggedWith('tag7');
 $t->ok(count($tagged_with_tag7) == 5, 'getObjectTaggedWith() can return several object types.');
 
-$tagged_with_tag17 = Doctrine_Core::getTable('Tag')->getObjectTaggedWith(array('tag1', 'tag7'));
+$tagged_with_tag17 = Doctrine_Core::getTable('Tag')->getObjectTaggedWith(['tag1', 'tag7']);
 $t->ok(count($tagged_with_tag17) == 3, 'getObjectTaggedWith() returns objects tagged with several specific tags.');
 
 $tagged_with_tag127 = Doctrine_Core::getTable('Tag')->getObjectTaggedWith('tag1, tag2, tag7',
-                                             array('nb_common_tags' => 2));
+    ['nb_common_tags' => 2]);
 $t->ok(count($tagged_with_tag127) == 6, 'the "nb_common_tags" option of getObjectTaggedWith() returns objects tagged with a certain number of tags within a set of specific tags.');
 
 
@@ -309,9 +308,8 @@ $t->ok(count($tagged_with_tag127) == 6, 'the "nb_common_tags" option of getObjec
 Taggable::preloadTags($tagged_with_tag17);
 $nb_tags = 0;
 
-foreach ($tagged_with_tag17 as $tmp_object)
-{
-  $nb_tags += count($tmp_object->getTags());
+foreach ($tagged_with_tag17 as $tmp_object) {
+    $nb_tags += count($tmp_object->getTags());
 }
 
 $t->ok($nb_tags === 10, 'preloadTags() preloads the tags of the objects.');
@@ -324,7 +322,7 @@ $t->ok(TaggableToolkit::isTaggable(TEST_CLASS) === true, 'it is possible to tell
 
 $object = _create_object();
 $t->ok(TaggableToolkit::isTaggable($object) === true, 'it is possible to tell if a model is taggable from one of its instances.');
-$t->ok(TaggableToolkit::isTaggable(TEST_NON_TAGGABLE_CLASS) === false, TEST_NON_TAGGABLE_CLASS.' is not taggable, and that is fine.');
+$t->ok(TaggableToolkit::isTaggable(TEST_NON_TAGGABLE_CLASS) === false, TEST_NON_TAGGABLE_CLASS . ' is not taggable, and that is fine.');
 
 // clean the database
 Doctrine_Query::create()->delete()->from('Tag')->execute();
@@ -336,9 +334,9 @@ Doctrine_Query::create()->delete()->from(TEST_CLASS_2)->execute();
 // these tests check for the application of triple tags
 $t->diag('applying triple tagging');
 
-$t->ok(TaggableToolkit::extractTriple('ns:key=value') === array('ns:key=value', 'ns', 'key', 'value'), 'triple extracted successfully.');
-$t->ok(TaggableToolkit::extractTriple('ns:key') === array('ns:key', null, null, null), 'ns:key is not a triple.');
-$t->ok(TaggableToolkit::extractTriple('ns') === array('ns', null, null, null), 'ns is not a triple.');
+$t->ok(TaggableToolkit::extractTriple('ns:key=value') === ['ns:key=value', 'ns', 'key', 'value'], 'triple extracted successfully.');
+$t->ok(TaggableToolkit::extractTriple('ns:key') === ['ns:key', null, null, null], 'ns:key is not a triple.');
+$t->ok(TaggableToolkit::extractTriple('ns') === ['ns', null, null, null], 'ns is not a triple.');
 
 $object = _create_object();
 $object->addTag('tutu');
@@ -383,16 +381,16 @@ $tags = $object->getTags();
 $t->ok(count($tags) == 5, 'The addTags() method permits to create triple tags, that can be retrieved using getTags(), even when saved.');
 
 // get all the informations in the "geo" namespace
-$tags = $object->getTags(array('is_triple' => true,
-                               'namespace' => 'geo',
-                               'return'    => 'value'));
+$tags = $object->getTags(['is_triple' => true,
+    'namespace' => 'geo',
+    'return'    => 'value']);
 $t->ok(count($tags) == 2, 'The getTags() method permits to select triple tags in one specific namespace.');
 
 // get all the values of the triple tags for which the key is "city", whatever
 // the namespace
-$tags = $object->getTags(array('is_triple' => true,
-                               'key'       => 'city',
-                               'return'    => 'value'));
+$tags = $object->getTags(['is_triple' => true,
+    'key'       => 'city',
+    'return'    => 'value']);
 $t->ok(count($tags) == 3, 'The getTags() method permits to select triple tags for one specific key.');
 
 $object2 = _create_object();
@@ -405,13 +403,13 @@ $object2->save();
 
 // get all the values of the triple tags for which the key is "city", whatever
 // the namespace
-$tags = $object2->getTags(array('is_triple' => true,
-                                'key'       => 'city',
-                                'return'    => 'value'));
+$tags = $object2->getTags(['is_triple' => true,
+    'key'       => 'city',
+    'return'    => 'value']);
 $t->ok(count($tags) == 1, 'When selecting only the values of triple tags of one object, there is no duplicate.');
 
-$ns = $object2->getTags(array('is_triple' => true,
-                              'return'    => 'namespace'));
+$ns = $object2->getTags(['is_triple' => true,
+    'return'    => 'namespace']);
 $t->ok(count($ns) == 4, 'The method getTags() permit to select only the names of the namespaces of the tags attached to one object.');
 
 
@@ -419,11 +417,11 @@ $t->ok(count($ns) == 4, 'The method getTags() permit to select only the names of
 sfConfig::set('app_sfDoctrineActAsTaggablePlugin_triple_distinct', false);
 $t->diag('querying triple tagging');
 
-$result = Doctrine_Core::getTable('Tag')->getAllTagName(null, array('triple' => true));
+$result = Doctrine_Core::getTable('Tag')->getAllTagName(null, ['triple' => true]);
 $t->ok(in_array('ns:key=value', $result), 'triple tags are returned when searching for triples only.');
 $t->ok(!in_array('tutu', $result), 'ordinary tags are not returned when searching for triples only.');
 
-$result = Doctrine_Core::getTable('Tag')->getAllTagName(null, array('triple' => false));
+$result = Doctrine_Core::getTable('Tag')->getAllTagName(null, ['triple' => false]);
 $t->ok(in_array('tutu', $result), 'normal tags are returned when searching for ordinary ones only.');
 $t->ok(!in_array('ns:key=value', $result), 'triple tags are not returned when searching for normal ones.');
 
@@ -431,16 +429,16 @@ $t->ok(!in_array('ns:key=value', $result), 'triple tags are not returned when se
 // these tests the search of specific triple tags parts
 $t->diag('searching for specific parts of triple');
 
-$result = Doctrine_Core::getTable('Tag')->getAllTagName(null, array('triple' => true, 'namespace' => 'ns'));
-$t->ok($result === array('ns:key=value', 'ns:key=tutu', 'ns:key=titi', 'ns:key=toto'), 'it is possible to search for triple tags by namespace.');
+$result = Doctrine_Core::getTable('Tag')->getAllTagName(null, ['triple' => true, 'namespace' => 'ns']);
+$t->ok($result === ['ns:key=value', 'ns:key=tutu', 'ns:key=titi', 'ns:key=toto'], 'it is possible to search for triple tags by namespace.');
 
-$result = Doctrine_Core::getTable('Tag')->getAllTagName(null, array('triple' => true, 'key' => 'key'));
-$t->ok($result === array('ns:key=value', 'ns:key=tutu', 'ns:key=titi', 'ns:key=toto'), 'it is possible to search for triple tags by key.');
+$result = Doctrine_Core::getTable('Tag')->getAllTagName(null, ['triple' => true, 'key' => 'key']);
+$t->ok($result === ['ns:key=value', 'ns:key=tutu', 'ns:key=titi', 'ns:key=toto'], 'it is possible to search for triple tags by key.');
 
-$result = Doctrine_Core::getTable('Tag')->getAllTagName(null, array('triple' => true, 'value' => 'tutu'));
-$t->ok($result === array('ns:key=tutu'), 'it is possible to search for triple tags by value.');
+$result = Doctrine_Core::getTable('Tag')->getAllTagName(null, ['triple' => true, 'value' => 'tutu']);
+$t->ok($result === ['ns:key=tutu'], 'it is possible to search for triple tags by value.');
 
-$objects_triple = Doctrine_Core::getTable('Tag')->getObjectTaggedWith(array(), array('namespace' => 'ns', 'model' => TEST_CLASS));
+$objects_triple = Doctrine_Core::getTable('Tag')->getObjectTaggedWith([], ['namespace' => 'ns', 'model' => TEST_CLASS]);
 $t->ok(count($objects_triple) == 1, 'it is possible to retrieve objects tagged with certain triple tags.');
 
 
@@ -467,7 +465,7 @@ $object->addTag('ns:key=titi');
 $object->addTag('ns:second_key=toto');
 $object->save();
 
-$tags_triple = Doctrine_Core::getTable('Tag')->getAllTagName(null, array('triple' => true, 'namespace' => 'ns'));
+$tags_triple = Doctrine_Core::getTable('Tag')->getAllTagName(null, ['triple' => true, 'namespace' => 'ns']);
 $t->ok(count($tags_triple) == 2, 'it is possible to set up the plugin so that namespace:key is a unique key.');
 
 $object2 = _create_object();
@@ -475,7 +473,7 @@ $object2->addTag('ns:key=value');
 $object2->addTag('ns:second_key=toto');
 $object2->save();
 
-$tags_triple = Doctrine_Core::getTable('Tag')->getAllTagName(null, array('triple' => true, 'namespace' => 'ns'));
+$tags_triple = Doctrine_Core::getTable('Tag')->getAllTagName(null, ['triple' => true, 'namespace' => 'ns']);
 $t->ok(count($tags_triple) == 3, 'it is possible to apply triple tags to various objects when the plugin is set up so that namespace:key is a unique key.');
 
 
@@ -483,25 +481,23 @@ $t->ok(count($tags_triple) == 3, 'it is possible to apply triple tags to various
 // test object creation
 function _create_object()
 {
-  $classname = TEST_CLASS;
+    $classname = TEST_CLASS;
 
-  if (!class_exists($classname))
-  {
-    throw new Exception(sprintf('Unknow class "%s"', $classname));
-  }
+    if (!class_exists($classname)) {
+        throw new Exception(sprintf('Unknow class "%s"', $classname));
+    }
 
-  return new $classname();
+    return new $classname();
 }
 
 // second type of test object creation
 function _create_object_2()
 {
-  $classname = TEST_CLASS_2;
+    $classname = TEST_CLASS_2;
 
-  if (!class_exists($classname))
-  {
-    throw new Exception(sprintf('Unknow class "%s"', $classname));
-  }
+    if (!class_exists($classname)) {
+        throw new Exception(sprintf('Unknow class "%s"', $classname));
+    }
 
-  return new $classname();
+    return new $classname();
 }

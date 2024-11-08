@@ -10,18 +10,18 @@
  */
 class BasesfGuardChangeUserPasswordForm extends BasesfGuardUserForm
 {
-  public function setup()
-  {
-    parent::setup();
+    public function setup()
+    {
+        parent::setup();
 
-    $this->useFields(array('password'));
+        $this->useFields(['password']);
 
-    $this->widgetSchema['password'] = new sfWidgetFormInputPassword();
-    $this->validatorSchema['password']->setOption('required', true);
-    $this->widgetSchema['password_again'] = new sfWidgetFormInputPassword();
-    $this->validatorSchema['password_again'] = clone $this->validatorSchema['password'];
-    $this->validatorSchema['password_again']->setOption('required', true);
+        $this->widgetSchema['password'] = new sfWidgetFormInputPassword();
+        $this->validatorSchema['password']->setOption('required', true);
+        $this->widgetSchema['password_again'] = new sfWidgetFormInputPassword();
+        $this->validatorSchema['password_again'] = clone $this->validatorSchema['password'];
+        $this->validatorSchema['password_again']->setOption('required', true);
 
-    $this->mergePostValidator(new sfValidatorSchemaCompare('password', sfValidatorSchemaCompare::EQUAL, 'password_again', array(), array('invalid' => 'The two passwords must be the same.')));
-  }
+        $this->mergePostValidator(new sfValidatorSchemaCompare('password', sfValidatorSchemaCompare::EQUAL, 'password_again', [], ['invalid' => 'The two passwords must be the same.']));
+    }
 }

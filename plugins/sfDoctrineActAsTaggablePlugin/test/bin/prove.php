@@ -20,10 +20,10 @@ require_once dirname(__DIR__) . '/bootstrap/unit.php';
 $h = new lime_harness();
 $h->base_dir = dirname(__DIR__);
 
-$h->register(sfFinder::type('file')->name('*Test.php')->in(array(
+$h->register(sfFinder::type('file')->name('*Test.php')->in([
     // unit tests
     $h->base_dir . '/unit',
-)));
+]));
 
 $ret = $h->run() ? 0 : 1;
 

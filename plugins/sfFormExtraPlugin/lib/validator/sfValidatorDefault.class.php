@@ -26,51 +26,47 @@
  */
 class sfValidatorDefault extends sfValidatorBase
 {
-  /**
-   * Configures the current validator.
-   *
-   * Available options:
-   *
-   *  * validator: The validator to use
-   *  * default:   The value to return if the validator fails
-   *
-   * @see sfValidatorBase
-   */
-  protected function configure($options = array(), $messages = array())
-  {
-    $this->addRequiredOption('validator');
-    $this->addOption('default', null);
-  }
-
-  /**
-   * @see sfValidatorBase
-   */
-  protected function isEmpty($value)
-  {
-    return false;
-  }
-
-  /**
-   * @see sfValidatorBase
-   *
-   * @throws InvalidArgumentException If the validator option is not a validator object
-   */
-  protected function doClean($value)
-  {
-    $validator = $this->getOption('validator');
-
-    if (!$validator instanceof sfValidatorBase)
+    /**
+     * Configures the current validator.
+     *
+     * Available options:
+     *
+     *  * validator: The validator to use
+     *  * default:   The value to return if the validator fails
+     *
+     * @see sfValidatorBase
+     */
+    protected function configure($options = [], $messages = [])
     {
-      throw new InvalidArgumentException('The "validator" option must be an instance of sfValidatorBase.');
+        $this->addRequiredOption('validator');
+        $this->addOption('default', null);
     }
 
-    try
+    /**
+     * @see sfValidatorBase
+     */
+    protected function isEmpty($value)
     {
-      return $validator->clean($value);
+        return false;
     }
-    catch (sfValidatorError $error)
+
+    /**
+     * @see sfValidatorBase
+     *
+     * @throws InvalidArgumentException If the validator option is not a validator object
+     */
+    protected function doClean($value)
     {
-      return null === $this->getOption('default') ? $validator->getEmptyValue() : $this->getOption('default');
+        $validator = $this->getOption('validator');
+
+        if (!$validator instanceof sfValidatorBase) {
+            throw new InvalidArgumentException('The "validator" option must be an instance of sfValidatorBase.');
+        }
+
+        try {
+            return $validator->clean($value);
+        } catch (sfValidatorError $error) {
+            return null === $this->getOption('default') ? $validator->getEmptyValue() : $this->getOption('default');
+        }
     }
-  }
 }

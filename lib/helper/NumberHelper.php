@@ -19,29 +19,27 @@
 
 function format_number($number, $culture = null)
 {
-  if (null === $number)
-  {
-    return null;
-  }
+    if (null === $number) {
+        return null;
+    }
 
-  $numberFormat = new sfNumberFormat(_current_language($culture));
+    $numberFormat = new sfNumberFormat(_current_language($culture));
 
-  return $numberFormat->format($number);
+    return $numberFormat->format($number);
 }
 
 function format_currency($amount, $currency = null, $culture = null)
 {
-  if (null === $amount)
-  {
-    return null;
-  }
+    if (null === $amount) {
+        return null;
+    }
 
-  $numberFormat = new sfNumberFormat(_current_language($culture));
+    $numberFormat = new sfNumberFormat(_current_language($culture));
 
-  return $numberFormat->format($amount, 'c', $currency);
+    return $numberFormat->format($amount, 'c', $currency);
 }
 
 function _current_language($culture)
 {
-  return $culture ? $culture : sfContext::getInstance()->getUser()->getCulture();
+    return $culture ? $culture : sfContext::getInstance()->getUser()->getCulture();
 }

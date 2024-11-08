@@ -15,12 +15,12 @@ abstract class PluginTag extends BaseTag
         return PluginTagTable::getModelsNameTaggedWith($this->name);
     }
 
-    public function getRelated($options = array())
+    public function getRelated($options = [])
     {
         return PluginTagTable::getRelatedTags($this->name);
     }
 
-    public function getObjectTaggedWith($options = array())
+    public function getObjectTaggedWith($options = [])
     {
         return PluginTagTable::getObjectTaggedWith($this->name);
     }

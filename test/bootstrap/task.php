@@ -8,17 +8,15 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/unit.php');
+require_once(dirname(__FILE__) . '/unit.php');
 
-if (!isset($root_dir))
-{
-    $root_dir = realpath(dirname(__FILE__).sprintf('/../%s/fixtures', isset($type) ? $type : 'functional'));
+if (!isset($root_dir)) {
+    $root_dir = realpath(dirname(__FILE__) . sprintf('/../%s/fixtures', isset($type) ? $type : 'functional'));
 }
 
 chdir($root_dir);
 
-require_once $root_dir.'/config/ProjectConfiguration.class.php';
-$application = new sfSymfonyCommandApplication(new sfEventDispatcher(), new sfFormatter(), array(
-  'symfony_lib_dir' => sfConfig::get('sf_symfony_lib_dir'),
-));
-
+require_once $root_dir . '/config/ProjectConfiguration.class.php';
+$application = new sfSymfonyCommandApplication(new sfEventDispatcher(), new sfFormatter(), [
+    'symfony_lib_dir' => sfConfig::get('sf_symfony_lib_dir'),
+]);

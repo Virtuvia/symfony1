@@ -20,71 +20,66 @@
  */
 class sfImageBrightnessGD extends sfImageTransformAbstract
 {
-  /**
-   * Constract level to be applied.
-  */
-  protected $brightness = 0;
+    /**
+     * Constract level to be applied.
+    */
+    protected $brightness = 0;
 
-  /**
-   * Construct an sfImageBrightness object.
-   *
-   * @param integer
-   */
-  public function __construct($brightness)
-  {
-    $this->setBrightness($brightness);
-  }
-
-  /**
-   * Sets the brightness
-   *
-   * @param integer
-   * @return boolean
-   */
-  public function setBrightness($brightness)
-  {
-    if (is_numeric($brightness))
+    /**
+     * Construct an sfImageBrightness object.
+     *
+     * @param int
+     */
+    public function __construct($brightness)
     {
-      $this->brightness = (int)$brightness;
-
-      return true;
+        $this->setBrightness($brightness);
     }
 
-    return false;
-  }
-
-  /**
-   * Gets the brightness
-   *
-   * @return integer
-   */
-  public function getBrightness()
-  {
-    return $this->brightness;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @access protected
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    $resource = $image->getAdapter()->getHolder();
-
-    if (function_exists('imagefilter'))
+    /**
+     * Sets the brightness
+     *
+     * @param int
+     * @return bool
+     */
+    public function setBrightness($brightness)
     {
-      imagefilter($resource, IMG_FILTER_BRIGHTNESS, $this->brightness);
+        if (is_numeric($brightness)) {
+            $this->brightness = (int) $brightness;
+
+            return true;
+        }
+
+        return false;
     }
 
-    else
+    /**
+     * Gets the brightness
+     *
+     * @return int
+     */
+    public function getBrightness()
     {
-      throw new sfImageTransformException(sprintf('Cannot perform transform, GD does not support imagefilter '));
+        return $this->brightness;
     }
 
-    return $image;
-  }
+    /**
+     * Apply the transform to the sfImage object.
+     *
+     * @access protected
+     * @param sfImage
+     * @return sfImage
+     */
+    protected function transform(sfImage $image)
+    {
+        $resource = $image->getAdapter()->getHolder();
+
+        if (function_exists('imagefilter')) {
+            imagefilter($resource, IMG_FILTER_BRIGHTNESS, $this->brightness);
+        } else {
+            throw new sfImageTransformException(sprintf('Cannot perform transform, GD does not support imagefilter '));
+        }
+
+        return $image;
+    }
 
 }

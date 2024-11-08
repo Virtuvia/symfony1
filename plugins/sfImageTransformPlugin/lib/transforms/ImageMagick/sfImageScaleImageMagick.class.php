@@ -22,61 +22,60 @@
  */
 class sfImageScaleImageMagick extends sfImageTransformAbstract
 {
-  /**
-   * The amount to scale the image by.
-   *
-   * @var float
-  */
-  protected $scale = 1;
+    /**
+     * The amount to scale the image by.
+     *
+     * @var float
+    */
+    protected $scale = 1;
 
-  /**
-   * Construct an sfImageScale object.
-   *
-   * @param float
-   */
-  public function __construct($scale)
-  {
-    $this->setScale($scale);
-  }
-
-  /**
-   * Set the scale factor.
-   *
-   * @param float
-   */
-  public function setScale($scale)
-  {
-    if (is_numeric($scale))
+    /**
+     * Construct an sfImageScale object.
+     *
+     * @param float
+     */
+    public function __construct($scale)
     {
-      $this->scale = (float)$scale;
+        $this->setScale($scale);
     }
-  }
 
-  /**
-   * Gets the scale factor.
-   *
-   * @return float
-   */
-  public function getScale()
-  {
-    return $this->scale;
-  }
+    /**
+     * Set the scale factor.
+     *
+     * @param float
+     */
+    public function setScale($scale)
+    {
+        if (is_numeric($scale)) {
+            $this->scale = (float) $scale;
+        }
+    }
 
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    $resource = $image->getAdapter()->getHolder();
+    /**
+     * Gets the scale factor.
+     *
+     * @return float
+     */
+    public function getScale()
+    {
+        return $this->scale;
+    }
 
-    $x = $resource->getImageWidth();
-    $y = $resource->getImageHeight();
+    /**
+     * Apply the transform to the sfImage object.
+     *
+     * @param sfImage
+     * @return sfImage
+     */
+    protected function transform(sfImage $image)
+    {
+        $resource = $image->getAdapter()->getHolder();
 
-    $image->resize(round($x * $this->scale),round($y * $this->scale));
+        $x = $resource->getImageWidth();
+        $y = $resource->getImageHeight();
 
-    return $image;
-  }
+        $image->resize(round($x * $this->scale), round($y * $this->scale));
+
+        return $image;
+    }
 }

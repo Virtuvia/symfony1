@@ -33,9 +33,9 @@
  *
  * @see    get_component_slot, include_partial, include_component
  */
-function include_component_slot($name, $vars = array())
+function include_component_slot($name, $vars = [])
 {
-  echo get_component_slot($name, $vars);
+    echo get_component_slot($name, $vars);
 }
 
 /**
@@ -53,20 +53,18 @@ function include_component_slot($name, $vars = array())
  * @return string result of the component execution
  * @see    get_component_slot, include_partial, include_component
  */
-function get_component_slot($name, $vars = array())
+function get_component_slot($name, $vars = [])
 {
-  $viewInstance = sfContext::getInstance()->get('view_instance');
+    $viewInstance = sfContext::getInstance()->get('view_instance');
 
-  if (!$viewInstance->hasComponentSlot($name))
-  {
-    // cannot find component slot
-    throw new sfConfigurationException(sprintf('The component slot "%s" is not set.', $name));
-  }
+    if (!$viewInstance->hasComponentSlot($name)) {
+        // cannot find component slot
+        throw new sfConfigurationException(sprintf('The component slot "%s" is not set.', $name));
+    }
 
-  if ($componentSlot = $viewInstance->getComponentSlot($name))
-  {
-    return get_component($componentSlot[0], $componentSlot[1], $vars);
-  }
+    if ($componentSlot = $viewInstance->getComponentSlot($name)) {
+        return get_component($componentSlot[0], $componentSlot[1], $vars);
+    }
 }
 
 /**
@@ -77,21 +75,19 @@ function get_component_slot($name, $vars = array())
  */
 function has_component_slot($name)
 {
-  $viewInstance = sfContext::getInstance()->get('view_instance');
+    $viewInstance = sfContext::getInstance()->get('view_instance');
 
-  // check to see if one is defined
-  if (!$viewInstance->hasComponentSlot($name))
-  {
+    // check to see if one is defined
+    if (!$viewInstance->hasComponentSlot($name)) {
+        return false;
+    }
+
+    // check to see if component slot is empty (null)
+    if ($viewInstance->getComponentSlot($name)) {
+        return true;
+    }
+
     return false;
-  }
-  
-  // check to see if component slot is empty (null)
-  if ($viewInstance->getComponentSlot($name))
-  {
-    return true;
-  }
-
-  return false;
 }
 
 /**
@@ -110,9 +106,9 @@ function has_component_slot($name)
  *
  * @see    get_component, include_partial, include_component_slot
  */
-function include_component($moduleName, $componentName, $vars = array())
+function include_component($moduleName, $componentName, $vars = [])
 {
-  echo get_component($moduleName, $componentName, $vars);
+    echo get_component($moduleName, $componentName, $vars);
 }
 
 /**
@@ -131,31 +127,29 @@ function include_component($moduleName, $componentName, $vars = array())
  * @return string result of the component execution
  * @see    include_component
  */
-function get_component($moduleName, $componentName, $vars = array())
+function get_component($moduleName, $componentName, $vars = [])
 {
-  $context = sfContext::getInstance();
-  $actionName = '_'.$componentName;
+    $context = sfContext::getInstance();
+    $actionName = '_' . $componentName;
 
-  require($context->getConfigCache()->checkConfig('modules/'.$moduleName.'/config/module.yml'));
+    require($context->getConfigCache()->checkConfig('modules/' . $moduleName . '/config/module.yml'));
 
-  $class = sfConfig::get('mod_'.strtolower($moduleName).'_partial_view_class', 'sf').'PartialView';
-  $view = new $class($context, $moduleName, $actionName, '');
-  $view->setPartialVars(true === sfConfig::get('sf_escaping_strategy') ? sfOutputEscaper::unescape($vars) : $vars);
+    $class = sfConfig::get('mod_' . strtolower($moduleName) . '_partial_view_class', 'sf') . 'PartialView';
+    $view = new $class($context, $moduleName, $actionName, '');
+    $view->setPartialVars(true === sfConfig::get('sf_escaping_strategy') ? sfOutputEscaper::unescape($vars) : $vars);
 
-  if ($retval = $view->getCache())
-  {
-    return $retval;
-  }
+    if ($retval = $view->getCache()) {
+        return $retval;
+    }
 
-  $allVars = _call_component($moduleName, $componentName, $vars);
+    $allVars = _call_component($moduleName, $componentName, $vars);
 
-  if (null !== $allVars)
-  {
-    // render
-    $view->getAttributeHolder()->add($allVars);
+    if (null !== $allVars) {
+        // render
+        $view->getAttributeHolder()->add($allVars);
 
-    return $view->render();
-  }
+        return $view->render();
+    }
 }
 
 /**
@@ -177,9 +171,9 @@ function get_component($moduleName, $componentName, $vars = array())
  *
  * @see    get_partial, include_component
  */
-function include_partial($templateName, $vars = array())
+function include_partial($templateName, $vars = [])
 {
-  echo get_partial($templateName, $vars);
+    echo get_partial($templateName, $vars);
 }
 
 /**
@@ -197,27 +191,24 @@ function include_partial($templateName, $vars = array())
  * @return string result of the partial execution
  * @see    include_partial
  */
-function get_partial($templateName, $vars = array())
+function get_partial($templateName, $vars = [])
 {
-  $context = sfContext::getInstance();
+    $context = sfContext::getInstance();
 
-  // partial is in another module?
-  if (false !== $sep = strpos($templateName, '/'))
-  {
-    $moduleName   = substr($templateName, 0, $sep);
-    $templateName = substr($templateName, $sep + 1);
-  }
-  else
-  {
-    $moduleName = $context->getActionStack()->getLastEntry()->getModuleName();
-  }
-  $actionName = '_'.$templateName;
+    // partial is in another module?
+    if (false !== $sep = strpos($templateName, '/')) {
+        $moduleName   = substr($templateName, 0, $sep);
+        $templateName = substr($templateName, $sep + 1);
+    } else {
+        $moduleName = $context->getActionStack()->getLastEntry()->getModuleName();
+    }
+    $actionName = '_' . $templateName;
 
-  $class = sfConfig::get('mod_'.strtolower($moduleName).'_partial_view_class', 'sf').'PartialView';
-  $view = new $class($context, $moduleName, $actionName, '');
-  $view->setPartialVars(true === sfConfig::get('sf_escaping_strategy') ? sfOutputEscaper::unescape($vars) : $vars);
+    $class = sfConfig::get('mod_' . strtolower($moduleName) . '_partial_view_class', 'sf') . 'PartialView';
+    $view = new $class($context, $moduleName, $actionName, '');
+    $view->setPartialVars(true === sfConfig::get('sf_escaping_strategy') ? sfOutputEscaper::unescape($vars) : $vars);
 
-  return $view->render();
+    return $view->render();
 }
 
 /**
@@ -230,34 +221,31 @@ function get_partial($templateName, $vars = array())
  */
 function slot($name, $value = null)
 {
-  $context = sfContext::getInstance();
-  $response = $context->getResponse();
+    $context = sfContext::getInstance();
+    $response = $context->getResponse();
 
-  $slot_names = sfConfig::get('symfony.view.slot_names', array());
-  if (in_array($name, $slot_names))
-  {
-    throw new sfCacheException(sprintf('A slot named "%s" is already started.', $name));
-  }
+    $slot_names = sfConfig::get('symfony.view.slot_names', []);
+    if (in_array($name, $slot_names)) {
+        throw new sfCacheException(sprintf('A slot named "%s" is already started.', $name));
+    }
 
-  if (sfConfig::get('sf_logging_enabled'))
-  {
-    $context->getEventDispatcher()->notify(new sfEvent(null, 'application.log', array(sprintf('Set slot "%s"', $name))));
-  }
+    if (sfConfig::get('sf_logging_enabled')) {
+        $context->getEventDispatcher()->notify(new sfEvent(null, 'application.log', [sprintf('Set slot "%s"', $name)]));
+    }
 
-  if (null !== $value)
-  {
-    $response->setSlot($name, $value);
+    if (null !== $value) {
+        $response->setSlot($name, $value);
 
-    return;
-  }
+        return;
+    }
 
-  $slot_names[] = $name;
+    $slot_names[] = $name;
 
-  $response->setSlot($name, '');
-  sfConfig::set('symfony.view.slot_names', $slot_names);
+    $response->setSlot($name, '');
+    sfConfig::set('symfony.view.slot_names', $slot_names);
 
-  ob_start();
-  ob_implicit_flush(0);
+    ob_start();
+    ob_implicit_flush(0);
 }
 
 /**
@@ -267,19 +255,18 @@ function slot($name, $value = null)
  */
 function end_slot()
 {
-  $content = ob_get_clean();
+    $content = ob_get_clean();
 
-  $response = sfContext::getInstance()->getResponse();
-  $slot_names = sfConfig::get('symfony.view.slot_names', array());
-  if (!$slot_names)
-  {
-    throw new sfCacheException('No slot started.');
-  }
+    $response = sfContext::getInstance()->getResponse();
+    $slot_names = sfConfig::get('symfony.view.slot_names', []);
+    if (!$slot_names) {
+        throw new sfCacheException('No slot started.');
+    }
 
-  $name = array_pop($slot_names);
+    $name = array_pop($slot_names);
 
-  $response->setSlot($name, $content);
-  sfConfig::set('symfony.view.slot_names', $slot_names);
+    $response->setSlot($name, $content);
+    sfConfig::set('symfony.view.slot_names', $slot_names);
 }
 
 /**
@@ -292,7 +279,7 @@ function end_slot()
  */
 function has_slot($name)
 {
-  return array_key_exists($name, sfContext::getInstance()->getResponse()->getSlots());
+    return array_key_exists($name, sfContext::getInstance()->getResponse()->getSlots());
 }
 
 /**
@@ -310,7 +297,7 @@ function has_slot($name)
  */
 function include_slot($name, $default = '')
 {
-  return ($v = get_slot($name, $default)) ? print $v : false;
+    return ($v = get_slot($name, $default)) ? print $v : false;
 }
 
 /**
@@ -329,68 +316,61 @@ function include_slot($name, $default = '')
  */
 function get_slot($name, $default = '')
 {
-  $context = sfContext::getInstance();
-  $slots = $context->getResponse()->getSlots();
+    $context = sfContext::getInstance();
+    $slots = $context->getResponse()->getSlots();
 
-  if (sfConfig::get('sf_logging_enabled'))
-  {
-    $context->getEventDispatcher()->notify(new sfEvent(null, 'application.log', array(sprintf('Get slot "%s"', $name))));
-  }
+    if (sfConfig::get('sf_logging_enabled')) {
+        $context->getEventDispatcher()->notify(new sfEvent(null, 'application.log', [sprintf('Get slot "%s"', $name)]));
+    }
 
-  return isset($slots[$name]) ? $slots[$name] : $default;
+    return isset($slots[$name]) ? $slots[$name] : $default;
 }
 
 function _call_component($moduleName, $componentName, $vars)
 {
-  $context = sfContext::getInstance();
+    $context = sfContext::getInstance();
 
-  $controller = $context->getController();
+    $controller = $context->getController();
 
-  if (!$controller->componentExists($moduleName, $componentName))
-  {
-    // cannot find component
-    throw new sfConfigurationException(sprintf('The component does not exist: "%s", "%s".', $moduleName, $componentName));
-  }
-
-  // create an instance of the action
-  $componentInstance = $controller->getComponent($moduleName, $componentName);
-
-  // load component's module config file
-  require($context->getConfigCache()->checkConfig('modules/'.$moduleName.'/config/module.yml'));
-
-  // pass unescaped vars to the component if escaping_strategy is set to true
-  $componentInstance->getVarHolder()->add(true === sfConfig::get('sf_escaping_strategy') ? sfOutputEscaper::unescape($vars) : $vars);
-
-  // dispatch component
-  $componentToRun = 'execute'.ucfirst($componentName);
-  if (!method_exists($componentInstance, $componentToRun))
-  {
-    if (!method_exists($componentInstance, 'execute'))
-    {
-      // component not found
-      throw new sfInitializationException(sprintf('sfComponent initialization failed for module "%s", component "%s".', $moduleName, $componentName));
+    if (!$controller->componentExists($moduleName, $componentName)) {
+        // cannot find component
+        throw new sfConfigurationException(sprintf('The component does not exist: "%s", "%s".', $moduleName, $componentName));
     }
 
-    $componentToRun = 'execute';
-  }
+    // create an instance of the action
+    $componentInstance = $controller->getComponent($moduleName, $componentName);
 
-  if (sfConfig::get('sf_logging_enabled'))
-  {
-    $context->getEventDispatcher()->notify(new sfEvent(null, 'application.log', array(sprintf('Call "%s->%s()'.'"', $moduleName, $componentToRun))));
-  }
+    // load component's module config file
+    require($context->getConfigCache()->checkConfig('modules/' . $moduleName . '/config/module.yml'));
 
-  // run component
-  if (sfConfig::get('sf_debug') && sfConfig::get('sf_logging_enabled'))
-  {
-    $timer = sfTimerManager::getTimer(sprintf('Component "%s/%s"', $moduleName, $componentName));
-  }
+    // pass unescaped vars to the component if escaping_strategy is set to true
+    $componentInstance->getVarHolder()->add(true === sfConfig::get('sf_escaping_strategy') ? sfOutputEscaper::unescape($vars) : $vars);
 
-  $retval = $componentInstance->$componentToRun($context->getRequest());
+    // dispatch component
+    $componentToRun = 'execute' . ucfirst($componentName);
+    if (!method_exists($componentInstance, $componentToRun)) {
+        if (!method_exists($componentInstance, 'execute')) {
+            // component not found
+            throw new sfInitializationException(sprintf('sfComponent initialization failed for module "%s", component "%s".', $moduleName, $componentName));
+        }
 
-  if (sfConfig::get('sf_debug') && sfConfig::get('sf_logging_enabled'))
-  {
-    $timer->addTime();
-  }
+        $componentToRun = 'execute';
+    }
 
-  return sfView::NONE == $retval ? null : $componentInstance->getVarHolder()->getAll();
+    if (sfConfig::get('sf_logging_enabled')) {
+        $context->getEventDispatcher()->notify(new sfEvent(null, 'application.log', [sprintf('Call "%s->%s()' . '"', $moduleName, $componentToRun)]));
+    }
+
+    // run component
+    if (sfConfig::get('sf_debug') && sfConfig::get('sf_logging_enabled')) {
+        $timer = sfTimerManager::getTimer(sprintf('Component "%s/%s"', $moduleName, $componentName));
+    }
+
+    $retval = $componentInstance->$componentToRun($context->getRequest());
+
+    if (sfConfig::get('sf_debug') && sfConfig::get('sf_logging_enabled')) {
+        $timer->addTime();
+    }
+
+    return sfView::NONE == $retval ? null : $componentInstance->getVarHolder()->getAll();
 }

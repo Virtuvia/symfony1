@@ -4,5 +4,4 @@
  */
 class PluginTaggingTable extends Doctrine_Table
 {
-
 }

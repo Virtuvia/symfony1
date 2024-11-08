@@ -11,32 +11,31 @@
  */
 class BasesfGuardFormSignin extends BaseForm
 {
-  /**
-   * @see sfForm
-   */
-  public function setup()
-  {
-    $this->setWidgets(array(
-      'username' => new sfWidgetFormInputText(),
-      'password' => new sfWidgetFormInputPassword(array('type' => 'password')),
-      'remember' => new sfWidgetFormInputCheckbox(),
-    ));
-
-    $this->setValidators(array(
-      'username' => new sfValidatorString(),
-      'password' => new sfValidatorString(),
-      'remember' => new sfValidatorBoolean(),
-    ));
-
-    if (sfConfig::get('app_sf_guard_plugin_allow_login_with_email', true))
+    /**
+     * @see sfForm
+     */
+    public function setup()
     {
-      $this->widgetSchema['username']->setLabel('Username or E-Mail');
+        $this->setWidgets([
+            'username' => new sfWidgetFormInputText(),
+            'password' => new sfWidgetFormInputPassword(['type' => 'password']),
+            'remember' => new sfWidgetFormInputCheckbox(),
+        ]);
+
+        $this->setValidators([
+            'username' => new sfValidatorString(),
+            'password' => new sfValidatorString(),
+            'remember' => new sfValidatorBoolean(),
+        ]);
+
+        if (sfConfig::get('app_sf_guard_plugin_allow_login_with_email', true)) {
+            $this->widgetSchema['username']->setLabel('Username or E-Mail');
+        }
+
+        $this->validatorSchema->setPostValidator(new sfGuardValidatorUser());
+
+        $this->widgetSchema->setNameFormat('signin[%s]');
+
+        parent::setup();
     }
-
-    $this->validatorSchema->setPostValidator(new sfGuardValidatorUser());
-
-    $this->widgetSchema->setNameFormat('signin[%s]');
-
-    parent::setup();
-  }
 }

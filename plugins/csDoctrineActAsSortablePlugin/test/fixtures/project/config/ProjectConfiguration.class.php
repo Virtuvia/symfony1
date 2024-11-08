@@ -30,7 +30,7 @@ class ProjectConfiguration extends sfProjectConfiguration
                 'model' => true,
                 'forms' => true,
                 'filters' => true,
-            ]
+            ],
         );
     }
 
@@ -43,7 +43,7 @@ class ProjectConfiguration extends sfProjectConfiguration
         chdir(sfConfig::get('sf_root_dir'));
         $task = new sfDoctrineDataLoadTask($this->dispatcher, new sfFormatter());
         $task->setConfiguration($this);
-        $task->run(array($path));
+        $task->run([$path]);
     }
 
     public function configureDoctrine(Doctrine_Manager $manager): void

@@ -22,69 +22,64 @@
  */
 class sfImageSmoothGD extends sfImageTransformAbstract
 {
-  /**
-   * Smoothness level to be applied.
-  */
-  protected $smoothness = 0;
+    /**
+     * Smoothness level to be applied.
+    */
+    protected $smoothness = 0;
 
-  /**
-   * Construct an sfImageSmooth object.
-   *
-   * @param integer
-   */
-  public function __construct($smoothness=0)
-  {
-    $this->setSmoothness($smoothness);
-  }
-
-  /**
-   * Sets the smoothness
-   *
-   * @param integer
-   * @return boolean
-   */
-  public function setSmoothness($smoothness)
-  {
-    if (is_numeric($smoothness))
+    /**
+     * Construct an sfImageSmooth object.
+     *
+     * @param int
+     */
+    public function __construct($smoothness = 0)
     {
-      $this->smoothness = (int)$smoothness;
-
-      return true;
+        $this->setSmoothness($smoothness);
     }
 
-    return false;
-  }
-
-  /**
-   * Gets the smoothness
-   *
-   * @return integer
-   */
-  public function getSmoothness()
-  {
-    return $this->smoothness;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    $resource = $image->getAdapter()->getHolder();
-
-    if (function_exists('imagefilter'))
+    /**
+     * Sets the smoothness
+     *
+     * @param int
+     * @return bool
+     */
+    public function setSmoothness($smoothness)
     {
-      imagefilter($resource, IMG_FILTER_SMOOTH, $this->smoothness);
+        if (is_numeric($smoothness)) {
+            $this->smoothness = (int) $smoothness;
+
+            return true;
+        }
+
+        return false;
     }
 
-    else
+    /**
+     * Gets the smoothness
+     *
+     * @return int
+     */
+    public function getSmoothness()
     {
-      throw new sfImageTransformException(sprintf('Cannot perform transform, GD does not support imagefilter '));
+        return $this->smoothness;
     }
 
-    return $image;
-  }
+    /**
+     * Apply the transform to the sfImage object.
+     *
+     * @param sfImage
+     * @return sfImage
+     */
+    protected function transform(sfImage $image)
+    {
+        $resource = $image->getAdapter()->getHolder();
+
+        if (function_exists('imagefilter')) {
+            imagefilter($resource, IMG_FILTER_SMOOTH, $this->smoothness);
+        } else {
+            throw new sfImageTransformException(sprintf('Cannot perform transform, GD does not support imagefilter '));
+        }
+
+        return $image;
+    }
 }

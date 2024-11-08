@@ -10,8 +10,8 @@
  */
 class renderTextActions extends sfActions
 {
-  public function executeIndex()
-  {
-    return $this->renderText('foo');
-  }
+    public function executeIndex()
+    {
+        return $this->renderText('foo');
+    }
 }

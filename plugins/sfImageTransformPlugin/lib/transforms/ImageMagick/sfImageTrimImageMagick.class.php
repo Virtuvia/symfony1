@@ -22,104 +22,100 @@
  */
 class sfImageTrimImageMagick extends sfImageTransformAbstract
 {
-  /**
-   * tolerence for the trim.
-   *
-   * @var float
-  */
-  protected $fuzz = 0;
+    /**
+     * tolerence for the trim.
+     *
+     * @var float
+    */
+    protected $fuzz = 0;
 
-  /**
-   * Background color.
-   *
-   * @var integer
-  */
-  protected $background = null;
+    /**
+     * Background color.
+     *
+     * @var int
+    */
+    protected $background = null;
 
-  /**
-   * Construct an sfImageCrop object.
-   *
-   * @param integer
-   * @param string
-   */
-  public function __construct($fuzz=0, $background=null)
-  {
-    $this->setFuzz($fuzz);
-    $this->setBackgroundColor($background);
-  }
-
-  /**
-   * set the angle to rotate the image by.
-   *
-   * @param integer
-   */
-  public function setFuzz($fuzz)
-  {
-    if (!is_numeric($fuzz))
+    /**
+     * Construct an sfImageCrop object.
+     *
+     * @param int
+     * @param string
+     */
+    public function __construct($fuzz = 0, $background = null)
     {
-      $this->fuzz = (float)$fuzz;
-
-      return true;
+        $this->setFuzz($fuzz);
+        $this->setBackgroundColor($background);
     }
 
-    return false;
-  }
-
-  /**
-   * Gets the angle to rotate the image by.
-   *
-   * @return integer
-   */
-  public function getFuzz()
-  {
-    return $this->fuzz;
-  }
-
-  /**
-   * set the background color for the image.
-   *
-   * @param integer
-   */
-  public function setBackgroundColor($color)
-  {
-    $this->background = $color;
-  }
-
-  /**
-   * Gets the angle to rotate the image by.
-   *
-   * @return integer
-   */
-  public function getBackgroundColor()
-  {
-    return $this->background;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    $resource = $image->getAdapter()->getHolder();
-
-    // By default use the background of the top left corner
-    if (is_null($this->background))
+    /**
+     * set the angle to rotate the image by.
+     *
+     * @param int
+     */
+    public function setFuzz($fuzz)
     {
-      $this->background = $resource->getImagePixelColor(0, 0);
-      $background = $this->background;
-    }
-    else
-    {
-      $background = new ImagickPixel();
-      $background->setColor($this->background);
+        if (!is_numeric($fuzz)) {
+            $this->fuzz = (float) $fuzz;
+
+            return true;
+        }
+
+        return false;
     }
 
-    $resource->setBackgroundColor($background);
-    $resource->trimImage($this->fuzz);
+    /**
+     * Gets the angle to rotate the image by.
+     *
+     * @return int
+     */
+    public function getFuzz()
+    {
+        return $this->fuzz;
+    }
 
-    return $image;
-  }
+    /**
+     * set the background color for the image.
+     *
+     * @param int
+     */
+    public function setBackgroundColor($color)
+    {
+        $this->background = $color;
+    }
+
+    /**
+     * Gets the angle to rotate the image by.
+     *
+     * @return int
+     */
+    public function getBackgroundColor()
+    {
+        return $this->background;
+    }
+
+    /**
+     * Apply the transform to the sfImage object.
+     *
+     * @param sfImage
+     * @return sfImage
+     */
+    protected function transform(sfImage $image)
+    {
+        $resource = $image->getAdapter()->getHolder();
+
+        // By default use the background of the top left corner
+        if (is_null($this->background)) {
+            $this->background = $resource->getImagePixelColor(0, 0);
+            $background = $this->background;
+        } else {
+            $background = new ImagickPixel();
+            $background->setColor($this->background);
+        }
+
+        $resource->setBackgroundColor($background);
+        $resource->trimImage($this->fuzz);
+
+        return $image;
+    }
 }

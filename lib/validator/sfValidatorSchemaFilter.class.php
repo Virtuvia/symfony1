@@ -18,50 +18,45 @@
  */
 class sfValidatorSchemaFilter extends sfValidatorSchema
 {
-  /**
-   * Constructor.
-   *
-   * @param string          $field      The field name
-   * @param sfValidatorBase $validator  The validator
-   * @param array           $options    An array of options
-   * @param array           $messages   An array of error messages
-   *
-   * @see sfValidatorBase
-   */
-  public function __construct($field, sfValidatorBase $validator, $options = array(), $messages = array())
-  {
-    $this->addOption('field', $field);
-    $this->addOption('validator', $validator);
-
-    parent::__construct(null, $options, $messages);
-  }
-
-  /**
-   * @see sfValidatorBase
-   */
-  protected function doClean($value)
-  {
-    if (null === $value)
+    /**
+     * Constructor.
+     *
+     * @param string          $field      The field name
+     * @param sfValidatorBase $validator  The validator
+     * @param array           $options    An array of options
+     * @param array           $messages   An array of error messages
+     *
+     * @see sfValidatorBase
+     */
+    public function __construct($field, sfValidatorBase $validator, $options = [], $messages = [])
     {
-      $value = array();
+        $this->addOption('field', $field);
+        $this->addOption('validator', $validator);
+
+        parent::__construct(null, $options, $messages);
     }
 
-    if (!is_array($value))
+    /**
+     * @see sfValidatorBase
+     */
+    protected function doClean($value)
     {
-      throw new InvalidArgumentException('You must pass an array parameter to the clean() method');
-    }
+        if (null === $value) {
+            $value = [];
+        }
 
-    $fieldValue = isset($value[$this->getOption('field')]) ? $value[$this->getOption('field')] : null;
+        if (!is_array($value)) {
+            throw new InvalidArgumentException('You must pass an array parameter to the clean() method');
+        }
 
-    try
-    {
-      $value[$this->getOption('field')] = $this->getOption('validator')->clean($fieldValue);
-    }
-    catch (sfValidatorError $error)
-    {
-      throw new sfValidatorErrorSchema($this, array($this->getOption('field') => $error));
-    }
+        $fieldValue = isset($value[$this->getOption('field')]) ? $value[$this->getOption('field')] : null;
 
-    return $value;
-  }
+        try {
+            $value[$this->getOption('field')] = $this->getOption('validator')->clean($fieldValue);
+        } catch (sfValidatorError $error) {
+            throw new sfValidatorErrorSchema($this, [$this->getOption('field') => $error]);
+        }
+
+        return $value;
+    }
 }

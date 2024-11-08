@@ -12,9 +12,9 @@ $t = new lime_test(0);
 
 class TestsfGuardUserForm extends PluginsfGuardUserForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }
 
 // ->__construct()

@@ -10,11 +10,11 @@
  */
 class sfGuardRegisterForm extends BasesfGuardRegisterForm
 {
-  /**
-   * @see sfForm
-   */
-  public function configure()
-  {
-  	$this->widgetSchema->getFormFormatter()->setTranslationCatalogue('sf_guard');
-  }
+    /**
+     * @see sfForm
+     */
+    public function configure()
+    {
+        $this->widgetSchema->getFormFormatter()->setTranslationCatalogue('sf_guard');
+    }
 }

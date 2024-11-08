@@ -36,74 +36,70 @@
  */
 class sfFormLanguage extends sfForm
 {
-  protected
-    $user = null;
+    protected $user = null;
 
-  /**
-   * Constructor.
-   *
-   * @param sfUser A sfUser instance
-   * @param array  An array of options
-   * @param string A CSRF secret (false to disable CSRF protection, null to use the global CSRF secret)
-   *
-   * @see sfForm
-   */
-  public function __construct(sfUser $user, $options = array(), $CSRFSecret = null)
-  {
-    $this->user = $user;
-
-    if (!isset($options['languages']))
+    /**
+     * Constructor.
+     *
+     * @param sfUser A sfUser instance
+     * @param array  An array of options
+     * @param string A CSRF secret (false to disable CSRF protection, null to use the global CSRF secret)
+     *
+     * @see sfForm
+     */
+    public function __construct(sfUser $user, $options = [], $CSRFSecret = null)
     {
-      throw new RuntimeException(sprintf('%s requires a "languages" option.', get_class($this)));
+        $this->user = $user;
+
+        if (!isset($options['languages'])) {
+            throw new RuntimeException(sprintf('%s requires a "languages" option.', get_class($this)));
+        }
+
+        parent::__construct(['language' => $user->getCulture()], $options, $CSRFSecret);
     }
 
-    parent::__construct(array('language' => $user->getCulture()), $options, $CSRFSecret);
-  }
-
-  /**
-   * Changes the current user culture.
-   */
-  public function save()
-  {
-    $this->user->setCulture($this->getValue('language'));
-  }
-
-  /**
-   * Processes the current request.
-   *
-   * @param  sfRequest A sfRequest instance
-   *
-   * @return Boolean   true if the form is valid, false otherwise
-   */
-  public function process(sfRequest $request)
-  {
-    $data = array('language' => $request->getParameter('language'));
-    if ($request->hasParameter(self::$CSRFFieldName))
+    /**
+     * Changes the current user culture.
+     */
+    public function save()
     {
-      $data[self::$CSRFFieldName] = $request->getParameter(self::$CSRFFieldName);
+        $this->user->setCulture($this->getValue('language'));
     }
 
-    $this->bind($data);
-
-    if ($isValid = $this->isValid())
+    /**
+     * Processes the current request.
+     *
+     * @param  sfRequest A sfRequest instance
+     *
+     * @return bool   true if the form is valid, false otherwise
+     */
+    public function process(sfRequest $request)
     {
-      $this->save();
+        $data = ['language' => $request->getParameter('language')];
+        if ($request->hasParameter(self::$CSRFFieldName)) {
+            $data[self::$CSRFFieldName] = $request->getParameter(self::$CSRFFieldName);
+        }
+
+        $this->bind($data);
+
+        if ($isValid = $this->isValid()) {
+            $this->save();
+        }
+
+        return $isValid;
     }
 
-    return $isValid;
-  }
+    /**
+     * @see sfForm
+     */
+    public function configure()
+    {
+        $this->setValidators([
+            'language' => new sfValidatorI18nChoiceLanguage(['languages' => $this->options['languages']]),
+        ]);
 
-  /**
-   * @see sfForm
-   */
-  public function configure()
-  {
-    $this->setValidators(array(
-      'language' => new sfValidatorI18nChoiceLanguage(array('languages' => $this->options['languages'])),
-    ));
-
-    $this->setWidgets(array(
-      'language' => new sfWidgetFormI18nChoiceLanguage(array('culture' => $this->user->getCulture(), 'languages' => $this->options['languages'])),
-    ));
-  }
+        $this->setWidgets([
+            'language' => new sfWidgetFormI18nChoiceLanguage(['culture' => $this->user->getCulture(), 'languages' => $this->options['languages']]),
+        ]);
+    }
 }

@@ -10,15 +10,15 @@
 
 /**
  * Processes the "remember me" cookie.
- * 
+ *
  * This filter should be added to the application filters.yml file **above**
  * the security filter:
- * 
+ *
  *    remember_me:
  *      class: sfGuardRememberMeFilter
- * 
+ *
  *    security: ~
- * 
+ *
  * @package    symfony
  * @subpackage plugin
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
@@ -26,35 +26,33 @@
  */
 class sfGuardRememberMeFilter extends sfFilter
 {
-  /**
-   * Executes the filter chain.
-   *
-   * @param sfFilterChain $filterChain
-   */
-  public function execute($filterChain)
-  {
-    $cookieName = sfConfig::get('app_sf_guard_plugin_remember_cookie_name', 'sfRemember');
-
-    if (
-      $this->isFirstCall()
-      &&
-      $this->context->getUser()->isAnonymous()
-      &&
-      $cookie = $this->context->getRequest()->getCookie($cookieName)
-    )
+    /**
+     * Executes the filter chain.
+     *
+     * @param sfFilterChain $filterChain
+     */
+    public function execute($filterChain)
     {
-      $q = Doctrine_Core::getTable('sfGuardUser')->createQuery('u')
-        ->select('u.*')
-        ->innerJoin('u.RememberKeys r')
-        ->where('u.is_active = ?', true)
-        ->addWhere('r.remember_key = ?', $cookie);
+        $cookieName = sfConfig::get('app_sf_guard_plugin_remember_cookie_name', 'sfRemember');
 
-      if ($q->count())
-      {
-        $this->context->getUser()->signIn($q->fetchOne());
-      }
+        if (
+            $this->isFirstCall()
+            &&
+            $this->context->getUser()->isAnonymous()
+            &&
+            $cookie = $this->context->getRequest()->getCookie($cookieName)
+        ) {
+            $q = Doctrine_Core::getTable('sfGuardUser')->createQuery('u')
+              ->select('u.*')
+              ->innerJoin('u.RememberKeys r')
+              ->where('u.is_active = ?', true)
+              ->addWhere('r.remember_key = ?', $cookie);
+
+            if ($q->count()) {
+                $this->context->getUser()->signIn($q->fetchOne());
+            }
+        }
+
+        $filterChain->execute();
     }
-
-    $filterChain->execute();
-  }
 }

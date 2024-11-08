@@ -18,15 +18,15 @@
  */
 class sfValidatorEmail extends sfValidatorRegex
 {
-  const REGEX_EMAIL = '/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i';
+    public const REGEX_EMAIL = '/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i';
 
-  /**
-   * @see sfValidatorRegex
-   */
-  protected function configure($options = array(), $messages = array())
-  {
-    parent::configure($options, $messages);
+    /**
+     * @see sfValidatorRegex
+     */
+    protected function configure($options = [], $messages = [])
+    {
+        parent::configure($options, $messages);
 
-    $this->setOption('pattern', self::REGEX_EMAIL);
-  }
+        $this->setOption('pattern', self::REGEX_EMAIL);
+    }
 }

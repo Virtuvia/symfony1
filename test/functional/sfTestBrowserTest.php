@@ -11,22 +11,21 @@ declare(strict_types=1);
  */
 
 $app = 'frontend';
-if (!include(dirname(__FILE__).'/../bootstrap/functional.php'))
-{
-  return;
+if (!include(dirname(__FILE__) . '/../bootstrap/functional.php')) {
+    return;
 }
 
 class TestBrowser extends sfTestBrowser
 {
-  public $events = array();
-  public function listen(sfEvent $event)
-  {
-    $this->events[] = $event;
-  }
+    public $events = [];
+    public function listen(sfEvent $event)
+    {
+        $this->events[] = $event;
+    }
 }
 
 $b = new TestBrowser();
-$b->addListener('context.load_factories', array($b, 'listen'));
+$b->addListener('context.load_factories', [$b, 'listen']);
 
 // listeners
 $b->get('/');
@@ -100,14 +99,11 @@ $b->
   end()
 ;
 
-try
-{
-  $b->with('response')->checkElement('h1', 'text');
-  $b->test()->fail('The DOM is not accessible if the response content type is not HTML');
-}
-catch (LogicException $e)
-{
-  $b->test()->pass('The DOM is not accessible if the response content type is not HTML');
+try {
+    $b->with('response')->checkElement('h1', 'text');
+    $b->test()->fail('The DOM is not accessible if the response content type is not HTML');
+} catch (LogicException $e) {
+    $b->test()->pass('The DOM is not accessible if the response content type is not HTML');
 }
 
 // check response headers

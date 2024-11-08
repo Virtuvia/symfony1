@@ -22,65 +22,63 @@
  */
 class sfImageTransparencyGD extends sfImageTransformAbstract
 {
-  /**
-   * The transparent color defined in hex.
-  */
-  protected $color = '#FFFFFF';
+    /**
+     * The transparent color defined in hex.
+    */
+    protected $color = '#FFFFFF';
 
-  /**
-   * Construct an sfImageCrop object.
-   *
-   * @param array string
-   */
-  public function __construct($color)
-  {
-    $this->setColor($color);
-  }
-
-  /**
-   * Set the color to be transparent.
-   *
-   * @param string
-   */
-  public function setColor($color)
-  {
-    $this->color = $color;
-  }
-
-  /**
-   * Gets text color.
-   *
-   * @return string
-   */
-  public function getColor()
-  {
-    return $this->color;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    $resource = $image->getAdapter()->getHolder();
-
-    // Set the defined color as transparent
-    if ($this->color !== '')
+    /**
+     * Construct an sfImageCrop object.
+     *
+     * @param array string
+     */
+    public function __construct($color)
     {
-      $color = $image->getAdapter()->getColorByHex($resource, $this->color);
+        $this->setColor($color);
     }
 
-    // Or default to the color at the top left
-    else
+    /**
+     * Set the color to be transparent.
+     *
+     * @param string
+     */
+    public function setColor($color)
     {
-      $color = imagecolorat($resource, 0, 0);
+        $this->color = $color;
     }
 
-    imagecolortransparent($resource,$color);
+    /**
+     * Gets text color.
+     *
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
 
-    return $image;
-  }
+    /**
+     * Apply the transform to the sfImage object.
+     *
+     * @param sfImage
+     * @return sfImage
+     */
+    protected function transform(sfImage $image)
+    {
+        $resource = $image->getAdapter()->getHolder();
+
+        // Set the defined color as transparent
+        if ($this->color !== '') {
+            $color = $image->getAdapter()->getColorByHex($resource, $this->color);
+        }
+
+        // Or default to the color at the top left
+        else {
+            $color = imagecolorat($resource, 0, 0);
+        }
+
+        imagecolortransparent($resource, $color);
+
+        return $image;
+    }
 }

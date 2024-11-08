@@ -18,40 +18,39 @@
  */
 class sfWidgetFormI18nChoiceLanguage extends sfWidgetFormChoice
 {
-  /**
-   * Constructor.
-   *
-   * Available options:
-   *
-   *  * culture:   The culture to use for internationalized strings
-   *  * languages: An array of language codes to use
-   *  * add_empty: Whether to add a first empty value or not (false by default)
-   *               If the option is not a bool, the value will be used as the text value
-   *
-   * @param array $options     An array of options
-   * @param array $attributes  An array of default HTML attributes
-   *
-   * @see sfWidgetFormChoice
-   */
-  protected function configure($options = array(), $attributes = array())
-  {
-    parent::configure($options, $attributes);
-
-    $this->addOption('culture');
-    $this->addOption('languages');
-    $this->addOption('add_empty', false);
-
-    // populate choices with all languages
-    $culture = isset($options['culture']) ? $options['culture'] : 'en';
-
-    $languages = sfCultureInfo::getInstance($culture)->getLanguages(isset($options['languages']) ? $options['languages'] : null);
-
-    $addEmpty = isset($options['add_empty']) ? $options['add_empty'] : false;
-    if (false !== $addEmpty)
+    /**
+     * Constructor.
+     *
+     * Available options:
+     *
+     *  * culture:   The culture to use for internationalized strings
+     *  * languages: An array of language codes to use
+     *  * add_empty: Whether to add a first empty value or not (false by default)
+     *               If the option is not a bool, the value will be used as the text value
+     *
+     * @param array $options     An array of options
+     * @param array $attributes  An array of default HTML attributes
+     *
+     * @see sfWidgetFormChoice
+     */
+    protected function configure($options = [], $attributes = [])
     {
-      $languages = array_merge(array('' => true === $addEmpty ? '' : $addEmpty), $languages);
-    }
+        parent::configure($options, $attributes);
 
-    $this->setOption('choices', $languages);
-  }
+        $this->addOption('culture');
+        $this->addOption('languages');
+        $this->addOption('add_empty', false);
+
+        // populate choices with all languages
+        $culture = isset($options['culture']) ? $options['culture'] : 'en';
+
+        $languages = sfCultureInfo::getInstance($culture)->getLanguages(isset($options['languages']) ? $options['languages'] : null);
+
+        $addEmpty = isset($options['add_empty']) ? $options['add_empty'] : false;
+        if (false !== $addEmpty) {
+            $languages = array_merge(['' => true === $addEmpty ? '' : $addEmpty], $languages);
+        }
+
+        $this->setOption('choices', $languages);
+    }
 }

@@ -20,20 +20,20 @@
  */
 class sfImageGreyscaleImageMagick extends sfImageTransformAbstract
 {
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @access protected
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    $resource = $image->getAdapter()->getHolder();
+    /**
+     * Apply the transform to the sfImage object.
+     *
+     * @access protected
+     * @param sfImage
+     * @return sfImage
+     */
+    protected function transform(sfImage $image)
+    {
+        $resource = $image->getAdapter()->getHolder();
 
-    $resource->modulateImage(100, 0, 100);
+        $resource->modulateImage(100, 0, 100);
 
-    return $image;
-  }
+        return $image;
+    }
 
 }

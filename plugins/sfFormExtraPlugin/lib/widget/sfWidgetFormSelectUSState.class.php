@@ -3,24 +3,24 @@
 /*
  * This file is part of the symfony package.
  * (c) Fabien Potencier <fabien.potencier@symfony-project.com>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 /**
  * Select menu of US states.
- * 
+ *
  * Here's an example usage:
- * 
+ *
  *    $this->setWidgets(array(
  *      'state' => new sfWidgetFormSelectUSState(array('add_empty' => 'Select a state...')),
  *    ));
- * 
+ *
  *    $this->setValidators(array(
  *      'state' => sfValidatorChoice(array('choices' => sfWidgetFormSelectUSState::getStateAbbreviations())),
  *    ));
- * 
+ *
  * @package    sfFormExtraPlugin
  * @subpackage widget
  * @author     Kris Wallsmith <kris.wallsmith@symfony-project.com>
@@ -28,125 +28,124 @@
  */
 class sfWidgetFormSelectUSState extends sfWidgetFormSelect
 {
-  /**
-   * @see sfWidget
-   */
-  public function __construct($options = array(), $attributes = array())
-  {
-    $options['choices'] = new sfCallable(array($this, 'getChoices'));
-
-    parent::__construct($options, $attributes);
-  }
-
-  /**
-   * @see sfWidget
-   */
-  protected function configure($options = array(), $attributes = array())
-  {
-    $this->addOption('add_empty', false);
-
-    parent::configure($options, $attributes);
-  }
-
-  /**
-   * Returns choices for the current widget.
-   * 
-   * @return array
-   */
-  public function getChoices()
-  {
-    $choices = array();
-    if (false !== $this->getOption('add_empty'))
+    /**
+     * @see sfWidget
+     */
+    public function __construct($options = [], $attributes = [])
     {
-      $choices[''] = true === $this->getOption('add_empty') ? '' : $this->getOption('add_empty');
+        $options['choices'] = new sfCallable([$this, 'getChoices']);
+
+        parent::__construct($options, $attributes);
     }
 
-    $choices = array_merge($choices, self::getStates());
+    /**
+     * @see sfWidget
+     */
+    protected function configure($options = [], $attributes = [])
+    {
+        $this->addOption('add_empty', false);
 
-    return $choices;
-  }
+        parent::configure($options, $attributes);
+    }
 
-  /**
-   * Returns an associative array of US states.
-   * 
-   * @return array
-   */
-  static public function getStates()
-  {
-    return self::$states;
-  }
+    /**
+     * Returns choices for the current widget.
+     *
+     * @return array
+     */
+    public function getChoices()
+    {
+        $choices = [];
+        if (false !== $this->getOption('add_empty')) {
+            $choices[''] = true === $this->getOption('add_empty') ? '' : $this->getOption('add_empty');
+        }
 
-  /**
-   * Sets the array of states.
-   * 
-   * @param array $states
-   */
-  static public function setStates(array $states)
-  {
-    self::$states = $states;
-  }
+        $choices = array_merge($choices, self::getStates());
 
-  /**
-   * Returns an array of state abbreviations.
-   * 
-   * @return array
-   */
-  static public function getStateAbbreviations()
-  {
-    return array_keys(self::$states);
-  }
+        return $choices;
+    }
 
-  static protected $states = array(
-    'AL' => 'Alabama',
-    'AK' => 'Alaska',
-    'AZ' => 'Arizona',
-    'AR' => 'Arkansas',
-    'CA' => 'California',
-    'CO' => 'Colorado',
-    'CT' => 'Connecticut',
-    'DE' => 'Delaware',
-    'DC' => 'District Of Columbia',
-    'FL' => 'Florida',
-    'GA' => 'Georgia',
-    'HI' => 'Hawaii',
-    'ID' => 'Idaho',
-    'IL' => 'Illinois',
-    'IN' => 'Indiana',
-    'IA' => 'Iowa',
-    'KS' => 'Kansas',
-    'KY' => 'Kentucky',
-    'LA' => 'Louisiana',
-    'ME' => 'Maine',
-    'MD' => 'Maryland',
-    'MA' => 'Massachusetts',
-    'MI' => 'Michigan',
-    'MN' => 'Minnesota',
-    'MS' => 'Mississippi',
-    'MO' => 'Missouri',
-    'MT' => 'Montana',
-    'NE' => 'Nebraska',
-    'NV' => 'Nevada',
-    'NH' => 'New Hampshire',
-    'NJ' => 'New Jersey',
-    'NM' => 'New Mexico',
-    'NY' => 'New York',
-    'NC' => 'North Carolina',
-    'ND' => 'North Dakota',
-    'OH' => 'Ohio',
-    'OK' => 'Oklahoma',
-    'OR' => 'Oregon',
-    'PA' => 'Pennsylvania',
-    'RI' => 'Rhode Island',
-    'SC' => 'South Carolina',
-    'SD' => 'South Dakota',
-    'TN' => 'Tennessee',
-    'TX' => 'Texas',
-    'UT' => 'Utah',
-    'VT' => 'Vermont',
-    'VA' => 'Virginia',
-    'WA' => 'Washington',
-    'WV' => 'West Virginia',
-    'WI' => 'Wisconsin',
-    'WY' => 'Wyoming',
-  );
+    /**
+     * Returns an associative array of US states.
+     *
+     * @return array
+     */
+    public static function getStates()
+    {
+        return self::$states;
+    }
+
+    /**
+     * Sets the array of states.
+     *
+     * @param array $states
+     */
+    public static function setStates(array $states)
+    {
+        self::$states = $states;
+    }
+
+    /**
+     * Returns an array of state abbreviations.
+     *
+     * @return array
+     */
+    public static function getStateAbbreviations()
+    {
+        return array_keys(self::$states);
+    }
+
+    protected static $states = [
+        'AL' => 'Alabama',
+        'AK' => 'Alaska',
+        'AZ' => 'Arizona',
+        'AR' => 'Arkansas',
+        'CA' => 'California',
+        'CO' => 'Colorado',
+        'CT' => 'Connecticut',
+        'DE' => 'Delaware',
+        'DC' => 'District Of Columbia',
+        'FL' => 'Florida',
+        'GA' => 'Georgia',
+        'HI' => 'Hawaii',
+        'ID' => 'Idaho',
+        'IL' => 'Illinois',
+        'IN' => 'Indiana',
+        'IA' => 'Iowa',
+        'KS' => 'Kansas',
+        'KY' => 'Kentucky',
+        'LA' => 'Louisiana',
+        'ME' => 'Maine',
+        'MD' => 'Maryland',
+        'MA' => 'Massachusetts',
+        'MI' => 'Michigan',
+        'MN' => 'Minnesota',
+        'MS' => 'Mississippi',
+        'MO' => 'Missouri',
+        'MT' => 'Montana',
+        'NE' => 'Nebraska',
+        'NV' => 'Nevada',
+        'NH' => 'New Hampshire',
+        'NJ' => 'New Jersey',
+        'NM' => 'New Mexico',
+        'NY' => 'New York',
+        'NC' => 'North Carolina',
+        'ND' => 'North Dakota',
+        'OH' => 'Ohio',
+        'OK' => 'Oklahoma',
+        'OR' => 'Oregon',
+        'PA' => 'Pennsylvania',
+        'RI' => 'Rhode Island',
+        'SC' => 'South Carolina',
+        'SD' => 'South Dakota',
+        'TN' => 'Tennessee',
+        'TX' => 'Texas',
+        'UT' => 'Utah',
+        'VT' => 'Vermont',
+        'VA' => 'Virginia',
+        'WA' => 'Washington',
+        'WV' => 'West Virginia',
+        'WI' => 'Wisconsin',
+        'WY' => 'Wyoming',
+    ];
 }

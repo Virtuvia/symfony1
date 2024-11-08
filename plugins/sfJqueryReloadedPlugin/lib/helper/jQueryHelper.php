@@ -16,14 +16,12 @@ require_once(sfConfig::get('sf_symfony_lib_dir') . '/helper/JavascriptBaseHelper
  * in the project by other means.
  */
 
-if (sfConfig::get('sf_jquery_core', null) !== false)
-{
-  if (!$jq_path = sfConfig::get('sf_jquery_path'))
-  {
-    $jq_path = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') .
-      '/js/' . sfConfig::get('sf_jquery_core', 'jquery-1.4.2.min.js');
-  }
-  sfContext::getInstance()->getResponse()->addJavascript($jq_path, 'first');
+if (sfConfig::get('sf_jquery_core', null) !== false) {
+    if (!$jq_path = sfConfig::get('sf_jquery_path')) {
+        $jq_path = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') .
+          '/js/' . sfConfig::get('sf_jquery_core', 'jquery-1.4.2.min.js');
+    }
+    sfContext::getInstance()->getResponse()->addJavascript($jq_path, 'first');
 }
 
 /**
@@ -33,10 +31,10 @@ if (sfConfig::get('sf_jquery_core', null) !== false)
  * sortable
  * autocomplete
  *
- * This is useful to app developers when the normal "just in time" approach 
+ * This is useful to app developers when the normal "just in time" approach
  * doesn't work. For instance, if you are making helper calls in layout.php (or
- * components invoked by it...) and you have already called get_javascripts, 
- * it's too late to rely on the automatic calls to jq_add_plugin in the 
+ * components invoked by it...) and you have already called get_javascripts,
+ * it's too late to rely on the automatic calls to jq_add_plugin in the
  * various helpers. So call this early instead, right after use_helper.
  *
  * Example:
@@ -44,37 +42,35 @@ if (sfConfig::get('sf_jquery_core', null) !== false)
  *
  */
 
-function jq_add_plugins_by_name($args = array()) {
-  /* 
-   * When adding the capability to use a new plugin you must
-   * extend this array, and keep it up to date when you update to
-   * a new version. You must also update the plugin's
-   * default config/settings.yml file
-   */
+function jq_add_plugins_by_name($args = [])
+{
+    /*
+     * When adding the capability to use a new plugin you must
+     * extend this array, and keep it up to date when you update to
+     * a new version. You must also update the plugin's
+     * default config/settings.yml file
+     */
 
-  $plugins = array(
-    // Backwards compatibility
-    'sortable' => 'jquery-ui-1.7.3.custom.min.js',
-    'ui' => 'jquery-ui-1.7.3.custom.min.js',
-    'autocomplete' => 'jquery.autocomplete.min.js'
-  );
+    $plugins = [
+        // Backwards compatibility
+        'sortable' => 'jquery-ui-1.7.3.custom.min.js',
+        'ui' => 'jquery-ui-1.7.3.custom.min.js',
+        'autocomplete' => 'jquery.autocomplete.min.js',
+    ];
 
-  $pluginPaths = sfConfig::get('sf_jquery_plugin_paths');
-  foreach ($args as $name)
-  {
-    if (!isset($plugins[$name]))
-    {
-      throw new Exception("Unknown jQuery plugin name $name");
+    $pluginPaths = sfConfig::get('sf_jquery_plugin_paths');
+    foreach ($args as $name) {
+        if (!isset($plugins[$name])) {
+            throw new Exception("Unknown jQuery plugin name $name");
+        }
+        if (!isset($pluginPaths[$name])) {
+            $filename = sfConfig::get("sf_jquery_$name", $plugins[$name]);
+            $filename = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') . "/js/plugins/$filename";
+        } else {
+            $filename = $pluginPaths[$name];
+        }
+        sfContext::getInstance()->getResponse()->addJavascript($filename);
     }
-    if (!isset($pluginPaths[$name]))
-    {
-      $filename = sfConfig::get("sf_jquery_$name", $plugins[$name]);
-      $filename = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') . "/js/plugins/$filename";
-    } else {
-      $filename = $pluginPaths[$name];
-    }
-    sfContext::getInstance()->getResponse()->addJavascript($filename);
-  }
 }
 
 
@@ -82,17 +78,17 @@ function jq_add_plugins_by_name($args = array()) {
  * Backwards compatibility only. Don't use this.
  */
 
-function jq_add_plugin($options = array()) {
-	// tom@punkave.com: with a singular name (jq_add_plugin), this function
-	// really should accept a non-array argument
-	if (!is_array($options))
-	{
-		$options = array($options);
-	}
-	foreach ( $options as $o ) {
-    $file = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') . "/js/plugins/$o";
-		sfContext::getInstance ()->getResponse ()->addJavascript ($file);
-	}
+function jq_add_plugin($options = [])
+{
+    // tom@punkave.com: with a singular name (jq_add_plugin), this function
+    // really should accept a non-array argument
+    if (!is_array($options)) {
+        $options = [$options];
+    }
+    foreach ($options as $o) {
+        $file = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') . "/js/plugins/$o";
+        sfContext::getInstance()->getResponse()->addJavascript($file);
+    }
 }
 
 
@@ -101,12 +97,12 @@ function jq_add_plugin($options = array()) {
  * Usually used to update a specified div ('update') with the results of the remote call.
  * The options for specifying the target with 'url' and defining callbacks is the same as 'link_to_remote()'.
  */
-function jq_periodically_call_remote($options = array())
+function jq_periodically_call_remote($options = [])
 {
-	$frequency = isset($options['frequency']) ? $options['frequency'] : 10; // every ten seconds by default
-	$code = 'setInterval(function() {'.jq_remote_function($options).'}, '.($frequency * 1000).')';
+    $frequency = isset($options['frequency']) ? $options['frequency'] : 10; // every ten seconds by default
+    $code = 'setInterval(function() {' . jq_remote_function($options) . '}, ' . ($frequency * 1000) . ')';
 
-	return javascript_tag($code);
+    return javascript_tag($code);
 }
 
 /**
@@ -116,9 +112,9 @@ function jq_periodically_call_remote($options = array())
  * See link_to_remote() for details.
  *
  */
-function jq_button_to_remote($name, $options = array(), $html_options = array())
+function jq_button_to_remote($name, $options = [], $html_options = [])
 {
-	return jq_button_to_function($name, jq_remote_function($options), $html_options);
+    return jq_button_to_function($name, jq_remote_function($options), $html_options);
 }
 
 
@@ -220,9 +216,9 @@ function jq_button_to_remote($name, $options = array(), $html_options = array())
  *                       it could just as well be the ID of a
  *                       table row or any other DOM element.
  */
-function jq_link_to_remote($name, $options = array(), $html_options = array())
+function jq_link_to_remote($name, $options = [], $html_options = [])
 {
-	return jq_link_to_function($name, jq_remote_function($options), $html_options);
+    return jq_link_to_function($name, jq_remote_function($options), $html_options);
 }
 
 /**
@@ -244,35 +240,34 @@ function jq_link_to_remote($name, $options = array(), $html_options = array())
  *   ) ?>
  */
 
-function jq_update_element_function($element_id, $options = array())
+function jq_update_element_function($element_id, $options = [])
 {
 
 
-	$content = escape_javascript(isset($options['content']) ? $options['content'] : '');
+    $content = escape_javascript(isset($options['content']) ? $options['content'] : '');
 
-	$value = isset($options['action']) ? $options['action'] : 'update';
-	switch ($value)
-	{
-		case 'update':
-			$updateMethod = _update_method(isset($options['position']) ? $options['position'] : '');
-			$javascript_function = "jQuery('#$element_id').$updateMethod('$content')";
-			break;
+    $value = isset($options['action']) ? $options['action'] : 'update';
+    switch ($value) {
+        case 'update':
+            $updateMethod = _update_method(isset($options['position']) ? $options['position'] : '');
+            $javascript_function = "jQuery('#$element_id').$updateMethod('$content')";
+            break;
 
-		case 'empty':
-			$javascript_function = "jQuery('#$element_id').empty()";
-			break;
+        case 'empty':
+            $javascript_function = "jQuery('#$element_id').empty()";
+            break;
 
-		case 'remove':
-			$javascript_function = "jQuery('#$element_id').remove()";
-			break;
+        case 'remove':
+            $javascript_function = "jQuery('#$element_id').remove()";
+            break;
 
-		default:
-			throw new sfException('Invalid action, choose one of update, remove, empty');
-	}
+        default:
+            throw new sfException('Invalid action, choose one of update, remove, empty');
+    }
 
-	$javascript_function .= ";\n";
+    $javascript_function .= ";\n";
 
-	return (isset($options['binding']) ? $javascript_function.$options['binding'] : $javascript_function);
+    return (isset($options['binding']) ? $javascript_function . $options['binding'] : $javascript_function);
 }
 
 /**
@@ -287,111 +282,136 @@ function jq_update_element_function($element_id, $options = array())
  */
 function jq_remote_function($options)
 {
-	// Defining elements to update
-	if (isset($options['update']) && is_array($options['update']))
-	{
-		// On success, update the element with returned data
-		if (isset($options['update']['success'])) $update_success = "#".$options['update']['success'];
+    // Defining elements to update
+    if (isset($options['update']) && is_array($options['update'])) {
+        // On success, update the element with returned data
+        if (isset($options['update']['success'])) {
+            $update_success = "#" . $options['update']['success'];
+        }
 
-		// On failure, execute a client-side function
-		if (isset($options['update']['failure'])) $update_failure = $options['update']['failure'];
-	}
-	else if (isset($options['update'])) $update_success = "#".$options['update'];
+        // On failure, execute a client-side function
+        if (isset($options['update']['failure'])) {
+            $update_failure = $options['update']['failure'];
+        }
+    } elseif (isset($options['update'])) {
+        $update_success = "#" . $options['update'];
+    }
 
-	// Update method
-	$updateMethod = _update_method(isset($options['position']) ? $options['position'] : '');
+    // Update method
+    $updateMethod = _update_method(isset($options['position']) ? $options['position'] : '');
 
-	// Callbacks
-	if (isset($options['loading'])) $callback_loading = $options['loading'];
-	if (isset($options['complete'])) $callback_complete = $options['complete'];
-	if (isset($options['success'])) $callback_success = $options['success'];
-	
-	if (isset($options['cache'])) { 
-		if($options['cache']){
-			$cache = 'true';
-		} else {
-			$cache = 'false';
-		}
-	}
-	$execute = 'false';
-	if ((isset($options['script'])) && ($options['script'] == '1')) $execute = 'true';
+    // Callbacks
+    if (isset($options['loading'])) {
+        $callback_loading = $options['loading'];
+    }
+    if (isset($options['complete'])) {
+        $callback_complete = $options['complete'];
+    }
+    if (isset($options['success'])) {
+        $callback_success = $options['success'];
+    }
 
-	// Data Type
-	if (isset($options['dataType']))
-	{
-		$dataType = $options['dataType'];
-	}
-	elseif ($execute)
-	{
-		$dataType = 'html';
-	}
-	else
-	{
-		$dataType = 'text';
-	}
+    if (isset($options['cache'])) {
+        if ($options['cache']) {
+            $cache = 'true';
+        } else {
+            $cache = 'false';
+        }
+    }
+    $execute = 'false';
+    if ((isset($options['script'])) && ($options['script'] == '1')) {
+        $execute = 'true';
+    }
 
-	// POST or GET ?
-	$method = 'POST';
-	if ((isset($options['method'])) && (strtoupper($options['method']) == 'GET')) $method = $options['method'];
+    // Data Type
+    if (isset($options['dataType'])) {
+        $dataType = $options['dataType'];
+    } elseif ($execute) {
+        $dataType = 'html';
+    } else {
+        $dataType = 'text';
+    }
 
-	// async or sync, async is default
-	if ((isset($options['type'])) && ($options['type'] == 'synchronous')) $type = 'false';
+    // POST or GET ?
+    $method = 'POST';
+    if ((isset($options['method'])) && (strtoupper($options['method']) == 'GET')) {
+        $method = $options['method'];
+    }
 
-	// Is it a form submitting
-	if (isset($options['form'])) $formData = 'jQuery(this).serialize()';
-	elseif (isset($options['submit'])) $formData = '{\'#'.$options['submit'].'\'}.serialize()';
-	// boutell and JoeZ99: 'with' should not be quoted, it's not useful
-	// that way, see the Symfony documentation for the original remote_function
-	elseif (isset($options['with'])) $formData = $options['with'];
-	// Is it a link with csrf protection
-	elseif(isset($options['csrf']) && $options['csrf'] == '1')
-	{
-	  // Symfony 1.4 form should be BaseForm, not sfForm. Also this means
-	  // CSRF works properly according to Jose Fernando Castillo Rosas
-		$form = new BaseForm();
-		if ($form->isCSRFProtected())
-		{
-			$formData = '{'.$form->getCSRFFieldName().': \''.$form->getCSRFToken().'\'}';
-		}
-	}
+    // async or sync, async is default
+    if ((isset($options['type'])) && ($options['type'] == 'synchronous')) {
+        $type = 'false';
+    }
 
-	// build the function
-	$function = "jQuery.ajax({";
-	$function .= 'type:\''.$method.'\'';
-	$function .= ',dataType:\'' . $dataType . '\'';
-	if (isset($type)) $function .= ',async:'.$type;
-	if (isset($cache)) $function .= ',cache:'.$cache;
-	if (isset($formData)) $function .= ',data:'.$formData;
-	if (isset($update_success) and !isset($callback_success)) $function .= ',success:function(data, textStatus){jQuery(\''.$update_success.'\').'.$updateMethod.'(data);}';
-	if (isset($update_failure)) $function .= ',error:function(XMLHttpRequest, textStatus, errorThrown){'.$update_failure.'}';
-	if (isset($callback_loading)) $function .= ',beforeSend:function(XMLHttpRequest){'.$callback_loading.'}';
-	if (isset($callback_complete)) $function .= ',complete:function(XMLHttpRequest, textStatus){'.$callback_complete.'}';
-	if (isset($callback_success)) $function .= ',success:function(data, textStatus){'.$callback_success.'}';
-	$function .= ',url:\''.url_for($options['url']).'\'';
-	$function .= '})';
+    // Is it a form submitting
+    if (isset($options['form'])) {
+        $formData = 'jQuery(this).serialize()';
+    } elseif (isset($options['submit'])) {
+        $formData = '{\'#' . $options['submit'] . '\'}.serialize()';
+    }
+    // boutell and JoeZ99: 'with' should not be quoted, it's not useful
+    // that way, see the Symfony documentation for the original remote_function
+    elseif (isset($options['with'])) {
+        $formData = $options['with'];
+    }
+    // Is it a link with csrf protection
+    elseif (isset($options['csrf']) && $options['csrf'] == '1') {
+        // Symfony 1.4 form should be BaseForm, not sfForm. Also this means
+        // CSRF works properly according to Jose Fernando Castillo Rosas
+        $form = new BaseForm();
+        if ($form->isCSRFProtected()) {
+            $formData = '{' . $form->getCSRFFieldName() . ': \'' . $form->getCSRFToken() . '\'}';
+        }
+    }
 
-	if (isset($options['before']))
-	{
-		$function = $options['before'].'; '.$function;
-	}
-	if (isset($options['after']))
-	{
-		$function = $function.'; '.$options['after'];
-	}
-	if (isset($options['condition']))
-	{
-		$function = 'if ('.$options['condition'].') { '.$function.'; }';
-	}
-	if (isset($options['confirm']))
-	{
-		$function = "if (confirm('".escape_javascript($options['confirm'])."')) { $function; }";
-		if (isset($options['cancel']))
-		{
-			$function = $function.' else { '.$options['cancel'].' }';
-		}
-	}
+    // build the function
+    $function = "jQuery.ajax({";
+    $function .= 'type:\'' . $method . '\'';
+    $function .= ',dataType:\'' . $dataType . '\'';
+    if (isset($type)) {
+        $function .= ',async:' . $type;
+    }
+    if (isset($cache)) {
+        $function .= ',cache:' . $cache;
+    }
+    if (isset($formData)) {
+        $function .= ',data:' . $formData;
+    }
+    if (isset($update_success) and !isset($callback_success)) {
+        $function .= ',success:function(data, textStatus){jQuery(\'' . $update_success . '\').' . $updateMethod . '(data);}';
+    }
+    if (isset($update_failure)) {
+        $function .= ',error:function(XMLHttpRequest, textStatus, errorThrown){' . $update_failure . '}';
+    }
+    if (isset($callback_loading)) {
+        $function .= ',beforeSend:function(XMLHttpRequest){' . $callback_loading . '}';
+    }
+    if (isset($callback_complete)) {
+        $function .= ',complete:function(XMLHttpRequest, textStatus){' . $callback_complete . '}';
+    }
+    if (isset($callback_success)) {
+        $function .= ',success:function(data, textStatus){' . $callback_success . '}';
+    }
+    $function .= ',url:\'' . url_for($options['url']) . '\'';
+    $function .= '})';
 
-	return $function.( (isset($options['stop_propagation']) && $options['stop_propagation']) ? '; if(event && event.stopPropagation) {event.stopPropagation();} else {window.event.cancelBubble = true;}' : '');
+    if (isset($options['before'])) {
+        $function = $options['before'] . '; ' . $function;
+    }
+    if (isset($options['after'])) {
+        $function = $function . '; ' . $options['after'];
+    }
+    if (isset($options['condition'])) {
+        $function = 'if (' . $options['condition'] . ') { ' . $function . '; }';
+    }
+    if (isset($options['confirm'])) {
+        $function = "if (confirm('" . escape_javascript($options['confirm']) . "')) { $function; }";
+        if (isset($options['cancel'])) {
+            $function = $function . ' else { ' . $options['cancel'] . ' }';
+        }
+    }
+
+    return $function . ((isset($options['stop_propagation']) && $options['stop_propagation']) ? '; if(event && event.stopPropagation) {event.stopPropagation();} else {window.event.cancelBubble = true;}' : '');
 }
 
 /**
@@ -416,18 +436,18 @@ function jq_remote_function($options)
  * By default the fall-through action is the same as the one specified in the 'url'
  * (and the default method is 'post').
  */
-function jq_form_remote_tag($options = array(), $options_html = array())
+function jq_form_remote_tag($options = [], $options_html = [])
 {
-	$options = _parse_attributes($options);
-	$options_html = _parse_attributes($options_html);
+    $options = _parse_attributes($options);
+    $options_html = _parse_attributes($options_html);
 
-	$options['form'] = true;
+    $options['form'] = true;
 
-	$options_html['onsubmit'] = jq_remote_function($options).'; return false;';
-	$options_html['action'] = isset($options_html['action']) ? $options_html['action'] : url_for($options['url']);
-	$options_html['method'] = isset($options_html['method']) ? $options_html['method'] : 'post';
+    $options_html['onsubmit'] = jq_remote_function($options) . '; return false;';
+    $options_html['action'] = isset($options_html['action']) ? $options_html['action'] : url_for($options['url']);
+    $options_html['method'] = isset($options_html['method']) ? $options_html['method'] : 'post';
 
-	return tag('form', $options_html, true);
+    return tag('form', $options_html, true);
 }
 
 
@@ -435,22 +455,21 @@ function jq_form_remote_tag($options = array(), $options_html = array())
  *  Returns a button input tag that will submit form using XMLHttpRequest in the background instead of regular
  *  reloading POST arrangement. The '$options' argument is the same as in 'form_remote_tag()'.
  */
-function jq_submit_to_remote($name, $value, $options = array(), $options_html = array())
+function jq_submit_to_remote($name, $value, $options = [], $options_html = [])
 {
-	$options = _parse_attributes($options);
-	$options_html = _parse_attributes($options_html);
+    $options = _parse_attributes($options);
+    $options_html = _parse_attributes($options_html);
 
-	if (!isset($options['with']))
-	{
-		$options['with'] = 'jQuery(this.form.elements).serialize()';
-	}
+    if (!isset($options['with'])) {
+        $options['with'] = 'jQuery(this.form.elements).serialize()';
+    }
 
-	$options_html['type'] = 'button';
-	$options_html['onclick'] = jq_remote_function($options).'; return false;';
-	$options_html['name'] = $name;
-	$options_html['value'] = $value;
+    $options_html['type'] = 'button';
+    $options_html['onclick'] = jq_remote_function($options) . '; return false;';
+    $options_html['name'] = $name;
+    $options_html['value'] = $value;
 
-	return tag('input', $options_html, false);
+    return tag('input', $options_html, false);
 }
 
 
@@ -458,31 +477,29 @@ function jq_submit_to_remote($name, $value, $options = array(), $options_html = 
  *  Returns a image submit tag that will submit form using XMLHttpRequest in the background instead of regular
  *  reloading POST arrangement. The '$options' argument is the same as in 'form_remote_tag()'.
  */
-function jq_submit_image_to_remote($name, $source, $options = array(), $options_html = array())
+function jq_submit_image_to_remote($name, $source, $options = [], $options_html = [])
 {
-	$options = _parse_attributes($options);
-	$options_html = _parse_attributes($options_html);
+    $options = _parse_attributes($options);
+    $options_html = _parse_attributes($options_html);
 
-	if (!isset($options['with']))
-	{
-		$options['with'] = 'jQuery(this.form.elements).serialize()';
-	}
+    if (!isset($options['with'])) {
+        $options['with'] = 'jQuery(this.form.elements).serialize()';
+    }
 
-	$options_html['type'] = 'image';
-	$options_html['onclick'] = jq_remote_function($options).'; return false;';
-	$options_html['name'] = $name;
-	$options_html['src'] = image_path($source);
+    $options_html['type'] = 'image';
+    $options_html['onclick'] = jq_remote_function($options) . '; return false;';
+    $options_html['name'] = $name;
+    $options_html['src'] = image_path($source);
 
-	if (!isset($options_html['alt']))
-	{
-		$path_pos = strrpos($source, '/');
-		$dot_pos = strrpos($source, '.');
-		$begin = $path_pos ? $path_pos + 1 : 0;
-		$nb_str = ($dot_pos ? $dot_pos : strlen($source)) - $begin;
-		$options_html['alt'] = ucfirst(substr($source, $begin, $nb_str));
-	}
+    if (!isset($options_html['alt'])) {
+        $path_pos = strrpos($source, '/');
+        $dot_pos = strrpos($source, '.');
+        $begin = $path_pos ? $path_pos + 1 : 0;
+        $nb_str = ($dot_pos ? $dot_pos : strlen($source)) - $begin;
+        $options_html['alt'] = ucfirst(substr($source, $begin, $nb_str));
+    }
 
-	return tag('input', $options_html, false);
+    return tag('input', $options_html, false);
 }
 
 /**
@@ -509,21 +526,21 @@ function jq_submit_image_to_remote($name, $source, $options = array(), $options_
  *
  * Added by tom@punkave.com.
  */
-function jq_sortable_element($selector, $options = array())
+function jq_sortable_element($selector, $options = [])
 {
-	// We need ui for this trick. It's now just ui, not sortable; for simplicity
-	// we have a catch-all ui package, which is minimized to contain only the 
-	// features that actually get used by the plugin. If you want fewer features,
-	// or more features, from jQuery ui then get your own minimized package download
-	// from the jquery ui site
-  jq_add_plugins_by_name(array("ui"));
-	$options = _parse_attributes($options);
-	$options['url'] = url_for($options['url']);
-  $options['type'] = 'POST';
-  $selector = json_encode($selector);
-  $options = json_encode($options);	
-	
-	$result = <<<EOM
+    // We need ui for this trick. It's now just ui, not sortable; for simplicity
+    // we have a catch-all ui package, which is minimized to contain only the
+    // features that actually get used by the plugin. If you want fewer features,
+    // or more features, from jQuery ui then get your own minimized package download
+    // from the jquery ui site
+    jq_add_plugins_by_name(["ui"]);
+    $options = _parse_attributes($options);
+    $options['url'] = url_for($options['url']);
+    $options['type'] = 'POST';
+    $selector = json_encode($selector);
+    $options = json_encode($options);
+
+    $result = <<<EOM
 $(document).ready(
   function() 
   {
@@ -539,7 +556,7 @@ $(document).ready(
     } );
   });
 EOM;
-  return javascript_tag($result);
+    return javascript_tag($result);
 }
 
 
@@ -563,52 +580,50 @@ EOM;
  * @return string input field tag, div for completion results, and
  *                 auto complete javascript tags
  */
-function jq_input_auto_complete_tag($name, $value, $url, $tag_options = array(), $completion_options = array()) {
-	// We need ui.autocomplete for this trick
-  jq_add_plugins_by_name(array("autocomplete"));
+function jq_input_auto_complete_tag($name, $value, $url, $tag_options = [], $completion_options = [])
+{
+    // We need ui.autocomplete for this trick
+    jq_add_plugins_by_name(["autocomplete"]);
 
-	$tag_options = _convert_options($tag_options);
-	$comp_options = _convert_options($completion_options);
+    $tag_options = _convert_options($tag_options);
+    $comp_options = _convert_options($completion_options);
 
-	// Convert to JSON parameters
-	$jsonOptions = '';
-	foreach ($comp_options as $key => $val)
-	{
-		if ($jsonOptions!='')
-		{
-			$jsonOptions .= ', ';
-		}
-		switch($key) {
-			case 'formatItem':
-			case 'formatResult':
-				$jsonOptions .= "$key: " . $val;
-				break;
-			default:
-				$jsonOptions .= "$key: " . json_encode($val);
-				break;
-		}
-	}
+    // Convert to JSON parameters
+    $jsonOptions = '';
+    foreach ($comp_options as $key => $val) {
+        if ($jsonOptions != '') {
+            $jsonOptions .= ', ';
+        }
+        switch ($key) {
+            case 'formatItem':
+            case 'formatResult':
+                $jsonOptions .= "$key: " . $val;
+                break;
+            default:
+                $jsonOptions .= "$key: " . json_encode($val);
+                break;
+        }
+    }
 
-	// Get Stylesheet
-	$context = sfContext::getInstance();
-	$response = $context->getResponse();
-	$comp_options = _convert_options($completion_options);
-	if (isset($comp_options['use_style']) && $comp_options['use_style'] == true)
-	{
-		$response->addStylesheet(sfConfig::get('sf_jquery_web_dir').'/css/JqueryAutocomplete');
-	}
+    // Get Stylesheet
+    $context = sfContext::getInstance();
+    $response = $context->getResponse();
+    $comp_options = _convert_options($completion_options);
+    if (isset($comp_options['use_style']) && $comp_options['use_style'] == true) {
+        $response->addStylesheet(sfConfig::get('sf_jquery_web_dir') . '/css/JqueryAutocomplete');
+    }
 
-	// Get Id from name attribute
-	$tag_options['id'] = get_id_from_name(isset($tag_options['id']) ? $tag_options['id'] : $name);
+    // Get Id from name attribute
+    $tag_options['id'] = get_id_from_name(isset($tag_options['id']) ? $tag_options['id'] : $name);
 
-	// Add input form
-	$javascript  = tag('input', array_merge(array('type' => 'text', 'name' => $name, 'value' => $value), _convert_options($tag_options)));
+    // Add input form
+    $javascript  = tag('input', array_merge(['type' => 'text', 'name' => $name, 'value' => $value], _convert_options($tag_options)));
 
-	// Calc JQuery Javascript code
-	$autocomplete_script = sprintf('$("#%s").autocomplete("%s",{ %s	});',$name,$url,$jsonOptions);
-	$javascript .=	javascript_tag($autocomplete_script);
+    // Calc JQuery Javascript code
+    $autocomplete_script = sprintf('$("#%s").autocomplete("%s",{ %s	});', $name, $url, $jsonOptions);
+    $javascript .=	javascript_tag($autocomplete_script);
 
-	return $javascript;
+    return $javascript;
 }
 
 /**
@@ -622,13 +637,13 @@ function jq_input_auto_complete_tag($name, $value, $url, $tag_options = array(),
  * You can change the behaviour with various options, see
  * http://script.aculo.us for more documentation.
  */
-function jq_draggable_element($selector, $options = array())
+function jq_draggable_element($selector, $options = [])
 {
-	// We need ui for this trick
-  jq_add_plugins_by_name(array("ui"));
-	$options = json_encode(_parse_attributes($options));  
-	$selector = json_encode($selector);
-  return javascript_tag("jQuery($selector).draggable($options)");
+    // We need ui for this trick
+    jq_add_plugins_by_name(["ui"]);
+    $options = json_encode(_parse_attributes($options));
+    $selector = json_encode($selector);
+    return javascript_tag("jQuery($selector).draggable($options)");
 }
 
 /**
@@ -644,92 +659,89 @@ function jq_draggable_element($selector, $options = array())
  * You can change the behaviour with various options, see
  * http://script.aculo.us for more documentation.
  */
-function jq_drop_receiving_element($selector, $options = array())
+function jq_drop_receiving_element($selector, $options = [])
 {
-  jq_add_plugins_by_name(array("ui"));
-  if (!isset($options['with']))
-  {
-    $options['with'] = "'id=' + encodeURIComponent(element.id)";
-  }
-  if (!isset($options['drop']))
-  {
-    $options['drop'] = "function(element){".jq_remote_function($options)."}";
-  }
+    jq_add_plugins_by_name(["ui"]);
+    if (!isset($options['with'])) {
+        $options['with'] = "'id=' + encodeURIComponent(element.id)";
+    }
+    if (!isset($options['drop'])) {
+        $options['drop'] = "function(element){" . jq_remote_function($options) . "}";
+    }
 
-  // For backwards compatibility with prototype
-  if (isset($options['hoverclass']))
-  {
-    $options['hoverClass'] = $options['hoverclass'];
-  }
-  $options['hoverClass'] = json_encode('hoverclass');
-  
-  foreach (jq_get_ajax_options() as $key)
-  {
-    unset($options[$key]);
-  }
+    // For backwards compatibility with prototype
+    if (isset($options['hoverclass'])) {
+        $options['hoverClass'] = $options['hoverclass'];
+    }
+    $options['hoverClass'] = json_encode('hoverclass');
 
-  if (isset($options['accept']))
-  {
-    $options['accept'] = json_encode($options['accept']);
-  }
-  $options = jq_options_for_javascript($options);
-  $selector = json_encode($selector);
-  return javascript_tag("jQuery($selector).droppable($options);");
+    foreach (jq_get_ajax_options() as $key) {
+        unset($options[$key]);
+    }
+
+    if (isset($options['accept'])) {
+        $options['accept'] = json_encode($options['accept']);
+    }
+    $options = jq_options_for_javascript($options);
+    $selector = json_encode($selector);
+    return javascript_tag("jQuery($selector).droppable($options);");
 }
 
-function _update_method($position) {
-	// Updating method
-	$updateMethod = 'html';
-	switch ($position) {
-		case 'before':$updateMethod='before';break;
-		case 'after':$updateMethod='after';break;
-		case 'top':$updateMethod='prepend';break;
-		case 'bottom':$updateMethod='append';break;
-	}
+function _update_method($position)
+{
+    // Updating method
+    $updateMethod = 'html';
+    switch ($position) {
+        case 'before':$updateMethod = 'before';
+            break;
+        case 'after':$updateMethod = 'after';
+            break;
+        case 'top':$updateMethod = 'prepend';
+            break;
+        case 'bottom':$updateMethod = 'append';
+            break;
+    }
 
-	return $updateMethod;
+    return $updateMethod;
 }
 
-/***  This should be just a wrapper for the JavascriptBaseHelper link_to_function call, 
-    but right now it is a copy that contains correct support for 'confirm' that 
-    doesn't break IE or produce invalid HTML. It will make sense to turn this back 
+/***  This should be just a wrapper for the JavascriptBaseHelper link_to_function call,
+    but right now it is a copy that contains correct support for 'confirm' that
+    doesn't break IE or produce invalid HTML. It will make sense to turn this back
     into a simple wrapper once it is fixed in a Symfony release. See:
-    
+
     http://trac.symfony-project.org/ticket/4152 ***/
-    
-function jq_link_to_function($name, $function, $html_options = array())
+
+function jq_link_to_function($name, $function, $html_options = [])
 {
-  $html_options = _parse_attributes($html_options);
+    $html_options = _parse_attributes($html_options);
 
-  $html_options['href'] = isset($html_options['href']) ? $html_options['href'] : '#';
-  if ( isset($html_options['confirm']) )
-  {
-    $confirm = escape_javascript($html_options['confirm']);
-    $html_options['onclick'] = "if(confirm('$confirm')){ $function;}; return false;";
-    // tom@punkave.com: without this we get a confirm attribute, which breaks confirm() in IE
-    // (we could call window.confirm, but there is no reason to have the
-    // nonstandard confirm attribute) 
-    unset($html_options['confirm']);
-  }
-  else
-  {
-    $html_options['onclick'] = $function.'; return false;';
-  }
+    $html_options['href'] = isset($html_options['href']) ? $html_options['href'] : '#';
+    if (isset($html_options['confirm'])) {
+        $confirm = escape_javascript($html_options['confirm']);
+        $html_options['onclick'] = "if(confirm('$confirm')){ $function;}; return false;";
+        // tom@punkave.com: without this we get a confirm attribute, which breaks confirm() in IE
+        // (we could call window.confirm, but there is no reason to have the
+        // nonstandard confirm attribute)
+        unset($html_options['confirm']);
+    } else {
+        $html_options['onclick'] = $function . '; return false;';
+    }
 
-  return content_tag('a', $name, $html_options);
+    return content_tag('a', $name, $html_options);
 }
-    
+
 /***  This is a wrapper for the JavascriptHelper function  ***/
-function jq_button_to_function($name, $function, $html_options = array())
+function jq_button_to_function($name, $function, $html_options = [])
 {
-	return button_to_function($name, $function, $html_options);
+    return button_to_function($name, $function, $html_options);
 }
 
 
 /***  This is a wrapper for the JavascriptHelper function  ***/
 function jq_javascript_tag($content = null)
 {
-	return javascript_tag($content);
+    return javascript_tag($content);
 }
 
 
@@ -737,31 +749,30 @@ function jq_javascript_tag($content = null)
 /***  This is a wrapper for the JavascriptHelper function  ***/
 function jq_javascript_cdata_section($content)
 {
-	return javascript_cdata_section($content);
+    return javascript_cdata_section($content);
 }
 
 
 /***  This is a wrapper for the JavascriptHelper function  ***/
 function jq_if_javascript()
 {
-	return if_javascript();
+    return if_javascript();
 }
 
 
 /***  This is a wrapper for the JavascriptHelper function  ***/
 function jq_end_javascript_tag()
 {
-	return end_javascript_tag();
+    return end_javascript_tag();
 }
 
 function _options_for_javascript($options)
 {
-  $opts = array();
-  foreach ($options as $key => $value)
-  {
-    $opts[] = "$key:$value";
-  }
-  sort($opts);
+    $opts = [];
+    foreach ($options as $key => $value) {
+        $opts[] = "$key:$value";
+    }
+    sort($opts);
 
-  return '{'.join(', ', $opts).'}';
+    return '{' . join(', ', $opts) . '}';
 }

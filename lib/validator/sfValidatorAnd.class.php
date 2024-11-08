@@ -18,118 +18,104 @@
  */
 class sfValidatorAnd extends sfValidatorBase
 {
-  protected
-    $validators = array();
+    protected $validators = [];
 
-  /**
-   * Constructor.
-   *
-   * The first argument can be:
-   *
-   *  * null
-   *  * a sfValidatorBase instance
-   *  * an array of sfValidatorBase instances
-   *
-   * @param mixed $validators Initial validators
-   * @param array $options    An array of options
-   * @param array $messages   An array of error messages
-   *
-   * @see sfValidatorBase
-   */
-  public function __construct($validators = null, $options = array(), $messages = array())
-  {
-    if ($validators instanceof sfValidatorBase)
+    /**
+     * Constructor.
+     *
+     * The first argument can be:
+     *
+     *  * null
+     *  * a sfValidatorBase instance
+     *  * an array of sfValidatorBase instances
+     *
+     * @param mixed $validators Initial validators
+     * @param array $options    An array of options
+     * @param array $messages   An array of error messages
+     *
+     * @see sfValidatorBase
+     */
+    public function __construct($validators = null, $options = [], $messages = [])
     {
-      $this->addValidator($validators);
-    }
-    else if (is_array($validators))
-    {
-      foreach ($validators as $validator)
-      {
-        $this->addValidator($validator);
-      }
-    }
-    else if (null !== $validators)
-    {
-      throw new InvalidArgumentException('sfValidatorAnd constructor takes a sfValidatorBase object, or a sfValidatorBase array.');
-    }
-    
-    parent::__construct($options, $messages);
-  }
-
-  /**
-   * Configures the current validator.
-   *
-   * Available options:
-   *
-   *  * halt_on_error: Whether to halt on the first error or not (false by default)
-   *
-   * @param array $options   An array of options
-   * @param array $messages  An array of error messages
-   *
-   * @see sfValidatorBase
-   */
-  protected function configure($options = array(), $messages = array())
-  {
-    $this->addOption('halt_on_error', false);
-
-    $this->setMessage('invalid', null);
-  }
-
-  /**
-   * Adds a validator.
-   *
-   * @param sfValidatorBase $validator  A sfValidatorBase instance
-   */
-  public function addValidator(sfValidatorBase $validator)
-  {
-    $this->validators[] = $validator;
-  }
-
-  /**
-   * Returns an array of the validators.
-   *
-   * @return array An array of sfValidatorBase instances
-   */
-  public function getValidators()
-  {
-    return $this->validators;
-  }
-
-  /**
-   * @see sfValidatorBase
-   */
-  protected function doClean($value)
-  {
-    $clean = $value;
-    $errors = array();
-    foreach ($this->validators as $validator)
-    {
-      try
-      {
-        $clean = $validator->clean($clean);
-      }
-      catch (sfValidatorError $e)
-      {
-        $errors[] = $e;
-
-        if ($this->getOption('halt_on_error'))
-        {
-          break;
+        if ($validators instanceof sfValidatorBase) {
+            $this->addValidator($validators);
+        } elseif (is_array($validators)) {
+            foreach ($validators as $validator) {
+                $this->addValidator($validator);
+            }
+        } elseif (null !== $validators) {
+            throw new InvalidArgumentException('sfValidatorAnd constructor takes a sfValidatorBase object, or a sfValidatorBase array.');
         }
-      }
+
+        parent::__construct($options, $messages);
     }
 
-    if (count($errors))
+    /**
+     * Configures the current validator.
+     *
+     * Available options:
+     *
+     *  * halt_on_error: Whether to halt on the first error or not (false by default)
+     *
+     * @param array $options   An array of options
+     * @param array $messages  An array of error messages
+     *
+     * @see sfValidatorBase
+     */
+    protected function configure($options = [], $messages = [])
     {
-      if ($this->getMessage('invalid'))
-      {
-        throw new sfValidatorError($this, 'invalid', array('value' => $value));
-      }
+        $this->addOption('halt_on_error', false);
 
-      throw new sfValidatorErrorSchema($this, $errors);
+        $this->setMessage('invalid', null);
     }
 
-    return $clean;
-  }
+    /**
+     * Adds a validator.
+     *
+     * @param sfValidatorBase $validator  A sfValidatorBase instance
+     */
+    public function addValidator(sfValidatorBase $validator)
+    {
+        $this->validators[] = $validator;
+    }
+
+    /**
+     * Returns an array of the validators.
+     *
+     * @return array An array of sfValidatorBase instances
+     */
+    public function getValidators()
+    {
+        return $this->validators;
+    }
+
+    /**
+     * @see sfValidatorBase
+     */
+    protected function doClean($value)
+    {
+        $clean = $value;
+        $errors = [];
+        foreach ($this->validators as $validator) {
+            try {
+                $clean = $validator->clean($clean);
+            } catch (sfValidatorError $e) {
+                $errors[] = $e;
+
+                if ($this->getOption('halt_on_error')) {
+                    break;
+                }
+            }
+        }
+
+        if (count($errors)) {
+            if ($this->getMessage('invalid')) {
+                throw new sfValidatorError($this, 'invalid', ['value' => $value]);
+            }
+
+            throw new sfValidatorErrorSchema($this, $errors);
+        }
+
+        return $clean;
+    }
 }

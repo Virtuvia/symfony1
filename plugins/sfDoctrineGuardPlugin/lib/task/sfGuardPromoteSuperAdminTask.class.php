@@ -3,7 +3,7 @@
 /*
  * This file is part of the symfony package.
  * (c) Fabien Potencier <fabien.potencier@symfony-project.com>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -19,52 +19,51 @@
  */
 class sfGuardPromoteSuperAdminTask extends sfBaseTask
 {
-  /**
-   * @see sfTask
-   */
-  protected function configure()
-  {
-    $this->addArguments(array(
-      new sfCommandArgument('username', sfCommandArgument::REQUIRED, 'The user name'),
-    ));
+    /**
+     * @see sfTask
+     */
+    protected function configure()
+    {
+        $this->addArguments([
+            new sfCommandArgument('username', sfCommandArgument::REQUIRED, 'The user name'),
+        ]);
 
-    $this->addOptions(array(
-      new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', null),
-      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
-    ));
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', null),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+        ]);
 
-    $this->namespace = 'guard';
-    $this->name = 'promote';
-    $this->briefDescription = 'Promotes a user as a super administrator';
+        $this->namespace = 'guard';
+        $this->name = 'promote';
+        $this->briefDescription = 'Promotes a user as a super administrator';
 
-    $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<EOF
 The [guard:promote|INFO] task promotes a user as a super administrator:
 
   [./symfony guard:promote fabien|INFO]
 EOF;
-  }
-
-  /**
-   * Executes the task.
-   *
-   * @param array $arguments An array of arguments
-   * @param array $options An array of options
-   * @throws sfException
-   */
-  protected function execute($arguments = array(), $options = array())
-  {
-    $databaseManager = new sfDatabaseManager($this->configuration);
-
-    $user = Doctrine_Core::getTable('sfGuardUser')->retrieveByUsername($arguments['username']);
-
-    if (!$user)
-    {
-      throw new sfException(sprintf('User identified by "%s" username does not exist or is not active.', $arguments['username']));
     }
 
-    $user->setIsSuperAdmin(true);
-    $user->save();
+    /**
+     * Executes the task.
+     *
+     * @param array $arguments An array of arguments
+     * @param array $options An array of options
+     * @throws sfException
+     */
+    protected function execute($arguments = [], $options = [])
+    {
+        $databaseManager = new sfDatabaseManager($this->configuration);
 
-    $this->logSection('guard', sprintf('User identified by "%s" username has been promoted as super administrator', $arguments['username']));
-  }
+        $user = Doctrine_Core::getTable('sfGuardUser')->retrieveByUsername($arguments['username']);
+
+        if (!$user) {
+            throw new sfException(sprintf('User identified by "%s" username does not exist or is not active.', $arguments['username']));
+        }
+
+        $user->setIsSuperAdmin(true);
+        $user->save();
+
+        $this->logSection('guard', sprintf('User identified by "%s" username has been promoted as super administrator', $arguments['username']));
+    }
 }

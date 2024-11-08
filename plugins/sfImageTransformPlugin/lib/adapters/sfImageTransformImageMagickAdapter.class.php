@@ -20,300 +20,287 @@
  */
 class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
 {
-  /**
-   * The image resource.
-   * @access protected
-   * @var resource
-   *
-   * @throws sfImageTransformException
-  */
-  protected $holder;
+    /**
+     * The image resource.
+     * @access protected
+     * @var resource
+     *
+     * @throws sfImageTransformException
+    */
+    protected $holder;
 
-  /*
-   * Supported MIME types for the sfImageImageMagickAdapter
-   * and their associated file extensions
-   * @var array
-   */
-  protected $types = array(
-    'image/jpeg' => array('jpeg','jpg'),
-    'image/gif' => array('gif'),
-    'image/png' => array('png')
-  );
+    /*
+     * Supported MIME types for the sfImageImageMagickAdapter
+     * and their associated file extensions
+     * @var array
+     */
+    protected $types = [
+        'image/jpeg' => ['jpeg','jpg'],
+        'image/gif' => ['gif'],
+        'image/png' => ['png'],
+    ];
 
-  /**
-   * Initialize the object. Check for imagick extension. An exception is thrown if not installed
-   *
-   * @throws sfImageTransformException
-   */
-  public function __construct()
-  {
-    // Check that the GD extension is installed and configured
-    if (!extension_loaded('imagick'))
+    /**
+     * Initialize the object. Check for imagick extension. An exception is thrown if not installed
+     *
+     * @throws sfImageTransformException
+     */
+    public function __construct()
     {
-      throw new sfImageTransformException('The image processing library ImageMagick is not enabled. See PHP Manual for installation instructions.');
+        // Check that the GD extension is installed and configured
+        if (!extension_loaded('imagick')) {
+            throw new sfImageTransformException('The image processing library ImageMagick is not enabled. See PHP Manual for installation instructions.');
+        }
+
+        $this->setHolder(new Imagick());
     }
 
-    $this->setHolder(new Imagick());
-  }
-
-  /**
-   * Tidy up the object
-  */
-  public function __destruct()
-  {
-    if ($this->hasHolder())
+    /**
+     * Tidy up the object
+    */
+    public function __destruct()
     {
-      $this->getHolder()->destroy();
-    }
-  }
-
-  /**
-   * Create a new empty (1 x 1 px) gd true colour image
-   *
-   * @param integer Image width
-   * @param integer Image Height
-   */
-  public function create($x=1, $y=1)
-  {
-    $image = new Imagick();
-    $image->newImage($x, $y, new ImagickPixel('white'));
-    $image->setImageFormat('png');
-    $this->setHolder($image);
-  }
-
-  /**
-   * Load and sets the resource from a existing file
-   *
-   * @param string
-   * @return boolean
-   *
-   * @throws sfImageTransformException
-   */
-  public function load($filename, $mime)
-  {
-    if (preg_match('/image\/.+/',$mime))
-    {
-      $this->holder = new Imagick($filename);
-      $this->mime_type = $mime;
-      $this->setFilename($filename);
-
-      return true;
+        if ($this->hasHolder()) {
+            $this->getHolder()->destroy();
+        }
     }
 
-    throw new sfImageTransformException(sprintf('Cannot load file %s as %s is an unsupported file type.', $filename, $mime));
-  }
-
-  /**
-   * Load and sets the resource from a string
-   *
-   * @param string
-   * @return boolean
-   *
-   * @throws sfImageTransformException
-   */
-
-   public function loadString($string)
-	{
-    return $this->getHolder()->readImageBlob($string);;
-	 }
-
-  /**
-   * Get the image as string
-   *
-   * @return string
-   */
-  public function __toString(): string
-  {
-    $this->getHolder()->setImageCompressionQuality($this->getQuality());
-
-    return (string)$this->getHolder();
-  }
-
-  /**
-   * Save the image to disk
-   *
-   * @return boolean
-   */
-  public function save()
-  {
-    $this->getHolder()->setImageCompressionQuality($this->getQuality());
-
-    return $this->getHolder()->writeImage($this->getFilename());
-  }
-
-  /**
-   * Save the image to the specified file
-   *
-   * @param string Filename
-   * @param string MIME type
-   * @return boolean
-   */
-  public function saveAs($filename, $mime='')
-  {
-    if ('' !== $mime)
+    /**
+     * Create a new empty (1 x 1 px) gd true colour image
+     *
+     * @param int Image width
+     * @param int Image Height
+     */
+    public function create($x = 1, $y = 1)
     {
-      $this->setMimeType($mime);
+        $image = new Imagick();
+        $image->newImage($x, $y, new ImagickPixel('white'));
+        $image->setImageFormat('png');
+        $this->setHolder($image);
     }
 
-    $this->getHolder()->setImageCompressionQuality($this->getQuality());
-
-    return $this->getHolder()->writeImage($filename);
-  }
-
-  /**
-   * Returns a copy of the adapter object
-   *
-   * @return sfImage
-   */
-  public function copy()
-  {
-    $copyObj = clone $this;
-
-    $extension = new ReflectionExtension('imagick');
-
-    if (version_compare($extension->getVersion(), '3.0.1', '>'))
+    /**
+     * Load and sets the resource from a existing file
+     *
+     * @param string
+     * @return bool
+     *
+     * @throws sfImageTransformException
+     */
+    public function load($filename, $mime)
     {
-      $copyObj->setHolder(clone $this->getHolder());
-    }
-    else
-    {
-      $copyObj->setHolder($this->getHolder()->clone());
-     }
+        if (preg_match('/image\/.+/', $mime)) {
+            $this->holder = new Imagick($filename);
+            $this->mime_type = $mime;
+            $this->setFilename($filename);
 
-    return $copyObj;
-  }
+            return true;
+        }
 
-  /**
-   * Gets the pixel width of the image
-   *
-   * @return integer
-   */
-  public function getWidth()
-  {
-    if ($this->hasHolder())
-    {
-      return $this->getHolder()->getImageWidth();
+        throw new sfImageTransformException(sprintf('Cannot load file %s as %s is an unsupported file type.', $filename, $mime));
     }
 
-    return 0;
-  }
+    /**
+     * Load and sets the resource from a string
+     *
+     * @param string
+     * @return bool
+     *
+     * @throws sfImageTransformException
+     */
 
-  /**
-   * Gets the pixel height of the image
-   *
-   * @return integer
-   */
-  public function getHeight()
-  {
-    if ($this->hasHolder())
+    public function loadString($string)
     {
-      return $this->getHolder()->getImageHeight();
+        return $this->getHolder()->readImageBlob($string);
+        ;
     }
 
-    return 0;
-  }
-
-  /**
-   * Sets the image resource holder
-   * @param Imagick resource object
-   * @return boolean
-   *
-   */
-  public function setHolder($holder)
-  {
-    if (is_object($holder) && 'Imagick' === get_class($holder))
+    /**
+     * Get the image as string
+     *
+     * @return string
+     */
+    public function __toString(): string
     {
-      $this->holder = $holder;
-      return true;
+        $this->getHolder()->setImageCompressionQuality($this->getQuality());
+
+        return (string) $this->getHolder();
     }
 
-    return false;
-  }
-
-  /**
-   * Returns the image resource
-   * @return resource
-   *
-   */
-  public function getHolder()
-  {
-    if ($this->hasHolder())
+    /**
+     * Save the image to disk
+     *
+     * @return bool
+     */
+    public function save()
     {
-      return $this->holder;
+        $this->getHolder()->setImageCompressionQuality($this->getQuality());
+
+        return $this->getHolder()->writeImage($this->getFilename());
     }
 
-    return false;
-  }
-
-  /**
-   * Returns whether there is a valid GD image resource
-   * @return boolean
-   *
-   */
-  public function hasHolder()
-  {
-    if (is_object($this->holder) && 'Imagick' === get_class($this->holder))
+    /**
+     * Save the image to the specified file
+     *
+     * @param string Filename
+     * @param string MIME type
+     * @return bool
+     */
+    public function saveAs($filename, $mime = '')
     {
-      return true;
+        if ('' !== $mime) {
+            $this->setMimeType($mime);
+        }
+
+        $this->getHolder()->setImageCompressionQuality($this->getQuality());
+
+        return $this->getHolder()->writeImage($filename);
     }
 
-    return false;
-  }
-
-  /**
-   * Returns the supported MIME types
-   * @return array
-   *
-   */
-  public function getMimeType()
-  {
-    return $this->mime_type;
-  }
-
- /**
-   * Returns image MIME type
-   * @param string valid MIME Type
-   * @return boolean
-   *
-   */
-  public function setMimeType($mime)
-  {
-    $this->mime_type = $mime;
-    if ($this->hasHolder() && isset($this->types[$mime]))
+    /**
+     * Returns a copy of the adapter object
+     *
+     * @return sfImage
+     */
+    public function copy()
     {
-      $this->getHolder()->setImageFormat($this->types[$mime][0]);
+        $copyObj = clone $this;
 
-      return true;
+        $extension = new ReflectionExtension('imagick');
+
+        if (version_compare($extension->getVersion(), '3.0.1', '>')) {
+            $copyObj->setHolder(clone $this->getHolder());
+        } else {
+            $copyObj->setHolder($this->getHolder()->clone());
+        }
+
+        return $copyObj;
     }
 
-    return false;
-  }
-
-  /**
-   * Returns the name of the adapter
-   * @return string
-   *
-   */
-  public function getAdapterName()
-  {
-    return 'ImageMagick';
-  }
-
-  /**
-   * Sets the image filename
-   * @param integer Quality of the image
-   *
-   * @return boolean
-   */
-  public function setQuality($quality)
-  {
-    if (parent::setQuality($quality))
+    /**
+     * Gets the pixel width of the image
+     *
+     * @return int
+     */
+    public function getWidth()
     {
-      $this->getHolder()->setImageCompressionQuality($quality);
+        if ($this->hasHolder()) {
+            return $this->getHolder()->getImageWidth();
+        }
 
-      return true;
+        return 0;
     }
 
-    return false;
-  }
+    /**
+     * Gets the pixel height of the image
+     *
+     * @return int
+     */
+    public function getHeight()
+    {
+        if ($this->hasHolder()) {
+            return $this->getHolder()->getImageHeight();
+        }
+
+        return 0;
+    }
+
+    /**
+     * Sets the image resource holder
+     * @param Imagick resource object
+     * @return bool
+     *
+     */
+    public function setHolder($holder)
+    {
+        if (is_object($holder) && 'Imagick' === get_class($holder)) {
+            $this->holder = $holder;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the image resource
+     * @return resource
+     *
+     */
+    public function getHolder()
+    {
+        if ($this->hasHolder()) {
+            return $this->holder;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns whether there is a valid GD image resource
+     * @return bool
+     *
+     */
+    public function hasHolder()
+    {
+        if (is_object($this->holder) && 'Imagick' === get_class($this->holder)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the supported MIME types
+     * @return array
+     *
+     */
+    public function getMimeType()
+    {
+        return $this->mime_type;
+    }
+
+    /**
+      * Returns image MIME type
+      * @param string valid MIME Type
+      * @return bool
+      *
+      */
+    public function setMimeType($mime)
+    {
+        $this->mime_type = $mime;
+        if ($this->hasHolder() && isset($this->types[$mime])) {
+            $this->getHolder()->setImageFormat($this->types[$mime][0]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the name of the adapter
+     * @return string
+     *
+     */
+    public function getAdapterName()
+    {
+        return 'ImageMagick';
+    }
+
+    /**
+     * Sets the image filename
+     * @param int Quality of the image
+     *
+     * @return bool
+     */
+    public function setQuality($quality)
+    {
+        if (parent::setQuality($quality)) {
+            $this->getHolder()->setImageCompressionQuality($quality);
+
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -19,140 +19,129 @@
  */
 abstract class sfYamlConfigHandler extends sfConfigHandler
 {
-  protected
-    $yamlConfig = null;
+    protected $yamlConfig = null;
 
-  /**
-   * Parses an array of YAMLs files and merges them in one configuration array.
-   *
-   * @param array $configFiles An array of configuration file paths
-   *
-   * @return array A merged configuration array
-   */
-  static public function parseYamls($configFiles)
-  {
-    $config = array();
-    foreach ($configFiles as $configFile)
+    /**
+     * Parses an array of YAMLs files and merges them in one configuration array.
+     *
+     * @param array $configFiles An array of configuration file paths
+     *
+     * @return array A merged configuration array
+     */
+    public static function parseYamls($configFiles)
     {
-      // the first level is an environment and its value must be an array
-      $values = array();
-      foreach (self::parseYaml($configFile) as $env => $value)
-      {
-        if (null !== $value)
-        {
-          $values[$env] = $value;
+        $config = [];
+        foreach ($configFiles as $configFile) {
+            // the first level is an environment and its value must be an array
+            $values = [];
+            foreach (self::parseYaml($configFile) as $env => $value) {
+                if (null !== $value) {
+                    $values[$env] = $value;
+                }
+            }
+
+            $config = sfToolkit::arrayDeepMerge($config, $values);
         }
-      }
 
-      $config = sfToolkit::arrayDeepMerge($config, $values);
+        return $config;
     }
 
-    return $config;
-  }
-
-  /**
-   * Parses a YAML (.yml) configuration file.
-   *
-   * @param string $configFile An absolute filesystem path to a configuration file
-   *
-   * @return string A parsed .yml configuration
-   *
-   * @throws sfConfigurationException If a requested configuration file does not exist or is not readable
-   * @throws sfParseException If a requested configuration file is improperly formatted
-   */
-  static public function parseYaml($configFile)
-  {
-    if (!is_readable($configFile))
+    /**
+     * Parses a YAML (.yml) configuration file.
+     *
+     * @param string $configFile An absolute filesystem path to a configuration file
+     *
+     * @return string A parsed .yml configuration
+     *
+     * @throws sfConfigurationException If a requested configuration file does not exist or is not readable
+     * @throws sfParseException If a requested configuration file is improperly formatted
+     */
+    public static function parseYaml($configFile)
     {
-      // can't read the configuration
-      throw new sfConfigurationException(sprintf('Configuration file "%s" does not exist or is not readable.', $configFile));
+        if (!is_readable($configFile)) {
+            // can't read the configuration
+            throw new sfConfigurationException(sprintf('Configuration file "%s" does not exist or is not readable.', $configFile));
+        }
+
+        // parse our config
+        $config = sfYaml::load($configFile);
+
+        if ($config === false) {
+            // configuration couldn't be parsed
+            throw new sfParseException(sprintf('Configuration file "%s" could not be parsed', $configFile));
+        }
+
+        return null === $config ? [] : $config;
     }
 
-    // parse our config
-    $config = sfYaml::load($configFile);
-
-    if ($config === false)
+    /**
+     * Merges configuration values for a given key and category.
+     *
+     * @param string $keyName  The key name
+     * @param string $category The category name
+     *
+     * @return string The value associated with this key name and category
+     */
+    protected function mergeConfigValue($keyName, $category)
     {
-      // configuration couldn't be parsed
-      throw new sfParseException(sprintf('Configuration file "%s" could not be parsed', $configFile));
+        $values = [];
+
+        if (isset($this->yamlConfig['all'][$keyName]) && is_array($this->yamlConfig['all'][$keyName])) {
+            $values = $this->yamlConfig['all'][$keyName];
+        }
+
+        if ($category && isset($this->yamlConfig[$category][$keyName]) && is_array($this->yamlConfig[$category][$keyName])) {
+            $values = array_merge($values, $this->yamlConfig[$category][$keyName]);
+        }
+
+        return $values;
     }
 
-    return null === $config ? array() : $config;
-  }
-
-  /**
-   * Merges configuration values for a given key and category.
-   *
-   * @param string $keyName  The key name
-   * @param string $category The category name
-   *
-   * @return string The value associated with this key name and category
-   */
-  protected function mergeConfigValue($keyName, $category)
-  {
-    $values = array();
-
-    if (isset($this->yamlConfig['all'][$keyName]) && is_array($this->yamlConfig['all'][$keyName]))
+    /**
+     * Gets a configuration value for a given key and category.
+     *
+     * @param string $keyName      The key name
+     * @param string $category     The category name
+     * @param string $defaultValue The default value
+     *
+     * @return string The value associated with this key name and category
+     */
+    protected function getConfigValue($keyName, $category, $defaultValue = null)
     {
-      $values = $this->yamlConfig['all'][$keyName];
+        if (isset($this->yamlConfig[$category][$keyName])) {
+            return $this->yamlConfig[$category][$keyName];
+        } elseif (isset($this->yamlConfig['all'][$keyName])) {
+            return $this->yamlConfig['all'][$keyName];
+        }
+
+        return $defaultValue;
     }
 
-    if ($category && isset($this->yamlConfig[$category][$keyName]) && is_array($this->yamlConfig[$category][$keyName]))
+    public static function flattenConfiguration($config)
     {
-      $values = array_merge($values, $this->yamlConfig[$category][$keyName]);
+        $config['all'] = sfToolkit::arrayDeepMerge(
+            isset($config['default']) && is_array($config['default']) ? $config['default'] : [],
+            isset($config['all']) && is_array($config['all']) ? $config['all'] : [],
+        );
+
+        unset($config['default']);
+
+        return $config;
     }
 
-    return $values;
-  }
-
-  /**
-   * Gets a configuration value for a given key and category.
-   *
-   * @param string $keyName      The key name
-   * @param string $category     The category name
-   * @param string $defaultValue The default value
-   *
-   * @return string The value associated with this key name and category
-   */
-  protected function getConfigValue($keyName, $category, $defaultValue = null)
-  {
-    if (isset($this->yamlConfig[$category][$keyName]))
+    /**
+     * Merges default, all and current environment configurations.
+     *
+     * @param array $config The main configuratino array
+     *
+     * @return array The merged configuration
+     */
+    public static function flattenConfigurationWithEnvironment($config)
     {
-      return $this->yamlConfig[$category][$keyName];
+        return sfToolkit::arrayDeepMerge(
+            isset($config['default']) && is_array($config['default']) ? $config['default'] : [],
+            isset($config['all']) && is_array($config['all']) ? $config['all'] : [],
+            isset($config[sfConfig::get('sf_environment')]) && is_array($config[sfConfig::get('sf_environment')]) ? $config[sfConfig::get('sf_environment')] : [],
+        );
     }
-    else if (isset($this->yamlConfig['all'][$keyName]))
-    {
-      return $this->yamlConfig['all'][$keyName];
-    }
-
-    return $defaultValue;
-  }
-
-  static public function flattenConfiguration($config)
-  {
-    $config['all'] = sfToolkit::arrayDeepMerge(
-      isset($config['default']) && is_array($config['default']) ? $config['default'] : array(),
-      isset($config['all']) && is_array($config['all']) ? $config['all'] : array()
-    );
-
-    unset($config['default']);
-
-    return $config;
-  }
-
-  /**
-   * Merges default, all and current environment configurations.
-   *
-   * @param array $config The main configuratino array
-   *
-   * @return array The merged configuration
-   */
-  static public function flattenConfigurationWithEnvironment($config)
-  {
-    return sfToolkit::arrayDeepMerge(
-      isset($config['default']) && is_array($config['default']) ? $config['default'] : array(),
-      isset($config['all']) && is_array($config['all']) ? $config['all'] : array(),
-      isset($config[sfConfig::get('sf_environment')]) && is_array($config[sfConfig::get('sf_environment')]) ? $config[sfConfig::get('sf_environment')] : array()
-    );
-  }
 }

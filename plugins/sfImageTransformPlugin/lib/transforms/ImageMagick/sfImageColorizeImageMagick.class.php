@@ -18,173 +18,169 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */
-class sfImageColorizeImageMagick  extends sfImageTransformAbstract
+class sfImageColorizeImageMagick extends sfImageTransformAbstract
 {
-  /**
-   * Red Tint.
-  */
-  protected $red_tint = 0;
+    /**
+     * Red Tint.
+    */
+    protected $red_tint = 0;
 
-  /**
-   * Green Tint.
-  */
-  protected $green_tint = 0;
+    /**
+     * Green Tint.
+    */
+    protected $green_tint = 0;
 
-  /**
-   * Blue Tint.
-  */
-  protected $blue_tint = 0;
+    /**
+     * Blue Tint.
+    */
+    protected $blue_tint = 0;
 
-  /**
-   * Alpha.
-  */
-  protected $alpha = 0;
+    /**
+     * Alpha.
+    */
+    protected $alpha = 0;
 
-  /**
-   * Construct an sfImageColorize object.
-   *
-   * @param integer
-   * @param integer
-   * @param integer
-   * @param integer
-   */
-  public function __construct($red, $green, $blue, $alpha=0)
-  {
-    $this->setRed($red);
-    $this->setGreen($green);
-    $this->setBlue($blue);
-    $this->setAlpha($alpha);
-  }
-
-  /**
-   * Sets the red
-   *
-   * @param integer
-   * @return boolean
-   */
-  public function setRed($red)
-  {
-    if (is_numeric($red))
+    /**
+     * Construct an sfImageColorize object.
+     *
+     * @param int
+     * @param int
+     * @param int
+     * @param int
+     */
+    public function __construct($red, $green, $blue, $alpha = 0)
     {
-      $this->red_tint = (int)$red;
-
-      return true;
+        $this->setRed($red);
+        $this->setGreen($green);
+        $this->setBlue($blue);
+        $this->setAlpha($alpha);
     }
 
-    return false;
-  }
-
-  /**
-   * Gets the red
-   *
-   * @return integer
-   */
-  public function getRed()
-  {
-    return $this->red_tint;
-  }
-
-  /**
-   * Sets the green
-   *
-   * @param integer
-   * @return boolean
-   */
-  public function setGreen($green)
-  {
-    if (is_numeric($green))
+    /**
+     * Sets the red
+     *
+     * @param int
+     * @return bool
+     */
+    public function setRed($red)
     {
-      $this->green_tint = (int)$green;
+        if (is_numeric($red)) {
+            $this->red_tint = (int) $red;
 
-      return true;
+            return true;
+        }
+
+        return false;
     }
 
-    return false;
-  }
-
-  /**
-   * Gets the green
-   *
-   * @return integer
-   */
-  public function getGreen()
-  {
-    return $this->green_tint;
-  }
-
-  /**
-   * Sets the blue
-   *
-   * @param integer
-   * @return boolean
-   */
-  public function setBlue($blue)
-  {
-    if (is_numeric($blue))
+    /**
+     * Gets the red
+     *
+     * @return int
+     */
+    public function getRed()
     {
-      $this->blue_tint = (int)$blue;
-
-      return true;
+        return $this->red_tint;
     }
 
-    return false;
-  }
-
-  /**
-   * Gets the blue
-   *
-   * @return integer
-   */
-  public function getBlue()
-  {
-    return $this->blue_tint;
-  }
-
-  /**
-   * Sets the alpha
-   *
-   * @param integer
-   * @return boolean
-   */
-  public function setAlpha($alpha)
-  {
-    if (is_numeric($alpha))
+    /**
+     * Sets the green
+     *
+     * @param int
+     * @return bool
+     */
+    public function setGreen($green)
     {
-      $this->alpha = (int)$alpha;
+        if (is_numeric($green)) {
+            $this->green_tint = (int) $green;
 
-      return true;
+            return true;
+        }
+
+        return false;
     }
 
-    return false;
-  }
+    /**
+     * Gets the green
+     *
+     * @return int
+     */
+    public function getGreen()
+    {
+        return $this->green_tint;
+    }
 
-  /**
-   * Gets the alpha
-   *
-   * @return integer
-   */
-  public function getAlpha()
-  {
-    return $this->alpha;
-  }
+    /**
+     * Sets the blue
+     *
+     * @param int
+     * @return bool
+     */
+    public function setBlue($blue)
+    {
+        if (is_numeric($blue)) {
+            $this->blue_tint = (int) $blue;
 
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @access protected
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    $resource = $image->getAdapter()->getHolder();
+            return true;
+        }
 
-    $color = sprintf('rgb(%d,%d,%d)', $this->getRed(), $this->getGreen(), $this->getBlue());
+        return false;
+    }
 
-    $pixel = new ImagickPixel($color);
+    /**
+     * Gets the blue
+     *
+     * @return int
+     */
+    public function getBlue()
+    {
+        return $this->blue_tint;
+    }
 
-    $resource->colorizeImage($pixel, $pixel);
+    /**
+     * Sets the alpha
+     *
+     * @param int
+     * @return bool
+     */
+    public function setAlpha($alpha)
+    {
+        if (is_numeric($alpha)) {
+            $this->alpha = (int) $alpha;
 
-    return $image;
-  }
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets the alpha
+     *
+     * @return int
+     */
+    public function getAlpha()
+    {
+        return $this->alpha;
+    }
+
+    /**
+     * Apply the transform to the sfImage object.
+     *
+     * @access protected
+     * @param sfImage
+     * @return sfImage
+     */
+    protected function transform(sfImage $image)
+    {
+        $resource = $image->getAdapter()->getHolder();
+
+        $color = sprintf('rgb(%d,%d,%d)', $this->getRed(), $this->getGreen(), $this->getBlue());
+
+        $pixel = new ImagickPixel($color);
+
+        $resource->colorizeImage($pixel, $pixel);
+
+        return $image;
+    }
 }

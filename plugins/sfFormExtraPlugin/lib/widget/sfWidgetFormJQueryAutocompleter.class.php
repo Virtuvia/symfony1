@@ -3,7 +3,7 @@
 /*
  * This file is part of the symfony package.
  * (c) Fabien Potencier <fabien.potencier@symfony-project.com>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -25,49 +25,49 @@
  */
 class sfWidgetFormJQueryAutocompleter extends sfWidgetFormInput
 {
-  /**
-   * Configures the current widget.
-   *
-   * Available options:
-   *
-   *  * url:            The URL to call to get the choices to use (required)
-   *  * config:         A JavaScript array that configures the JQuery autocompleter widget
-   *  * value_callback: A callback that converts the value before it is displayed
-   *
-   * @param array $options     An array of options
-   * @param array $attributes  An array of default HTML attributes
-   *
-   * @see sfWidgetForm
-   */
-  protected function configure($options = array(), $attributes = array())
-  {
-    $this->addRequiredOption('url');
-    $this->addOption('value_callback');
-    $this->addOption('config', '{ }');
+    /**
+     * Configures the current widget.
+     *
+     * Available options:
+     *
+     *  * url:            The URL to call to get the choices to use (required)
+     *  * config:         A JavaScript array that configures the JQuery autocompleter widget
+     *  * value_callback: A callback that converts the value before it is displayed
+     *
+     * @param array $options     An array of options
+     * @param array $attributes  An array of default HTML attributes
+     *
+     * @see sfWidgetForm
+     */
+    protected function configure($options = [], $attributes = [])
+    {
+        $this->addRequiredOption('url');
+        $this->addOption('value_callback');
+        $this->addOption('config', '{ }');
 
-    // this is required as it can be used as a renderer class for sfWidgetFormChoice
-    $this->addOption('choices');
+        // this is required as it can be used as a renderer class for sfWidgetFormChoice
+        $this->addOption('choices');
 
-    parent::configure($options, $attributes);
-  }
+        parent::configure($options, $attributes);
+    }
 
-  /**
-   * @param  string $name        The element name
-   * @param  string $value       The date displayed in this widget
-   * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-   * @param  array  $errors      An array of errors for the field
-   *
-   * @return string An HTML tag string
-   *
-   * @see sfWidgetForm
-   */
-  public function render($name, $value = null, $attributes = array(), $errors = array())
-  {
-    $visibleValue = $this->getOption('value_callback') ? call_user_func($this->getOption('value_callback'), $value) : $value;
+    /**
+     * @param  string $name        The element name
+     * @param  string $value       The date displayed in this widget
+     * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
+     * @param  array  $errors      An array of errors for the field
+     *
+     * @return string An HTML tag string
+     *
+     * @see sfWidgetForm
+     */
+    public function render($name, $value = null, $attributes = [], $errors = [])
+    {
+        $visibleValue = $this->getOption('value_callback') ? call_user_func($this->getOption('value_callback'), $value) : $value;
 
-    return $this->renderTag('input', array('type' => 'hidden', 'name' => $name, 'value' => $value)).
-           parent::render('autocomplete_'.$name, $visibleValue, $attributes, $errors).
-           sprintf(<<<EOF
+        return $this->renderTag('input', ['type' => 'hidden', 'name' => $name, 'value' => $value]) .
+               parent::render('autocomplete_' . $name, $visibleValue, $attributes, $errors) .
+               sprintf(<<<EOF
 <script type="text/javascript">
   jQuery(document).ready(function() {
     jQuery("#%s")
@@ -90,32 +90,32 @@ class sfWidgetFormJQueryAutocompleter extends sfWidgetFormInput
   });
 </script>
 EOF
-      ,
-      $this->generateId('autocomplete_'.$name),
-      $this->getOption('url'),
-      $this->getOption('config'),
-      $this->generateId($name),
-      $this->generateId($name)
-    );
-  }
+                   ,
+                   $this->generateId('autocomplete_' . $name),
+                   $this->getOption('url'),
+                   $this->getOption('config'),
+                   $this->generateId($name),
+                   $this->generateId($name),
+               );
+    }
 
-  /**
-   * Gets the stylesheet paths associated with the widget.
-   *
-   * @return array An array of stylesheet paths
-   */
-  public function getStylesheets()
-  {
-    return array('/sfFormExtraPlugin/css/jquery.autocompleter.css' => 'all');
-  }
+    /**
+     * Gets the stylesheet paths associated with the widget.
+     *
+     * @return array An array of stylesheet paths
+     */
+    public function getStylesheets()
+    {
+        return ['/sfFormExtraPlugin/css/jquery.autocompleter.css' => 'all'];
+    }
 
-  /**
-   * Gets the JavaScript paths associated with the widget.
-   *
-   * @return array An array of JavaScript paths
-   */
-  public function getJavascripts()
-  {
-    return array('/sfFormExtraPlugin/js/jquery.autocompleter.js');
-  }
+    /**
+     * Gets the JavaScript paths associated with the widget.
+     *
+     * @return array An array of JavaScript paths
+     */
+    public function getJavascripts()
+    {
+        return ['/sfFormExtraPlugin/js/jquery.autocompleter.js'];
+    }
 }

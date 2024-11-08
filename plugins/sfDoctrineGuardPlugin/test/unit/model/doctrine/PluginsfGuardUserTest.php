@@ -6,14 +6,14 @@
 
 require_once dirname(__DIR__, 3) . '/bootstrap/unit.php';
 
-$unique = random_int(10000,99999);
+$unique = random_int(10000, 99999);
 
 $t = new lime_test(14);
 
 $activeUser = new sfGuardUser();
 $activeUser->first_name = 'John';
 $activeUser->last_name = 'Doe';
-$activeUser->email_address = 'email' . $unique .'@test.com';
+$activeUser->email_address = 'email' . $unique . '@test.com';
 $activeUser->username = 'active_user' . $unique;
 $activeUser->password = 'password';
 $activeUser->is_active = true;
@@ -29,15 +29,12 @@ $t->ok(strlen($activeUser->getName()), '->getName() returns a string');
 // group managment
 $t->diag('group managment');
 
-$t->is($activeUser->getGroupNames(), array(), '->getGroupNames() return empty array if no group is set');
+$t->is($activeUser->getGroupNames(), [], '->getGroupNames() return empty array if no group is set');
 
-try
-{
+try {
     $activeUser->addGroupByName('test-group' . $unique);
     $t->fail('->addGroupByName() does throw an exception if group not exist');
-}
-catch (Exception $e)
-{
+} catch (Exception $e) {
     $t->pass('->addGroupByName() does throw an exception if group not exist');
 }
 
@@ -47,33 +44,27 @@ $group->save();
 
 $t->is($activeUser->hasGroup('test-group' . $unique), false, '->hasGroup() return false if user hasn\'t this group');
 
-try
-{
+try {
     $activeUser->addGroupByName('test-group' . $unique);
     $t->pass('->addGroupByName() does not throw an exception if group exist');
-}
-catch (Exception $e)
-{
+} catch (Exception $e) {
     $t->diag($e->getMessage());
     $t->fail('->addGroupByName() does not throw an exception if group exist');
 }
 
-$t->is($activeUser->getGroupNames(), array('test-group' . $unique), '->getGroupNames() return array with group names');
+$t->is($activeUser->getGroupNames(), ['test-group' . $unique], '->getGroupNames() return array with group names');
 $t->is($activeUser->hasGroup('test-group' . $unique), true, '->hasGroup() return true if user has this group');
 
 
 // permission managment
 $t->diag('permission managment');
 
-$t->is($activeUser->getPermissionNames(), array(), '->getPermissionNames() return empty array if no permission is set');
+$t->is($activeUser->getPermissionNames(), [], '->getPermissionNames() return empty array if no permission is set');
 
-try
-{
+try {
     $activeUser->addPermissionByName('test-permission' . $unique);
     $t->fail('->addPermissionByName() does throw an exception if group not exist');
-}
-catch (Exception $e)
-{
+} catch (Exception $e) {
     $t->pass('->addPermissionByName() does throw an exception if group not exist');
 }
 
@@ -83,16 +74,13 @@ $permission->save();
 
 $t->is($activeUser->hasPermission('test-permission' . $unique), false, '->hasPermission() return false if user hasn\'t this group');
 
-try
-{
+try {
     $activeUser->addPermissionByName('test-permission' . $unique);
     $t->pass('->addPermissionByName() does not throw an exception if permission exist');
-}
-catch (Exception $e)
-{
+} catch (Exception $e) {
     $t->diag($e->getMessage());
     $t->fail('->addPermissionByName() does not throw an exception if permission exist');
 }
 
-$t->is($activeUser->getPermissionNames(), array('test-permission' . $unique), '->getPermissionNames() return array with permission names');
+$t->is($activeUser->getPermissionNames(), ['test-permission' . $unique], '->getPermissionNames() return array with permission names');
 $t->is($activeUser->hasPermission('test-permission' . $unique), true, '->hasPermission() return true if user has this group');

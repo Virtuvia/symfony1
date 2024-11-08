@@ -8,16 +8,18 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
+require_once(dirname(__FILE__) . '/../../bootstrap/unit.php');
 
 class FormFormatterStub extends sfWidgetFormSchemaFormatter
 {
-  public function __construct() {}
+    public function __construct()
+    {
+    }
 
-  public function translate($subject, $parameters = array())
-  {
-    return sprintf('translation[%s]', $subject);
-  }
+    public function translate($subject, $parameters = [])
+    {
+        return sprintf('translation[%s]', $subject);
+    }
 }
 
 $t = new lime_test(1);
@@ -36,4 +38,3 @@ $w->setParent($ws);
 $dom->loadHTML($w->render('foo'));
 $css = new sfDomCssSelector($dom);
 $t->is($css->matchSingle('label[for="foo_is_empty"]')->getValue(), 'translation[is empty]', '->render() translates the empty_label option');
-

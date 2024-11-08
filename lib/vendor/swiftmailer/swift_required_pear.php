@@ -12,8 +12,9 @@
  * Autoloader and dependency injection initialization for Swift Mailer.
  */
 
-if (defined('SWIFT_REQUIRED_LOADED'))
-	return;
+if (defined('SWIFT_REQUIRED_LOADED')) {
+    return;
+}
 
 define('SWIFT_REQUIRED_LOADED', true);
 

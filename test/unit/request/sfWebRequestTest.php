@@ -3,47 +3,45 @@
 /*
  * This file is part of the symfony package.
  * (c) 2004-2006 Fabien Potencier <fabien.potencier@symfony-project.com>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
+require_once(dirname(__FILE__) . '/../../bootstrap/unit.php');
 
 $t = new lime_test(73);
 
 class myRequest extends sfWebRequest
 {
-  static protected $initialPathArrayKeys;
+    protected static $initialPathArrayKeys;
 
-  public $languages = null;
-  public $charsets = null;
-  public $acceptableContentTypes = null;
+    public $languages = null;
+    public $charsets = null;
+    public $acceptableContentTypes = null;
 
-  public function initialize(sfEventDispatcher $dispatcher, $parameters = array(), $attributes = array(), $options = array())
-  {
-    parent::initialize($dispatcher, $parameters, $attributes, $options);
-
-    if (null === self::$initialPathArrayKeys)
+    public function initialize(sfEventDispatcher $dispatcher, $parameters = [], $attributes = [], $options = [])
     {
-      self::$initialPathArrayKeys = array_keys($this->getPathInfoArray());
+        parent::initialize($dispatcher, $parameters, $attributes, $options);
+
+        if (null === self::$initialPathArrayKeys) {
+            self::$initialPathArrayKeys = array_keys($this->getPathInfoArray());
+        }
+
+        $this->resetPathInfoArray();
     }
 
-    $this->resetPathInfoArray();
-  }
-
-  public function setOption($key, $value)
-  {
-    $this->options[$key] = $value;
-  }
-
-  public function resetPathInfoArray()
-  {
-    foreach (array_diff(array_keys($this->getPathInfoArray()), self::$initialPathArrayKeys) as $key)
+    public function setOption($key, $value)
     {
-      unset($this->pathInfoArray[$key]);
+        $this->options[$key] = $value;
     }
-  }
+
+    public function resetPathInfoArray()
+    {
+        foreach (array_diff(array_keys($this->getPathInfoArray()), self::$initialPathArrayKeys) as $key) {
+            unset($this->pathInfoArray[$key]);
+        }
+    }
 }
 
 $dispatcher = new sfEventDispatcher();
@@ -52,67 +50,67 @@ $request = new myRequest($dispatcher);
 // ->getLanguages()
 $t->diag('->getLanguages()');
 
-$t->is($request->getLanguages(), array(), '->getLanguages() returns an empty array if the client do not send an ACCEPT_LANGUAGE header');
+$t->is($request->getLanguages(), [], '->getLanguages() returns an empty array if the client do not send an ACCEPT_LANGUAGE header');
 
 $request->languages = null;
 $_SERVER['HTTP_ACCEPT_LANGUAGE'] = '';
-$t->is($request->getLanguages(), array(), '->getLanguages() returns an empty array if the client send an empty ACCEPT_LANGUAGE header');
+$t->is($request->getLanguages(), [], '->getLanguages() returns an empty array if the client send an empty ACCEPT_LANGUAGE header');
 
 $request->languages = null;
 $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en-us,en;q=0.5,fr;q=0.3';
-$t->is($request->getLanguages(), array('en_US', 'en', 'fr'), '->getLanguages() returns an array with all accepted languages');
+$t->is($request->getLanguages(), ['en_US', 'en', 'fr'], '->getLanguages() returns an array with all accepted languages');
 
 // ->getPreferredCulture()
 $t->diag('->getPreferredCulture()');
 
 $request->languages = null;
 $_SERVER['HTTP_ACCEPT_LANGUAGE'] = '';
-$t->is($request->getPreferredCulture(array('fr', 'en')), 'fr', '->getPreferredCulture() returns the first given culture if the client do not send an ACCEPT_LANGUAGE header');
+$t->is($request->getPreferredCulture(['fr', 'en']), 'fr', '->getPreferredCulture() returns the first given culture if the client do not send an ACCEPT_LANGUAGE header');
 
 $request->languages = null;
 $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en-us,en;q=0.5,fr;q=0.3';
-$t->is($request->getPreferredCulture(array('fr', 'en')), 'en', '->getPreferredCulture() returns the preferred culture');
+$t->is($request->getPreferredCulture(['fr', 'en']), 'en', '->getPreferredCulture() returns the preferred culture');
 
 $request->languages = null;
 $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en-us,en;q=0.5,fr';
-$t->is($request->getPreferredCulture(array('fr', 'en')), 'fr', '->getPreferredCulture() returns the preferred culture');
+$t->is($request->getPreferredCulture(['fr', 'en']), 'fr', '->getPreferredCulture() returns the preferred culture');
 
 // ->getCharsets()
 $t->diag('->getCharsets()');
 
-$t->is($request->getCharsets(), array(), '->getCharsets() returns an empty array if the client do not send an ACCEPT_CHARSET header');
+$t->is($request->getCharsets(), [], '->getCharsets() returns an empty array if the client do not send an ACCEPT_CHARSET header');
 
 $request->charsets = null;
 $_SERVER['HTTP_ACCEPT_CHARSET'] = '';
-$t->is($request->getCharsets(), array(), '->getCharsets() returns an empty array if the client send an empty ACCEPT_CHARSET header');
+$t->is($request->getCharsets(), [], '->getCharsets() returns an empty array if the client send an empty ACCEPT_CHARSET header');
 
 $request->charsets = null;
 $_SERVER['HTTP_ACCEPT_CHARSET'] = 'ISO-8859-1,utf-8;q=0.7,*;q=0.3';
-$t->is($request->getCharsets(), array('ISO-8859-1', 'utf-8', '*'), '->getCharsets() returns an array with all accepted charsets');
+$t->is($request->getCharsets(), ['ISO-8859-1', 'utf-8', '*'], '->getCharsets() returns an array with all accepted charsets');
 
 // ->getAcceptableContentTypes()
 $t->diag('->getAcceptableContentTypes()');
 
-$t->is($request->getAcceptableContentTypes(), array(), '->getAcceptableContentTypes() returns an empty array if the client do not send an ACCEPT header');
+$t->is($request->getAcceptableContentTypes(), [], '->getAcceptableContentTypes() returns an empty array if the client do not send an ACCEPT header');
 
 $request->acceptableContentTypes = null;
 $_SERVER['HTTP_ACCEPT'] = '';
-$t->is($request->getAcceptableContentTypes(), array(), '->getAcceptableContentTypes() returns an empty array if the client send an empty ACCEPT header');
+$t->is($request->getAcceptableContentTypes(), [], '->getAcceptableContentTypes() returns an empty array if the client send an empty ACCEPT header');
 
 $request->acceptableContentTypes = null;
 $_SERVER['HTTP_ACCEPT'] = 'text/xml,application/xhtml+xml,application/xml,text/html;q=0.9,text/plain;q=0.8,*/*;q=0.5';
-$t->is($request->getAcceptableContentTypes(), array('text/xml', 'application/xhtml+xml', 'application/xml', 'text/html', 'text/plain', '*/*'), '->getAcceptableContentTypes() returns an array with all accepted content types');
+$t->is($request->getAcceptableContentTypes(), ['text/xml', 'application/xhtml+xml', 'application/xml', 'text/html', 'text/plain', '*/*'], '->getAcceptableContentTypes() returns an array with all accepted content types');
 
 // ->splitHttpAcceptHeader()
 $t->diag('->splitHttpAcceptHeader()');
 
-$t->is($request->splitHttpAcceptHeader(''), array(), '->splitHttpAcceptHeader() returns an empty array if the header is empty');
-$t->is($request->splitHttpAcceptHeader('a,b,c'), array('a', 'b', 'c'), '->splitHttpAcceptHeader() returns an array of values');
-$t->is($request->splitHttpAcceptHeader('a,b;q=0.7,c;q=0.3'), array('a', 'b', 'c'), '->splitHttpAcceptHeader() strips the q value');
-$t->is($request->splitHttpAcceptHeader('a;q=0.1,b,c;q=0.3'), array('b', 'c', 'a'), '->splitHttpAcceptHeader() sorts values by the q value');
-$t->is($request->splitHttpAcceptHeader('a;q=0.3,b,c;q=0.3'), array('b', 'a', 'c'), '->splitHttpAcceptHeader() sorts values by the q value including equal values');
-$t->is($request->splitHttpAcceptHeader('a; q=0.1, b, c; q=0.3'), array('b', 'c', 'a'), '->splitHttpAcceptHeader() trims whitespaces');
-$t->is($request->splitHttpAcceptHeader('a; q=0, b'), array('b'), '->splitHttpAcceptHeader() removes values when q = 0 (as per the RFC)');
+$t->is($request->splitHttpAcceptHeader(''), [], '->splitHttpAcceptHeader() returns an empty array if the header is empty');
+$t->is($request->splitHttpAcceptHeader('a,b,c'), ['a', 'b', 'c'], '->splitHttpAcceptHeader() returns an array of values');
+$t->is($request->splitHttpAcceptHeader('a,b;q=0.7,c;q=0.3'), ['a', 'b', 'c'], '->splitHttpAcceptHeader() strips the q value');
+$t->is($request->splitHttpAcceptHeader('a;q=0.1,b,c;q=0.3'), ['b', 'c', 'a'], '->splitHttpAcceptHeader() sorts values by the q value');
+$t->is($request->splitHttpAcceptHeader('a;q=0.3,b,c;q=0.3'), ['b', 'a', 'c'], '->splitHttpAcceptHeader() sorts values by the q value including equal values');
+$t->is($request->splitHttpAcceptHeader('a; q=0.1, b, c; q=0.3'), ['b', 'c', 'a'], '->splitHttpAcceptHeader() trims whitespaces');
+$t->is($request->splitHttpAcceptHeader('a; q=0, b'), ['b'], '->splitHttpAcceptHeader() removes values when q = 0 (as per the RFC)');
 
 // ->getRequestFormat() ->setRequestFormat()
 $t->diag('->getRequestFormat() ->setRequestFormat()');
@@ -129,7 +127,7 @@ $t->diag('->getFormat() ->setFormat()');
 
 $request->setFormat('js', 'application/x-javascript');
 $t->is($request->getFormat('application/x-javascript'), 'js', '->getFormat() returns the format for the given mime type');
-$request->setFormat('js', array('application/x-javascript', 'text/js'));
+$request->setFormat('js', ['application/x-javascript', 'text/js']);
 $t->is($request->getFormat('text/js'), 'js', '->setFormat() can take an array of mime types');
 $t->is($request->getFormat('foo/bar'), null, '->getFormat() returns null if the mime type does not exist');
 
@@ -236,7 +234,7 @@ $t->diag('->getForwardedFor()');
 
 $t->is($request->getForwardedFor(), null, '->getForwardedFor() returns null if the request was not forwarded.');
 $_SERVER['HTTP_X_FORWARDED_FOR'] = '10.0.0.1, 10.0.0.2';
-$t->is_deeply($request->getForwardedFor(), array('10.0.0.1', '10.0.0.2'), '->getForwardedFor() returns the value from HTTP_X_FORWARDED_FOR');
+$t->is_deeply($request->getForwardedFor(), ['10.0.0.1', '10.0.0.2'], '->getForwardedFor() returns the value from HTTP_X_FORWARDED_FOR');
 
 // ->getMethod()
 $t->diag('->getMethod()');
@@ -285,7 +283,7 @@ $_SERVER['PATH_INFO'] = '/test/klaus';
 $_SERVER['REQUEST_URI'] = '/test/klaus2';
 $t->is($request->getPathInfo(), '/test/klaus', '->getPathInfo() returns the url path value');
 
-$request = new myRequest($dispatcher, array(), array(), array('path_info_key' => 'SPECIAL'));
+$request = new myRequest($dispatcher, [], [], ['path_info_key' => 'SPECIAL']);
 $_SERVER['SPECIAL'] = '/special';
 $t->is($request->getPathInfo(), '/special', '->getPathInfo() returns the url path value use path_info_key');
 $request->resetPathInfoArray();
@@ -310,16 +308,16 @@ $t->is($request->getPathInfo(), '/', '->getPathInfo() returns the url path value
 $t->diag('getPathInfo');
 
 $request = new myRequest($dispatcher);
-$t->is($request->getRequestParameters(), array(), '->getRequestParameters() returns the request parameters default array');
+$t->is($request->getRequestParameters(), [], '->getRequestParameters() returns the request parameters default array');
 
-$request->addRequestParameters(array('test' => 'test'));
-$t->is($request->getRequestParameters(), array('test' => 'test'), '->getRequestParameters() returns the request parameters');
+$request->addRequestParameters(['test' => 'test']);
+$t->is($request->getRequestParameters(), ['test' => 'test'], '->getRequestParameters() returns the request parameters');
 
-$request->addRequestParameters(array('test' => 'test'));
-$t->is($request->getRequestParameters(), array('test' => 'test'), '->getRequestParameters() returns the request parameters allready exists');
+$request->addRequestParameters(['test' => 'test']);
+$t->is($request->getRequestParameters(), ['test' => 'test'], '->getRequestParameters() returns the request parameters allready exists');
 
-$request->addRequestParameters(array('_sf_ignore_cache' => 1, 'test2' => 'test2'));
-$t->is($request->getRequestParameters(), array('test' => 'test', 'test2' => 'test2', '_sf_ignore_cache' => 1), '->getRequestParameters() returns the request parameters check fixParameters call for special _sf_ params');
+$request->addRequestParameters(['_sf_ignore_cache' => 1, 'test2' => 'test2']);
+$t->is($request->getRequestParameters(), ['test' => 'test', 'test2' => 'test2', '_sf_ignore_cache' => 1], '->getRequestParameters() returns the request parameters check fixParameters call for special _sf_ params');
 $t->is($request->getAttribute('sf_ignore_cache'), 1, '->getAttribute() check special param is set as attribute');
 
 // ->checkCSRFProtection()
@@ -327,35 +325,29 @@ $t->diag('->checkCSRFProtection()');
 
 class BaseForm extends sfForm
 {
-  public function getCSRFToken($secret = null)
-  {
-    return '==TOKEN==';
-  }
+    public function getCSRFToken($secret = null)
+    {
+        return '==TOKEN==';
+    }
 }
 
 sfForm::enableCSRFProtection();
 
 $request = new myRequest($dispatcher);
-try
-{
-  $request->checkCSRFProtection();
-  $t->fail('->checkCSRFProtection() throws a validator error if CSRF protection fails');
-}
-catch (sfValidatorErrorSchema $error)
-{
-  $t->pass('->checkCSRFProtection() throws a validator error if CSRF protection fails');
+try {
+    $request->checkCSRFProtection();
+    $t->fail('->checkCSRFProtection() throws a validator error if CSRF protection fails');
+} catch (sfValidatorErrorSchema $error) {
+    $t->pass('->checkCSRFProtection() throws a validator error if CSRF protection fails');
 }
 
 $request = new myRequest($dispatcher);
 $request->setParameter('_csrf_token', '==TOKEN==');
-try
-{
-  $request->checkCSRFProtection();
-  $t->pass('->checkCSRFProtection() checks token from BaseForm');
-}
-catch (sfValidatorErrorSchema $error)
-{
-  $t->fail('->checkCSRFProtection() checks token from BaseForm');
+try {
+    $request->checkCSRFProtection();
+    $t->pass('->checkCSRFProtection() checks token from BaseForm');
+} catch (sfValidatorErrorSchema $error) {
+    $t->fail('->checkCSRFProtection() checks token from BaseForm');
 }
 
 // ->getContentType()

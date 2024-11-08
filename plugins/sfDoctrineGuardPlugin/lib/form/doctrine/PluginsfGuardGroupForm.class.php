@@ -10,19 +10,19 @@
  */
 abstract class PluginsfGuardGroupForm extends BasesfGuardGroupForm
 {
-  /**
-   * @see sfForm
-   */
-  protected function setupInheritance()
-  {
-    parent::setupInheritance();
+    /**
+     * @see sfForm
+     */
+    protected function setupInheritance()
+    {
+        parent::setupInheritance();
 
-    unset(
-      $this['created_at'],
-      $this['updated_at']
-    );
+        unset(
+            $this['created_at'],
+            $this['updated_at'],
+        );
 
-    $this->widgetSchema['users_list']->setLabel('Users');
-    $this->widgetSchema['permissions_list']->setLabel('Permissions');
-  }
+        $this->widgetSchema['users_list']->setLabel('Users');
+        $this->widgetSchema['permissions_list']->setLabel('Permissions');
+    }
 }

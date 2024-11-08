@@ -3,12 +3,12 @@
 /*
  * This file is part of the symfony package.
  * (c) 2004-2006 Fabien Potencier <fabien.potencier@symfony-project.com>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
+require_once(dirname(__FILE__) . '/../../bootstrap/unit.php');
 
 $t = new lime_test(25);
 
@@ -33,9 +33,9 @@ $t->is($ph->get('bar'), null, '->get() returns null if the key does not exist');
 $ref = 'foobar';
 $ph->setByRef('ref', $ref);
 $ref2 = &$ph->get('ref'); // obtain the very same reference and modify it
-$t->is($ref2 , $ref, '->get() returns a reference for the given key');
+$t->is($ref2, $ref, '->get() returns a reference for the given key');
 $ref2 = 'barfoo';
-$t->is($ref2 , $ref, '->get() returns a reference for the given key');
+$t->is($ref2, $ref, '->get() returns a reference for the given key');
 
 $ph = new sfParameterHolder();
 $t->is('default_value', $ph->get('foo1', 'default_value'), '->get() takes the default value as its second argument');
@@ -46,11 +46,11 @@ $ph = new sfParameterHolder();
 $ph->set('foo', 'bar');
 $ph->set('yourfoo', 'bar');
 
-$t->is($ph->getNames(), array('foo', 'yourfoo'), '->getNames() returns all key names');
+$t->is($ph->getNames(), ['foo', 'yourfoo'], '->getNames() returns all key names');
 
 // ->getAll()
 $t->diag('->getAll()');
-$parameters = array('foo' => 'bar', 'myfoo' => 'bar');
+$parameters = ['foo' => 'bar', 'myfoo' => 'bar'];
 $ph = new sfParameterHolder();
 $ph->add($parameters);
 $t->is($ph->getAll(), $parameters, '->getAll() returns all parameters');
@@ -105,8 +105,8 @@ $t->is($ph->get('foo'), $foo, '->setByRef() sets the value for a key as a refere
 // ->add()
 $t->diag('->add()');
 $foo = 'bar';
-$parameters = array('foo' => $foo, 'bar' => 'bar');
-$myparameters = array('myfoo' => 'bar', 'mybar' => 'bar');
+$parameters = ['foo' => $foo, 'bar' => 'bar'];
+$myparameters = ['myfoo' => 'bar', 'mybar' => 'bar'];
 
 $ph = new sfParameterHolder();
 $ph->add($parameters);
@@ -119,8 +119,8 @@ $t->is($ph->getAll(), $parameters, '->add() adds an array of parameters, not a r
 // ->addByRef()
 $t->diag('->addByRef()');
 $foo = 'bar';
-$parameters = array('foo' => &$foo, 'bar' => 'bar');
-$myparameters = array('myfoo' => 'bar', 'mybar' => 'bar');
+$parameters = ['foo' => &$foo, 'bar' => 'bar'];
+$myparameters = ['myfoo' => 'bar', 'mybar' => 'bar'];
 
 $ph = new sfParameterHolder();
 $ph->addByRef($parameters);

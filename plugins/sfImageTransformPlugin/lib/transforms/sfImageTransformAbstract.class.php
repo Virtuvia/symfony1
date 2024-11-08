@@ -22,33 +22,31 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */
-abstract class sfImageTransformAbstract 
+abstract class sfImageTransformAbstract
 {
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  public function execute(sfImage $image)
-  {
-
-    // Check we have a valid image holder
-    if(false === $image->getAdapter()->hasHolder())
+    /**
+     * Apply the transform to the sfImage object.
+     *
+     * @param sfImage
+     * @return sfImage
+     */
+    public function execute(sfImage $image)
     {
-      throw new sfImageTransformException(sprintf('Cannot perform transform: %s invalid image resource',get_class($this)));
-    }
-    return $this->transform($image);
-  }
 
-  /**
-   * Abstract method that performs the image manipulation.
-   *
-   * @param sfImage
-   * @ignore
-   * @return sfImage
-   */
-  abstract protected function transform(sfImage $image);
+        // Check we have a valid image holder
+        if (false === $image->getAdapter()->hasHolder()) {
+            throw new sfImageTransformException(sprintf('Cannot perform transform: %s invalid image resource', get_class($this)));
+        }
+        return $this->transform($image);
+    }
+
+    /**
+     * Abstract method that performs the image manipulation.
+     *
+     * @param sfImage
+     * @ignore
+     * @return sfImage
+     */
+    abstract protected function transform(sfImage $image);
 
 }

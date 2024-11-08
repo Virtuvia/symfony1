@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
+require_once(dirname(__FILE__) . '/../../bootstrap/unit.php');
 
 $t = new lime_test(1);
 
@@ -17,5 +17,5 @@ $dom->validateOnParse = true;
 
 // ->render()
 $t->diag('->render()');
-$w = new sfWidgetFormSelectMany(array('choices' => array('foo' => 'bar', 'foobar' => 'foo')));
+$w = new sfWidgetFormSelectMany(['choices' => ['foo' => 'bar', 'foobar' => 'foo']]);
 $t->is($w->getOption('multiple'), true, '__construct() creates a multiple select tag');

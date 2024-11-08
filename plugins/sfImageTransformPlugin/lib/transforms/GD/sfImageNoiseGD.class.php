@@ -22,114 +22,105 @@
  */
 class sfImageNoiseGD extends sfImageTransformAbstract
 {
-  /**
-   * Noise density.
-  */
-  protected $density = 20;
+    /**
+     * Noise density.
+    */
+    protected $density = 20;
 
-  /**
-   * Construct an sfImageDuotone object.
-   *
-   * @param integer
-   */
-  public function __construct($density=20)
-  {
-    $this->setDensity($density);
-  }
-
-  /**
-   * Sets the density
-   *
-   * @param integer
-   * @return boolean
-   */
-  public function setDensity($density)
-  {
-    if (is_numeric($density))
+    /**
+     * Construct an sfImageDuotone object.
+     *
+     * @param int
+     */
+    public function __construct($density = 20)
     {
-      $this->density = (int)$density;
-
-      return true;
+        $this->setDensity($density);
     }
 
-    return false;
-  }
-
-  /**
-   * Gets the density
-   *
-   * @return integer
-   */
-  public function getdensity()
-  {
-    return $this->density;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    $resource = $image->getAdapter()->getHolder();
-
-    $resourcex = imagesx($resource);
-    $resourcey = imagesy($resource);
-
-    for ($x = 0; $x < $resourcex; ++$x)
+    /**
+     * Sets the density
+     *
+     * @param int
+     * @return bool
+     */
+    public function setDensity($density)
     {
-      for ($y = 0; $y < $resourcey; ++$y)
-      {
-        $rgb = imagecolorat($resource, $x, $y);
-        $red = ($rgb >> 16) & 0xFF;
-        $green = ($rgb >> 8) & 0xFF;
-        $blue = $rgb & 0xFF;
-        $red = (int)(($red+$green+$blue)/3);
-        $modifier = rand(-$this->density,$this->density);
-        $red += $modifier;
-        $green += $modifier;
-        $blue += $modifier;
+        if (is_numeric($density)) {
+            $this->density = (int) $density;
 
-        // Max value is 255
-        // Min value is 0
-        if ($red > 255)
-        {
-          $red = 255;
+            return true;
         }
 
-        if ($green > 255)
-        {
-          $green = 255;
-        }
-
-        if ($blue > 255)
-        {
-          $blue = 255;
-        }
-
-        if ($red < 0)
-        {
-          $red = 0;
-        }
-
-        if ($green < 0)
-        {
-          $green = 0;
-        }
-
-        if ($blue < 0)
-        {
-          $blue = 0;
-        }
-
-        $newcol = imagecolorallocate ($resource, $red,$green,$blue);
-        imagesetpixel ($resource, $x, $y, $newcol);
-
-      }
+        return false;
     }
 
-    return $image;
-  }
+    /**
+     * Gets the density
+     *
+     * @return int
+     */
+    public function getdensity()
+    {
+        return $this->density;
+    }
+
+    /**
+     * Apply the transform to the sfImage object.
+     *
+     * @param sfImage
+     * @return sfImage
+     */
+    protected function transform(sfImage $image)
+    {
+        $resource = $image->getAdapter()->getHolder();
+
+        $resourcex = imagesx($resource);
+        $resourcey = imagesy($resource);
+
+        for ($x = 0; $x < $resourcex; ++$x) {
+            for ($y = 0; $y < $resourcey; ++$y) {
+                $rgb = imagecolorat($resource, $x, $y);
+                $red = ($rgb >> 16) & 0xFF;
+                $green = ($rgb >> 8) & 0xFF;
+                $blue = $rgb & 0xFF;
+                $red = (int) (($red + $green + $blue) / 3);
+                $modifier = rand(-$this->density, $this->density);
+                $red += $modifier;
+                $green += $modifier;
+                $blue += $modifier;
+
+                // Max value is 255
+                // Min value is 0
+                if ($red > 255) {
+                    $red = 255;
+                }
+
+                if ($green > 255) {
+                    $green = 255;
+                }
+
+                if ($blue > 255) {
+                    $blue = 255;
+                }
+
+                if ($red < 0) {
+                    $red = 0;
+                }
+
+                if ($green < 0) {
+                    $green = 0;
+                }
+
+                if ($blue < 0) {
+                    $blue = 0;
+                }
+
+                $newcol = imagecolorallocate($resource, $red, $green, $blue);
+                imagesetpixel($resource, $x, $y, $newcol);
+
+            }
+        }
+
+        return $image;
+    }
 }

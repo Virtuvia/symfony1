@@ -3,12 +3,12 @@
 /*
  * This file is part of the symfony package.
  * (c) 2004-2006 Fabien Potencier <fabien.potencier@symfony-project.com>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
+require_once(dirname(__FILE__) . '/../../bootstrap/unit.php');
 
 $t = new lime_test(9);
 
@@ -22,8 +22,8 @@ unlink($temp2);
 mkdir($temp2);
 
 // copy fixtures to tmp directory
-copy(dirname(__FILE__).'/fixtures/messages.fr.xml', $temp1.'/messages.fr.xml');
-copy(dirname(__FILE__).'/fixtures/messages_bis.fr.xml', $temp2.'/messages.fr.xml');
+copy(dirname(__FILE__) . '/fixtures/messages.fr.xml', $temp1 . '/messages.fr.xml');
+copy(dirname(__FILE__) . '/fixtures/messages_bis.fr.xml', $temp2 . '/messages.fr.xml');
 
 $source = get_source($temp1, $temp2);
 $source->setCulture('fr_FR');
@@ -75,8 +75,8 @@ rmdir($temp2);
 
 function get_source($temp1, $temp2)
 {
-  $source1 = sfMessageSource::factory('XLIFF', $temp1);
-  $source2 = sfMessageSource::factory('XLIFF', $temp2);
+    $source1 = sfMessageSource::factory('XLIFF', $temp1);
+    $source2 = sfMessageSource::factory('XLIFF', $temp2);
 
-  return sfMessageSource::factory('Aggregate', array($source1, $source2));
+    return sfMessageSource::factory('Aggregate', [$source1, $source2]);
 }

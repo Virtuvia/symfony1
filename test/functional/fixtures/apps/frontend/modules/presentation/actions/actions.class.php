@@ -10,13 +10,13 @@
  */
 class presentationActions extends sfActions
 {
-  public function executeIndex()
-  {
-    $this->foo = $this->getController()->getPresentationFor('presentation', 'foo');
-  }
+    public function executeIndex()
+    {
+        $this->foo = $this->getController()->getPresentationFor('presentation', 'foo');
+    }
 
-  public function executeFoo()
-  {
-    $this->setLayout(false);
-  }
+    public function executeFoo()
+    {
+        $this->setLayout(false);
+    }
 }

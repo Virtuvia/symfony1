@@ -18,345 +18,326 @@
  */
 class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, Iterator, Countable
 {
-  protected
-    $errors       = array(),
-    $globalErrors = array(),
-    $namedErrors  = array(),
-    $count        = 0;
+    protected $errors       = [];
+    protected $globalErrors = [];
+    protected $namedErrors  = [];
+    protected $count        = 0;
 
-  /**
-   * Constructor.
-   *
-   * @param sfValidatorBase $validator  An sfValidatorBase instance
-   * @param array           $errors     An array of errors
-   */
-  public function __construct(sfValidatorBase $validator, $errors = array())
-  {
-    $this->validator = $validator;
-    $this->arguments = array();
-
-    // override default exception message and code
-    $this->codeString = '';
-    $this->code = 0;
-    $this->message = '';
-
-    $this->addErrors($errors);
-  }
-
-  /**
-   * Adds an error.
-   *
-   * This method merges sfValidatorErrorSchema errors with the current instance.
-   *
-   * @param sfValidatorError $error  An sfValidatorError instance
-   * @param string           $name   The error name
-   *
-   * @return sfValidatorErrorSchema The current error schema instance
-   */
-  public function addError(sfValidatorError $error, $name = null)
-  {
-    if (null === $name || is_integer($name))
+    /**
+     * Constructor.
+     *
+     * @param sfValidatorBase $validator  An sfValidatorBase instance
+     * @param array           $errors     An array of errors
+     */
+    public function __construct(sfValidatorBase $validator, $errors = [])
     {
-      if ($error instanceof sfValidatorErrorSchema)
-      {
-        $this->addErrors($error);
-      }
-      else
-      {
-        $this->globalErrors[] = $error;
-        $this->errors[] = $error;
-      }
+        $this->validator = $validator;
+        $this->arguments = [];
+
+        // override default exception message and code
+        $this->codeString = '';
+        $this->code = 0;
+        $this->message = '';
+
+        $this->addErrors($errors);
     }
-    else
-    {
-      if (!isset($this->namedErrors[$name]) && !$error instanceof sfValidatorErrorSchema)
-      {
-        $this->namedErrors[$name] = $error;
-        $this->errors[$name] = $error;
-      }
-      else
-      {
-        if (!isset($this->namedErrors[$name]))
-        {
-          $this->namedErrors[$name] = new sfValidatorErrorSchema($error->getValidator());
-          $this->errors[$name] = new sfValidatorErrorSchema($error->getValidator());
-        }
-        else if (!$this->namedErrors[$name] instanceof sfValidatorErrorSchema)
-        {
-          $current = $this->namedErrors[$name];
-          $this->namedErrors[$name] = new sfValidatorErrorSchema($current->getValidator());
-          $this->errors[$name] = new sfValidatorErrorSchema($current->getValidator());
 
-          $method = $current instanceof sfValidatorErrorSchema ? 'addErrors' : 'addError';
-          $this->namedErrors[$name]->$method($current);
-          $this->errors[$name]->$method($current);
+    /**
+     * Adds an error.
+     *
+     * This method merges sfValidatorErrorSchema errors with the current instance.
+     *
+     * @param sfValidatorError $error  An sfValidatorError instance
+     * @param string           $name   The error name
+     *
+     * @return sfValidatorErrorSchema The current error schema instance
+     */
+    public function addError(sfValidatorError $error, $name = null)
+    {
+        if (null === $name || is_integer($name)) {
+            if ($error instanceof sfValidatorErrorSchema) {
+                $this->addErrors($error);
+            } else {
+                $this->globalErrors[] = $error;
+                $this->errors[] = $error;
+            }
+        } else {
+            if (!isset($this->namedErrors[$name]) && !$error instanceof sfValidatorErrorSchema) {
+                $this->namedErrors[$name] = $error;
+                $this->errors[$name] = $error;
+            } else {
+                if (!isset($this->namedErrors[$name])) {
+                    $this->namedErrors[$name] = new sfValidatorErrorSchema($error->getValidator());
+                    $this->errors[$name] = new sfValidatorErrorSchema($error->getValidator());
+                } elseif (!$this->namedErrors[$name] instanceof sfValidatorErrorSchema) {
+                    $current = $this->namedErrors[$name];
+                    $this->namedErrors[$name] = new sfValidatorErrorSchema($current->getValidator());
+                    $this->errors[$name] = new sfValidatorErrorSchema($current->getValidator());
+
+                    $method = $current instanceof sfValidatorErrorSchema ? 'addErrors' : 'addError';
+                    $this->namedErrors[$name]->$method($current);
+                    $this->errors[$name]->$method($current);
+                }
+
+                $method = $error instanceof sfValidatorErrorSchema ? 'addErrors' : 'addError';
+                $this->namedErrors[$name]->$method($error);
+                $this->errors[$name]->$method($error);
+            }
         }
 
-        $method = $error instanceof sfValidatorErrorSchema ? 'addErrors' : 'addError';
-        $this->namedErrors[$name]->$method($error);
-        $this->errors[$name]->$method($error);
-      }
+        $this->updateCode();
+        $this->updateMessage();
+
+        return $this;
     }
 
-    $this->updateCode();
-    $this->updateMessage();
-
-    return $this;
-  }
-
-  /**
-   * Adds an array of errors.
-   *
-   * @param array $errors  An array of sfValidatorError instances
-   *
-   * @return sfValidatorErrorSchema The current error schema instance
-   */
-  public function addErrors($errors)
-  {
-    if ($errors instanceof sfValidatorErrorSchema)
+    /**
+     * Adds an array of errors.
+     *
+     * @param array $errors  An array of sfValidatorError instances
+     *
+     * @return sfValidatorErrorSchema The current error schema instance
+     */
+    public function addErrors($errors)
     {
-      foreach ($errors->getGlobalErrors() as $error)
-      {
-        $this->addError($error);
-      }
+        if ($errors instanceof sfValidatorErrorSchema) {
+            foreach ($errors->getGlobalErrors() as $error) {
+                $this->addError($error);
+            }
 
-      foreach ($errors->getNamedErrors() as $name => $error)
-      {
-        $this->addError($error, (string) $name);
-      }
+            foreach ($errors->getNamedErrors() as $name => $error) {
+                $this->addError($error, (string) $name);
+            }
+        } else {
+            foreach ($errors as $name => $error) {
+                $this->addError($error, $name);
+            }
+        }
+
+        return $this;
     }
-    else
+
+    /**
+     * Gets an array of all errors
+     *
+     * @return array An array of sfValidatorError instances
+     */
+    public function getErrors()
     {
-      foreach ($errors as $name => $error)
-      {
-        $this->addError($error, $name);
-      }
+        return $this->errors;
     }
 
-    return $this;
-  }
+    /**
+     * Gets an array of all named errors
+     *
+     * @return array An array of sfValidatorError instances
+     */
+    public function getNamedErrors()
+    {
+        return $this->namedErrors;
+    }
 
-  /**
-   * Gets an array of all errors
-   *
-   * @return array An array of sfValidatorError instances
-   */
-  public function getErrors()
-  {
-    return $this->errors;
-  }
+    /**
+     * Gets an array of all global errors
+     *
+     * @return array An array of sfValidatorError instances
+     */
+    public function getGlobalErrors()
+    {
+        return $this->globalErrors;
+    }
 
-  /**
-   * Gets an array of all named errors
-   *
-   * @return array An array of sfValidatorError instances
-   */
-  public function getNamedErrors()
-  {
-    return $this->namedErrors;
-  }
+    /**
+     * @see sfValidatorError
+     */
+    public function getValue()
+    {
+        return null;
+    }
 
-  /**
-   * Gets an array of all global errors
-   *
-   * @return array An array of sfValidatorError instances
-   */
-  public function getGlobalErrors()
-  {
-    return $this->globalErrors;
-  }
+    /**
+     * @see sfValidatorError
+     */
+    public function getArguments($raw = false)
+    {
+        return [];
+    }
 
-  /**
-   * @see sfValidatorError
-   */
-  public function getValue()
-  {
-    return null;
-  }
+    /**
+     * @see sfValidatorError
+     */
+    public function getMessageFormat()
+    {
+        return '';
+    }
 
-  /**
-   * @see sfValidatorError
-   */
-  public function getArguments($raw = false)
-  {
-    return array();
-  }
+    /**
+     * Returns the number of errors (implements the Countable interface).
+     *
+     * @return int The number of array
+     */
+    public function count(): int
+    {
+        return count($this->errors);
+    }
 
-  /**
-   * @see sfValidatorError
-   */
-  public function getMessageFormat()
-  {
-    return '';
-  }
+    /**
+     * Reset the error array to the beginning (implements the Iterator interface).
+     */
+    public function rewind(): void
+    {
+        reset($this->errors);
 
-  /**
-   * Returns the number of errors (implements the Countable interface).
-   *
-   * @return int The number of array
-   */
-  public function count(): int
-  {
-    return count($this->errors);
-  }
+        $this->count = count($this->errors);
+    }
 
-  /**
-   * Reset the error array to the beginning (implements the Iterator interface).
-   */
-  public function rewind(): void
-  {
-    reset($this->errors);
+    /**
+     * Get the key associated with the current error (implements the Iterator interface).
+     *
+     * @return string The key
+     */
+    #[\ReturnTypeWillChange]
+    public function key()
+    {
+        return key($this->errors);
+    }
 
-    $this->count = count($this->errors);
-  }
+    /**
+     * Returns the current error (implements the Iterator interface).
+     *
+     * @return mixed The escaped value
+     */
+    #[\ReturnTypeWillChange]
+    public function current()
+    {
+        return current($this->errors);
+    }
 
-  /**
-   * Get the key associated with the current error (implements the Iterator interface).
-   *
-   * @return string The key
-   */
-  #[\ReturnTypeWillChange]
-  public function key()
-  {
-    return key($this->errors);
-  }
+    /**
+     * Moves to the next error (implements the Iterator interface).
+     */
+    public function next(): void
+    {
+        next($this->errors);
 
-  /**
-   * Returns the current error (implements the Iterator interface).
-   *
-   * @return mixed The escaped value
-   */
-  #[\ReturnTypeWillChange]
-  public function current()
-  {
-    return current($this->errors);
-  }
+        --$this->count;
+    }
 
-  /**
-   * Moves to the next error (implements the Iterator interface).
-   */
-  public function next(): void
-  {
-    next($this->errors);
+    /**
+     * Returns true if the current error is valid (implements the Iterator interface).
+     *
+     * @return bool The validity of the current element; true if it is valid
+     */
+    public function valid(): bool
+    {
+        return $this->count > 0;
+    }
 
-    --$this->count;
-  }
+    /**
+     * Returns true if the error exists (implements the ArrayAccess interface).
+     *
+     * @param  mixed $offset  The name of the error
+     *
+     * @return bool true if the error exists, false otherwise
+     */
+    public function offsetExists($offset): bool
+    {
+        return isset($this->errors[$offset]);
+    }
 
-  /**
-   * Returns true if the current error is valid (implements the Iterator interface).
-   *
-   * @return boolean The validity of the current element; true if it is valid
-   */
-  public function valid(): bool
-  {
-    return $this->count > 0;
-  }
+    /**
+     * Returns the error associated with the name (implements the ArrayAccess interface).
+     *
+     * @param  mixed $offset  The offset of the value to get
+     *
+     * @return sfValidatorError A sfValidatorError instance
+     */
+    #[\ReturnTypeWillChange]
+    public function offsetGet($offset)
+    {
+        return $this->errors[$offset] ?? null;
+    }
 
-  /**
-   * Returns true if the error exists (implements the ArrayAccess interface).
-   *
-   * @param  mixed $offset  The name of the error
-   *
-   * @return bool true if the error exists, false otherwise
-   */
-  public function offsetExists($offset): bool
-  {
-    return isset($this->errors[$offset]);
-  }
+    /**
+     * Throws an exception saying that values cannot be set (implements the ArrayAccess interface).
+     *
+     * @param mixed $offset  (ignored)
+     * @param mixed $value   (ignored)
+     *
+     * @throws LogicException
+     */
+    public function offsetSet($offset, $value): void
+    {
+        throw new LogicException('Unable update an error.');
+    }
 
-  /**
-   * Returns the error associated with the name (implements the ArrayAccess interface).
-   *
-   * @param  mixed $offset  The offset of the value to get
-   *
-   * @return sfValidatorError A sfValidatorError instance
-   */
-  #[\ReturnTypeWillChange]
-  public function offsetGet($offset)
-  {
-    return $this->errors[$offset] ?? null;
-  }
+    /**
+     * Impossible to call because this is an exception!
+     *
+     * @param mixed $offset  (ignored)
+     */
+    public function offsetUnset($offset): void
+    {
+    }
 
-  /**
-   * Throws an exception saying that values cannot be set (implements the ArrayAccess interface).
-   *
-   * @param mixed $offset  (ignored)
-   * @param mixed $value   (ignored)
-   *
-   * @throws LogicException
-   */
-  public function offsetSet($offset, $value): void
-  {
-    throw new LogicException('Unable update an error.');
-  }
+    /**
+     * Updates the exception error code according to the current errors.
+     */
+    protected function updateCode()
+    {
+        $this->codeString = implode(' ', array_merge(
+            array_map(function (sfValidatorError $e) { return $e->getCodeString(); }, $this->globalErrors),
+            array_map(function ($n, sfValidatorError $e) { return $n . ' [' . $e->getCodeString() . ']'; }, array_keys($this->namedErrors), array_values($this->namedErrors)),
+        ));
+    }
 
-  /**
-   * Impossible to call because this is an exception!
-   *
-   * @param mixed $offset  (ignored)
-   */
-  public function offsetUnset($offset): void
-  {
-  }
+    /**
+     * Updates the exception error message according to the current errors.
+     */
+    protected function updateMessage()
+    {
+        $this->message = implode(' ', array_merge(
+            array_map(function (sfValidatorError $e) { return $e->getMessage(); }, $this->globalErrors),
+            array_map(function ($n, sfValidatorError $e) { return $n . ' [' . $e->getMessage() . ']'; }, array_keys($this->namedErrors), array_values($this->namedErrors)),
+        ));
+    }
 
-  /**
-   * Updates the exception error code according to the current errors.
-   */
-  protected function updateCode()
-  {
-    $this->codeString = implode(' ', array_merge(
-      array_map(function (sfValidatorError $e) { return $e->getCodeString(); }, $this->globalErrors),
-      array_map(function ($n, sfValidatorError $e) { return $n.' ['.$e->getCodeString().']'; }, array_keys($this->namedErrors), array_values($this->namedErrors))
-    ));
-  }
+    /**
+     * Serializes the current instance.
+     *
+     * @return array The instance as a serialized array
+     */
+    public function __serialize(): array
+    {
+        return [
+            $this->validator,
+            $this->arguments,
+            $this->code,
+            $this->codeString,
+            $this->message,
+            $this->errors,
+            $this->globalErrors,
+            $this->namedErrors,
+        ];
+    }
 
-  /**
-   * Updates the exception error message according to the current errors.
-   */
-  protected function updateMessage()
-  {
-    $this->message = implode(' ', array_merge(
-      array_map(function (sfValidatorError $e) { return $e->getMessage(); }, $this->globalErrors),
-      array_map(function ($n, sfValidatorError $e) { return $n.' ['.$e->getMessage().']'; }, array_keys($this->namedErrors), array_values($this->namedErrors))
-    ));
-  }
-
-  /**
-   * Serializes the current instance.
-   *
-   * @return array The instance as a serialized array
-   */
-  public function __serialize(): array
-  {
-    return [
-      $this->validator,
-      $this->arguments,
-      $this->code,
-      $this->codeString,
-      $this->message,
-      $this->errors,
-      $this->globalErrors,
-      $this->namedErrors,
-    ];
-  }
-
-  /**
-   * Unserializes a sfValidatorError instance.
-   *
-   * @param array $data  A serialized sfValidatorError instance
-   *
-   */
-  public function __unserialize(array $data): void
-  {
-    [
-      $this->validator,
-      $this->arguments,
-      $this->code,
-      $this->codeString,
-      $this->message,
-      $this->errors,
-      $this->globalErrors,
-      $this->namedErrors,
-    ] = $data;
-  }
+    /**
+     * Unserializes a sfValidatorError instance.
+     *
+     * @param array $data  A serialized sfValidatorError instance
+     *
+     */
+    public function __unserialize(array $data): void
+    {
+        [
+            $this->validator,
+            $this->arguments,
+            $this->code,
+            $this->codeString,
+            $this->message,
+            $this->errors,
+            $this->globalErrors,
+            $this->namedErrors,
+        ] = $data;
+    }
 }

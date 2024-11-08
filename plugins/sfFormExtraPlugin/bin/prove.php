@@ -20,7 +20,7 @@ require dirname(__DIR__) . '/test/bootstrap.php';
 $h = new lime_harness();
 $h->base_dir = dirname(__DIR__) . '/test';
 $h->register(sfFinder::type('file')->name('*Test.php')->in([
-    $h->base_dir
+    $h->base_dir,
 ]));
 
 $ret = $h->run() ? 0 : 1;

@@ -3,7 +3,7 @@
 /*
  * This file is part of the symfony package.
  * (c) 2004-2006 Fabien Potencier <fabien.potencier@symfony-project.com>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -29,51 +29,44 @@
 */
 function cache($name, $lifeTime = 86400)
 {
-  if (!sfConfig::get('sf_cache'))
-  {
-    return null;
-  }
+    if (!sfConfig::get('sf_cache')) {
+        return null;
+    }
 
-  $cache = sfContext::getInstance()->getViewCacheManager();
+    $cache = sfContext::getInstance()->getViewCacheManager();
 
-  if (sfConfig::get('symfony.cache.started'))
-  {
-    throw new sfCacheException('Cache already started.');
-  }
+    if (sfConfig::get('symfony.cache.started')) {
+        throw new sfCacheException('Cache already started.');
+    }
 
-  $data = $cache->start($name, $lifeTime);
+    $data = $cache->start($name, $lifeTime);
 
-  if (null === $data)
-  {
-    sfConfig::set('symfony.cache.started', true);
-    sfConfig::set('symfony.cache.current_name', $name);
+    if (null === $data) {
+        sfConfig::set('symfony.cache.started', true);
+        sfConfig::set('symfony.cache.current_name', $name);
 
-    return false;
-  }
-  else
-  {
-    echo $data;
+        return false;
+    } else {
+        echo $data;
 
-    return true;
-  }
+        return true;
+    }
 }
 
 function cache_save()
 {
-  if (!sfConfig::get('sf_cache'))
-  {
-    return null;
-  }
+    if (!sfConfig::get('sf_cache')) {
+        return null;
+    }
 
-  if (!sfConfig::get('symfony.cache.started'))
-  {
-    throw new sfCacheException('Cache not started.');
-  }
+    if (!sfConfig::get('symfony.cache.started')) {
+        throw new sfCacheException('Cache not started.');
+    }
 
-  $data = sfContext::getInstance()->getViewCacheManager()->stop(sfConfig::get('symfony.cache.current_name', ''));
+    $data = sfContext::getInstance()->getViewCacheManager()->stop(sfConfig::get('symfony.cache.current_name', ''));
 
-  sfConfig::set('symfony.cache.started', false);
-  sfConfig::set('symfony.cache.current_name', null);
+    sfConfig::set('symfony.cache.started', false);
+    sfConfig::set('symfony.cache.current_name', null);
 
-  echo $data;
+    echo $data;
 }

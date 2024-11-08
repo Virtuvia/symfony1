@@ -22,128 +22,118 @@
  */
 class sfImagePixelBlurGD extends sfImageTransformAbstract
 {
-  /**
-   * The number of pixels used for the blur.
-   * @var integer
-  */
-  protected $blur_pixels = 1;
+    /**
+     * The number of pixels used for the blur.
+     * @var int
+    */
+    protected $blur_pixels = 1;
 
-  /**
-   * Construct an sfImageBlur object.
-   *
-   * @param array integer
-   */
-  public function __construct($blur=1)
-  {
-    $this->setBlur($blur);
-  }
-
-  /**
-   * Set the number of pixels to be read when calculating.
-   *
-   * @param integer
-   * @return boolean
-   */
-  public function setBlur($pixels)
-  {
-    if (is_numeric($pixels))
+    /**
+     * Construct an sfImageBlur object.
+     *
+     * @param array integer
+     */
+    public function __construct($blur = 1)
     {
-      $this->blur_pixels = $pixels;
-
-      return true;
+        $this->setBlur($blur);
     }
 
-    return false;
-  }
-
-  /**
-   * Returns the number of pixels to be read when calculating.
-   *
-   * @return integer
-   */
-  public function getBlur()
-  {
-    return $this->blur_pixels;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @access protected
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    $resource = $image->getAdapter()->getHolder();
-
-    $resourcex = imagesx($resource);
-    $resourcey = imagesy($resource);
-
-    for ($x = 0; $x < $resourcex; ++$x)
+    /**
+     * Set the number of pixels to be read when calculating.
+     *
+     * @param int
+     * @return bool
+     */
+    public function setBlur($pixels)
     {
-      for ($y = 0; $y < $resourcey; ++$y)
-      {
-        $newr = 0;
-        $newg = 0;
-        $newb = 0;
+        if (is_numeric($pixels)) {
+            $this->blur_pixels = $pixels;
 
-        $colours = array();
-        $thiscol = imagecolorat($resource, $x, $y);
-
-        for ($k = $x - $this->blur_pixels; $k <= $x + $this->blur_pixels; ++$k)
-        {
-          for ($l = $y - $this->blur_pixels; $l <= $y + $this->blur_pixels; ++$l)
-          {
-            if ($k < 0)
-            {
-              $colours[] = $thiscol;
-
-              continue;
-            }
-
-            if ($k >= $resourcex)
-            {
-              $colours[] = $thiscol;
-
-              continue;
-            }
-
-            if ($l < 0)
-            {
-              $colours[] = $thiscol;
-
-              continue;
-            }
-
-            if ($l >= $resourcey)
-            {
-              $colours[] = $thiscol;
-
-              continue;
-            }
-
-            $colours[] = imagecolorat($resource, $k, $l);
-          }
+            return true;
         }
 
-        foreach($colours as $colour)
-        {
-          $newr += ($colour >> 16) & 0xFF;
-          $newg += ($colour >> 8) & 0xFF;
-          $newb += $colour & 0xFF;
-        }
-
-        $numelements = count($colours);
-        $newr /= $numelements;
-        $newg /= $numelements;
-        $newb /= $numelements;
-
-        $newcol = imagecolorallocate($resource, $newr, $newg, $newb);
-        imagesetpixel($resource, $x, $y, $newcol);
-      }
+        return false;
     }
 
-    return $image;
-  }
+    /**
+     * Returns the number of pixels to be read when calculating.
+     *
+     * @return int
+     */
+    public function getBlur()
+    {
+        return $this->blur_pixels;
+    }
+
+    /**
+     * Apply the transform to the sfImage object.
+     *
+     * @access protected
+     * @param sfImage
+     * @return sfImage
+     */
+    protected function transform(sfImage $image)
+    {
+        $resource = $image->getAdapter()->getHolder();
+
+        $resourcex = imagesx($resource);
+        $resourcey = imagesy($resource);
+
+        for ($x = 0; $x < $resourcex; ++$x) {
+            for ($y = 0; $y < $resourcey; ++$y) {
+                $newr = 0;
+                $newg = 0;
+                $newb = 0;
+
+                $colours = [];
+                $thiscol = imagecolorat($resource, $x, $y);
+
+                for ($k = $x - $this->blur_pixels; $k <= $x + $this->blur_pixels; ++$k) {
+                    for ($l = $y - $this->blur_pixels; $l <= $y + $this->blur_pixels; ++$l) {
+                        if ($k < 0) {
+                            $colours[] = $thiscol;
+
+                            continue;
+                        }
+
+                        if ($k >= $resourcex) {
+                            $colours[] = $thiscol;
+
+                            continue;
+                        }
+
+                        if ($l < 0) {
+                            $colours[] = $thiscol;
+
+                            continue;
+                        }
+
+                        if ($l >= $resourcey) {
+                            $colours[] = $thiscol;
+
+                            continue;
+                        }
+
+                        $colours[] = imagecolorat($resource, $k, $l);
+                    }
+                }
+
+                foreach ($colours as $colour) {
+                    $newr += ($colour >> 16) & 0xFF;
+                    $newg += ($colour >> 8) & 0xFF;
+                    $newb += $colour & 0xFF;
+                }
+
+                $numelements = count($colours);
+                $newr /= $numelements;
+                $newg /= $numelements;
+                $newb /= $numelements;
+
+                $newcol = imagecolorallocate($resource, $newr, $newg, $newb);
+                imagesetpixel($resource, $x, $y, $newcol);
+            }
+        }
+
+        return $image;
+    }
 }

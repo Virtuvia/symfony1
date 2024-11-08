@@ -21,16 +21,15 @@
  */
 class sfImageTransformExtraPluginConfiguration extends sfPluginConfiguration
 {
-  const VERSION = '1.0.12';
+    public const VERSION = '1.0.12';
 
-  /**
-   * @see sfPluginConfiguration
-   */
-  public function initialize()
-  {
-    if($this->configuration instanceof sfApplicationConfiguration)
+    /**
+     * @see sfPluginConfiguration
+     */
+    public function initialize()
     {
-      require_once($this->configuration->getConfigCache()->checkConfig('config/thumbnailing.yml'));
+        if ($this->configuration instanceof sfApplicationConfiguration) {
+            require_once($this->configuration->getConfigCache()->checkConfig('config/thumbnailing.yml'));
+        }
     }
-  }
 }

@@ -17,18 +17,17 @@
  */
 class sfGuardValidatorUsernameOrEmail extends sfValidatorBase
 {
-  protected function doClean($value)
-  {
-    $clean = (string) $value;
-
-    // user exists?
-    $user = Doctrine_Core::getTable('sfGuardUser')
-      ->retrieveByUsernameOrEmailAddress($clean);
-    if ($user)
+    protected function doClean($value)
     {
-      return $value;
-    }
+        $clean = (string) $value;
 
-    throw new sfValidatorError($this, 'invalid', array('value' => $value));
-  }
+        // user exists?
+        $user = Doctrine_Core::getTable('sfGuardUser')
+          ->retrieveByUsernameOrEmailAddress($clean);
+        if ($user) {
+            return $value;
+        }
+
+        throw new sfValidatorError($this, 'invalid', ['value' => $value]);
+    }
 }

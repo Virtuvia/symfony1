@@ -10,16 +10,16 @@
  */
 class BasesfGuardRequestForgotPasswordForm extends BaseForm
 {
-  public function setup()
-  {
-    $this->widgetSchema['email_address'] = new sfWidgetFormInputText();
-    $this->validatorSchema['email_address'] = new sfGuardValidatorUsernameOrEmail(
-      array('trim' => true),
-      array('required' => 'Your username or e-mail address is required.', 'invalid' => 'Username or e-mail address not found please try again.')
-    );
+    public function setup()
+    {
+        $this->widgetSchema['email_address'] = new sfWidgetFormInputText();
+        $this->validatorSchema['email_address'] = new sfGuardValidatorUsernameOrEmail(
+            ['trim' => true],
+            ['required' => 'Your username or e-mail address is required.', 'invalid' => 'Username or e-mail address not found please try again.'],
+        );
 
-    $this->widgetSchema->setNameFormat('forgot_password[%s]');
+        $this->widgetSchema->setNameFormat('forgot_password[%s]');
 
-    parent::setup();
-  }
+        parent::setup();
+    }
 }

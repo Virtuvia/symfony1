@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/../../../test/bootstrap/unit.php');
+require_once(dirname(__FILE__) . '/../../../test/bootstrap/unit.php');
 
-require_once(dirname(__FILE__).'/../../../lib/helper/TagHelper.php');
-require_once(dirname(__FILE__).'/../../../lib/helper/TextHelper.php');
+require_once(dirname(__FILE__) . '/../../../lib/helper/TagHelper.php');
+require_once(dirname(__FILE__) . '/../../../lib/helper/TextHelper.php');
 
 $t = new lime_test(39);
 
@@ -22,49 +22,46 @@ $t->is(truncate_text(''), '', 'text_truncate() does nothing on an empty string')
 $t->is(truncate_text('Test'), 'Test', 'text_truncate() truncates to 30 characters by default');
 
 $text = str_repeat('A', 35);
-$truncated = str_repeat('A', 27).'...';
+$truncated = str_repeat('A', 27) . '...';
 $t->is(truncate_text($text), $truncated, 'text_truncate() adds ... to truncated text');
 
 $text = str_repeat('A', 35);
-$truncated = str_repeat('A', 22).'...';
+$truncated = str_repeat('A', 22) . '...';
 $t->is(truncate_text($text, 25), $truncated, 'text_truncate() takes the max length as its second argument');
 
 $text = str_repeat('A', 35);
-$truncated = str_repeat('A', 21).'BBBB';
+$truncated = str_repeat('A', 21) . 'BBBB';
 $t->is(truncate_text($text, 25, 'BBBB'), $truncated, 'text_truncate() takes the ... text as its third argument');
 
-$text = str_repeat('A', 10).str_repeat(' ', 10).str_repeat('A', 10);
-$truncated_true = str_repeat('A', 10).'...';
-$truncated_false = str_repeat('A', 10).str_repeat(' ', 2).'...';
+$text = str_repeat('A', 10) . str_repeat(' ', 10) . str_repeat('A', 10);
+$truncated_true = str_repeat('A', 10) . '...';
+$truncated_false = str_repeat('A', 10) . str_repeat(' ', 2) . '...';
 $t->is(truncate_text($text, 15, '...', false), $truncated_false, 'text_truncate() accepts a truncate lastspace boolean as its fourth argument');
 $t->is(truncate_text($text, 15, '...', true), $truncated_true, 'text_truncate() accepts a truncate lastspace boolean as its fourth argument');
 
-if(extension_loaded('mbstring'))
-{
-  $oldEncoding = mb_internal_encoding();
-  $t->is(truncate_text('のビヘイビアにパラメーターを渡すことで特定のモデルでのフォーム生成を無効にできます', 11), 'のビヘイビアにパ...', 'text_truncate() handles unicode characters using mbstring if available');
-  $t->is(mb_internal_encoding(), $oldEncoding, 'text_truncate() sets back the internal encoding in case it changes it');
-}
-else
-{
-  $t->skip('mbstring extension is not enabled', 2);
+if (extension_loaded('mbstring')) {
+    $oldEncoding = mb_internal_encoding();
+    $t->is(truncate_text('のビヘイビアにパラメーターを渡すことで特定のモデルでのフォーム生成を無効にできます', 11), 'のビヘイビアにパ...', 'text_truncate() handles unicode characters using mbstring if available');
+    $t->is(mb_internal_encoding(), $oldEncoding, 'text_truncate() sets back the internal encoding in case it changes it');
+} else {
+    $t->skip('mbstring extension is not enabled', 2);
 }
 
 // highlight_text()
 $t->diag('highlight_text()');
 $t->is(highlight_text("This is a beautiful morning", "beautiful"),
-  "This is a <strong class=\"highlight\">beautiful</strong> morning",
-  'text_highlighter() highlights a word given as its second argument'
+    "This is a <strong class=\"highlight\">beautiful</strong> morning",
+    'text_highlighter() highlights a word given as its second argument',
 );
 
 $t->is(highlight_text("This is a beautiful morning, but also a beautiful day", "beautiful"),
-  "This is a <strong class=\"highlight\">beautiful</strong> morning, but also a <strong class=\"highlight\">beautiful</strong> day",
-  'text_highlighter() highlights all occurrences of a word given as its second argument'
+    "This is a <strong class=\"highlight\">beautiful</strong> morning, but also a <strong class=\"highlight\">beautiful</strong> day",
+    'text_highlighter() highlights all occurrences of a word given as its second argument',
 );
 
 $t->is(highlight_text("This is a beautiful morning, but also a beautiful day", "beautiful", '<b>\\1</b>'),
-  "This is a <b>beautiful</b> morning, but also a <b>beautiful</b> day",
-  'text_highlighter() takes a pattern as its third argument'
+    "This is a <b>beautiful</b> morning, but also a <b>beautiful</b> day",
+    'text_highlighter() takes a pattern as its third argument',
 );
 
 $t->is(highlight_text('', 'beautiful'), '', 'text_highlighter() returns an empty string if input is empty');

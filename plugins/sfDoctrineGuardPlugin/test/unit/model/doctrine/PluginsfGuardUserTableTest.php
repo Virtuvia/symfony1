@@ -10,7 +10,7 @@ $t = new lime_test(8);
 
 $table = Doctrine_Core::getTable('sfGuardUser');
 $users = $table->createQuery()
-  ->whereIn('username', array('inactive_user', 'active_user'))
+  ->whereIn('username', ['inactive_user', 'active_user'])
   ->execute();
 $users->delete();
 
@@ -38,15 +38,12 @@ $t->isa_ok($table->retrieveByUsername('active_user'), 'sfGuardUser', '->retrieve
 $t->is($table->retrieveByUsername('active_user', false), null, '->retrieveByUsername() returns "null" if user is active and second parameter is false');
 $t->isa_ok($table->retrieveByUsername('active_user'), 'sfGuardUser', '->retrieveByUsername() can be called non-statically');
 
-try
-{
-  $table->retrieveByUsername(null);
-  $t->pass('->retrieveByUsername() does not throw an exception if username is null');
-}
-catch (Exception $e)
-{
-  $t->diag($e->getMessage());
-  $t->fail('->retrieveByUsername() does not throw an exception if username is null');
+try {
+    $table->retrieveByUsername(null);
+    $t->pass('->retrieveByUsername() does not throw an exception if username is null');
+} catch (Exception $e) {
+    $t->diag($e->getMessage());
+    $t->fail('->retrieveByUsername() does not throw an exception if username is null');
 }
 
 $t->isa_ok(\Doctrine_Core::getTable(\sfGuardUser::class)->retrieveByUsername('active_user'), \sfGuardUser::class, '->retrieveByUsername() can be called statically (BC)');

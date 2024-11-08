@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__).'/../lib/BasesfGuardRegisterActions.class.php';
+require_once dirname(__FILE__) . '/../lib/BasesfGuardRegisterActions.class.php';
 
 /**
  * sfGuardRegister actions.

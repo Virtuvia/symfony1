@@ -15,6 +15,6 @@ function symfony1_count($value)
     if (is_countable($value)) {
         return count($value);
     }
-    
+
     return $value !== null ? 1 : 0;
 }

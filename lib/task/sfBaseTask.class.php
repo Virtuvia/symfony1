@@ -18,271 +18,244 @@
  */
 abstract class sfBaseTask extends sfCommandApplicationTask
 {
-  protected
-    $configuration = null,
-    $pluginManager = null;
+    protected $configuration = null;
+    protected $pluginManager = null;
 
-  /**
-   * @see sfTask
-   */
-  protected function doRun(sfCommandManager $commandManager, $options)
-  {
-    $event = $this->dispatcher->filter(new sfEvent($this, 'command.filter_options', array('command_manager' => $commandManager)), $options);
-    $options = $event->getReturnValue();
-
-    $this->process($commandManager, $options);
-
-    $event = new sfEvent($this, 'command.pre_command', array('arguments' => $commandManager->getArgumentValues(), 'options' => $commandManager->getOptionValues()));
-    $this->dispatcher->notifyUntil($event);
-    if ($event->isProcessed())
+    /**
+     * @see sfTask
+     */
+    protected function doRun(sfCommandManager $commandManager, $options)
     {
-      return $event->getReturnValue();
-    }
+        $event = $this->dispatcher->filter(new sfEvent($this, 'command.filter_options', ['command_manager' => $commandManager]), $options);
+        $options = $event->getReturnValue();
 
-    $this->checkProjectExists();
+        $this->process($commandManager, $options);
 
-    $requiresApplication = $commandManager->getArgumentSet()->hasArgument('application') || $commandManager->getOptionSet()->hasOption('application');
-    if (null === $this->configuration || ($requiresApplication && !$this->configuration instanceof sfApplicationConfiguration))
-    {
-      $application = $commandManager->getArgumentSet()->hasArgument('application') ? $commandManager->getArgumentValue('application') : ($commandManager->getOptionSet()->hasOption('application') ? $commandManager->getOptionValue('application') : null);
-      $env = $commandManager->getOptionSet()->hasOption('env') ? $commandManager->getOptionValue('env') : 'test';
-
-      if (true === $application)
-      {
-        $application = $this->getFirstApplication();
-
-        if ($commandManager->getOptionSet()->hasOption('application'))
-        {
-          $commandManager->setOption($commandManager->getOptionSet()->getOption('application'), $application);
+        $event = new sfEvent($this, 'command.pre_command', ['arguments' => $commandManager->getArgumentValues(), 'options' => $commandManager->getOptionValues()]);
+        $this->dispatcher->notifyUntil($event);
+        if ($event->isProcessed()) {
+            return $event->getReturnValue();
         }
-      }
 
-      $this->configuration = $this->createConfiguration($application, $env);
+        $this->checkProjectExists();
+
+        $requiresApplication = $commandManager->getArgumentSet()->hasArgument('application') || $commandManager->getOptionSet()->hasOption('application');
+        if (null === $this->configuration || ($requiresApplication && !$this->configuration instanceof sfApplicationConfiguration)) {
+            $application = $commandManager->getArgumentSet()->hasArgument('application') ? $commandManager->getArgumentValue('application') : ($commandManager->getOptionSet()->hasOption('application') ? $commandManager->getOptionValue('application') : null);
+            $env = $commandManager->getOptionSet()->hasOption('env') ? $commandManager->getOptionValue('env') : 'test';
+
+            if (true === $application) {
+                $application = $this->getFirstApplication();
+
+                if ($commandManager->getOptionSet()->hasOption('application')) {
+                    $commandManager->setOption($commandManager->getOptionSet()->getOption('application'), $application);
+                }
+            }
+
+            $this->configuration = $this->createConfiguration($application, $env);
+        }
+
+        if (null !== $this->commandApplication && !$this->commandApplication->withTrace()) {
+            sfConfig::set('sf_logging_enabled', false);
+        }
+
+        $ret = $this->execute($commandManager->getArgumentValues(), $commandManager->getOptionValues());
+
+        $this->dispatcher->notify(new sfEvent($this, 'command.post_command'));
+
+        return $ret;
     }
 
-    if (null !== $this->commandApplication && !$this->commandApplication->withTrace())
+    /**
+     * Sets the current task's configuration.
+     *
+     * @param sfProjectConfiguration $configuration
+     */
+    public function setConfiguration(sfProjectConfiguration $configuration = null)
     {
-      sfConfig::set('sf_logging_enabled', false);
+        $this->configuration = $configuration;
     }
 
-    $ret = $this->execute($commandManager->getArgumentValues(), $commandManager->getOptionValues());
-
-    $this->dispatcher->notify(new sfEvent($this, 'command.post_command'));
-
-    return $ret;
-  }
-
-  /**
-   * Sets the current task's configuration.
-   *
-   * @param sfProjectConfiguration $configuration
-   */
-  public function setConfiguration(sfProjectConfiguration $configuration = null)
-  {
-    $this->configuration = $configuration;
-  }
-
-  /**
-   * Returns the filesystem instance.
-   *
-   * @return sfFilesystem A sfFilesystem instance
-   */
-  public function getFilesystem()
-  {
-    if (!isset($this->filesystem))
+    /**
+     * Returns the filesystem instance.
+     *
+     * @return sfFilesystem A sfFilesystem instance
+     */
+    public function getFilesystem()
     {
-      if (null === $this->commandApplication || $this->commandApplication->isVerbose())
-      {
-        $this->filesystem = new sfFilesystem($this->dispatcher, $this->formatter);
-      }
-      else
-      {
-        $this->filesystem = new sfFilesystem();
-      }
+        if (!isset($this->filesystem)) {
+            if (null === $this->commandApplication || $this->commandApplication->isVerbose()) {
+                $this->filesystem = new sfFilesystem($this->dispatcher, $this->formatter);
+            } else {
+                $this->filesystem = new sfFilesystem();
+            }
+        }
+
+        return $this->filesystem;
     }
 
-    return $this->filesystem;
-  }
-
-  /**
-   * Checks if the current directory is a symfony project directory.
-   *
-   * @return true if the current directory is a symfony project directory, false otherwise
-   */
-  public function checkProjectExists()
-  {
-    if (!file_exists('symfony'))
+    /**
+     * Checks if the current directory is a symfony project directory.
+     *
+     * @return true if the current directory is a symfony project directory, false otherwise
+     */
+    public function checkProjectExists()
     {
-      throw new sfException('You must be in a symfony project directory.');
+        if (!file_exists('symfony')) {
+            throw new sfException('You must be in a symfony project directory.');
+        }
     }
-  }
 
-  /**
-   * Checks if an application exists.
-   *
-   * @param  string $app  The application name
-   *
-   * @return bool true if the application exists, false otherwise
-   */
-  public function checkAppExists($app)
-  {
-    if (!is_dir(sfConfig::get('sf_apps_dir').'/'.$app))
+    /**
+     * Checks if an application exists.
+     *
+     * @param  string $app  The application name
+     *
+     * @return bool true if the application exists, false otherwise
+     */
+    public function checkAppExists($app)
     {
-      throw new sfException(sprintf('Application "%s" does not exist', $app));
+        if (!is_dir(sfConfig::get('sf_apps_dir') . '/' . $app)) {
+            throw new sfException(sprintf('Application "%s" does not exist', $app));
+        }
     }
-  }
 
-  /**
-   * Checks if a module exists.
-   *
-   * @param  string $app     The application name
-   * @param  string $module  The module name
-   *
-   * @return bool true if the module exists, false otherwise
-   */
-  public function checkModuleExists($app, $module)
-  {
-    if (!is_dir(sfConfig::get('sf_apps_dir').'/'.$app.'/modules/'.$module))
+    /**
+     * Checks if a module exists.
+     *
+     * @param  string $app     The application name
+     * @param  string $module  The module name
+     *
+     * @return bool true if the module exists, false otherwise
+     */
+    public function checkModuleExists($app, $module)
     {
-      throw new sfException(sprintf('Module "%s/%s" does not exist.', $app, $module));
+        if (!is_dir(sfConfig::get('sf_apps_dir') . '/' . $app . '/modules/' . $module)) {
+            throw new sfException(sprintf('Module "%s/%s" does not exist.', $app, $module));
+        }
     }
-  }
 
-  /**
-   * Creates a configuration object.
-   *
-   * @param string  $application The application name
-   * @param string  $env         The environment name
-   *
-   * @return sfProjectConfiguration A sfProjectConfiguration instance
-   */
-  protected function createConfiguration($application, $env)
-  {
-    if (null !== $application)
+    /**
+     * Creates a configuration object.
+     *
+     * @param string  $application The application name
+     * @param string  $env         The environment name
+     *
+     * @return sfProjectConfiguration A sfProjectConfiguration instance
+     */
+    protected function createConfiguration($application, $env)
     {
-      $this->checkAppExists($application);
+        if (null !== $application) {
+            $this->checkAppExists($application);
 
-      require_once sfConfig::get('sf_config_dir').'/ProjectConfiguration.class.php';
+            require_once sfConfig::get('sf_config_dir') . '/ProjectConfiguration.class.php';
 
-      $configuration = ProjectConfiguration::getApplicationConfiguration($application, $env, true, null, $this->dispatcher);
+            $configuration = ProjectConfiguration::getApplicationConfiguration($application, $env, true, null, $this->dispatcher);
+        } else {
+            if (file_exists(sfConfig::get('sf_config_dir') . '/ProjectConfiguration.class.php')) {
+                require_once sfConfig::get('sf_config_dir') . '/ProjectConfiguration.class.php';
+                $configuration = new ProjectConfiguration(null, $this->dispatcher);
+            } else {
+                $configuration = new sfProjectConfiguration(getcwd(), $this->dispatcher);
+            }
+
+            if (null !== $env) {
+                sfConfig::set('sf_environment', $env);
+            }
+        }
+
+        return $configuration;
     }
-    else
+
+    /**
+     * Returns the first application in apps.
+     *
+     * @return string The Application name
+     */
+    protected function getFirstApplication()
     {
-      if (file_exists(sfConfig::get('sf_config_dir').'/ProjectConfiguration.class.php'))
-      {
-        require_once sfConfig::get('sf_config_dir').'/ProjectConfiguration.class.php';
-        $configuration = new ProjectConfiguration(null, $this->dispatcher);
-      }
-      else
-      {
-        $configuration = new sfProjectConfiguration(getcwd(), $this->dispatcher);
-      }
+        if (count($dirs = sfFinder::type('dir')->maxdepth(0)->follow_link()->relative()->in(sfConfig::get('sf_apps_dir')))) {
+            return $dirs[0];
+        }
 
-      if (null !== $env)
-      {
-        sfConfig::set('sf_environment', $env);
-      }
+        return null;
     }
 
-    return $configuration;
-  }
-
-  /**
-   * Returns the first application in apps.
-   *
-   * @return string The Application name
-   */
-  protected function getFirstApplication()
-  {
-    if (count($dirs = sfFinder::type('dir')->maxdepth(0)->follow_link()->relative()->in(sfConfig::get('sf_apps_dir'))))
+    /**
+     * Mirrors a directory structure inside the created project.
+     *
+     * @param string   $dir    The directory to mirror
+     * @param sfFinder $finder A sfFinder instance to use for the mirroring
+     */
+    protected function installDir($dir, $finder = null)
     {
-      return $dirs[0];
+        if (null === $finder) {
+            $finder = sfFinder::type('any')->discard('.sf');
+        }
+
+        $this->getFilesystem()->mirror($dir, sfConfig::get('sf_root_dir'), $finder);
     }
 
-    return null;
-  }
-
-  /**
-   * Mirrors a directory structure inside the created project.
-   *
-   * @param string   $dir    The directory to mirror
-   * @param sfFinder $finder A sfFinder instance to use for the mirroring
-   */
-  protected function installDir($dir, $finder = null)
-  {
-    if (null === $finder)
+    /**
+     * Replaces tokens in files contained in a given directory.
+     *
+     * If you don't pass a directory, it will replace in the config/ and lib/ directory.
+     *
+     * You can define global tokens by defining the $this->tokens property.
+     *
+     * @param array $dirs   An array of directory where to do the replacement
+     * @param array $tokens An array of tokens to use
+     */
+    protected function replaceTokens($dirs = [], $tokens = [])
     {
-      $finder = sfFinder::type('any')->discard('.sf');
+        if (!$dirs) {
+            $dirs = [sfConfig::get('sf_config_dir'), sfConfig::get('sf_lib_dir')];
+        }
+
+        $tokens = array_merge(isset($this->tokens) ? $this->tokens : [], $tokens);
+
+        $this->getFilesystem()->replaceTokens(sfFinder::type('file')->prune('vendor')->in($dirs), '##', '##', $tokens);
     }
 
-    $this->getFilesystem()->mirror($dir, sfConfig::get('sf_root_dir'), $finder);
-  }
-
-  /**
-   * Replaces tokens in files contained in a given directory.
-   *
-   * If you don't pass a directory, it will replace in the config/ and lib/ directory.
-   *
-   * You can define global tokens by defining the $this->tokens property.
-   *
-   * @param array $dirs   An array of directory where to do the replacement
-   * @param array $tokens An array of tokens to use
-   */
-  protected function replaceTokens($dirs = array(), $tokens = array())
-  {
-    if (!$dirs)
+    /**
+     * Reloads tasks.
+     *
+     * Useful when you install plugins with tasks and if you want to use them with the runTask() method.
+     */
+    protected function reloadTasks()
     {
-      $dirs = array(sfConfig::get('sf_config_dir'), sfConfig::get('sf_lib_dir'));
+        if (null === $this->commandApplication) {
+            return;
+        }
+
+        $this->configuration = $this->createConfiguration(null, null);
+
+        $this->commandApplication->clearTasks();
+        $this->commandApplication->loadTasks($this->configuration);
+
+        $disabledPluginsRegex = sprintf('#^(%s)#', implode('|', array_diff($this->configuration->getAllPluginPaths(), $this->configuration->getPluginPaths())));
+        $tasks = [];
+        foreach (get_declared_classes() as $class) {
+            $r = new Reflectionclass($class);
+            if ($r->isSubclassOf('sfTask') && !$r->isAbstract() && !preg_match($disabledPluginsRegex, $r->getFileName())) {
+                $tasks[] = new $class($this->dispatcher, $this->formatter);
+            }
+        }
+
+        $this->commandApplication->registerTasks($tasks);
     }
 
-    $tokens = array_merge(isset($this->tokens) ? $this->tokens : array(), $tokens);
-
-    $this->getFilesystem()->replaceTokens(sfFinder::type('file')->prune('vendor')->in($dirs), '##', '##', $tokens);
-  }
-
-  /**
-   * Reloads tasks.
-   *
-   * Useful when you install plugins with tasks and if you want to use them with the runTask() method.
-   */
-  protected function reloadTasks()
-  {
-    if (null === $this->commandApplication)
+    /**
+     * @see sfCommandApplicationTask
+     */
+    protected function createTask($name)
     {
-      return;
+        $task = parent::createTask($name);
+
+        if ($task instanceof sfBaseTask) {
+            $task->setConfiguration($this->configuration);
+        }
+
+        return $task;
     }
-
-    $this->configuration = $this->createConfiguration(null, null);
-
-    $this->commandApplication->clearTasks();
-    $this->commandApplication->loadTasks($this->configuration);
-
-    $disabledPluginsRegex = sprintf('#^(%s)#', implode('|', array_diff($this->configuration->getAllPluginPaths(), $this->configuration->getPluginPaths())));
-    $tasks = array();
-    foreach (get_declared_classes() as $class)
-    {
-      $r = new Reflectionclass($class);
-      if ($r->isSubclassOf('sfTask') && !$r->isAbstract() && !preg_match($disabledPluginsRegex, $r->getFileName()))
-      {
-        $tasks[] = new $class($this->dispatcher, $this->formatter);
-      }
-    }
-
-    $this->commandApplication->registerTasks($tasks);
-  }
-
-  /**
-   * @see sfCommandApplicationTask
-   */
-  protected function createTask($name)
-  {
-    $task = parent::createTask($name);
-
-    if ($task instanceof sfBaseTask)
-    {
-      $task->setConfiguration($this->configuration);
-    }
-
-    return $task;
-  }
 }

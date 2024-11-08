@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
+require_once(dirname(__FILE__) . '/../../bootstrap/unit.php');
 
-require_once(dirname(__FILE__).'/../../../lib/helper/EscapingHelper.php');
-require_once(dirname(__FILE__).'/../../../lib/config/sfConfig.class.php');
+require_once(dirname(__FILE__) . '/../../../lib/helper/EscapingHelper.php');
+require_once(dirname(__FILE__) . '/../../../lib/config/sfConfig.class.php');
 
 $t = new lime_test(11);
 
-$a = array('<strong>escaped!</strong>', 1, null, array(2, '<strong>escaped!</strong>'));
+$a = ['<strong>escaped!</strong>', 1, null, [2, '<strong>escaped!</strong>']];
 $escaped = sfOutputEscaper::escape('esc_entities', $a);
 
 // ->getRaw()
@@ -31,50 +31,42 @@ $t->is($escaped[3][1], '&lt;strong&gt;escaped!&lt;/strong&gt;', 'The escaped obj
 $t->ok(isset($escaped[1]), 'The escaped object behaves like an array (isset)');
 
 $t->diag('ArrayAccess interface is read only');
-try
-{
-  unset($escaped[0]);
-  $t->fail('The escaped object is read only (unset)');
-}
-catch (sfException $e)
-{
-  $t->pass('The escaped object is read only (unset)');
+try {
+    unset($escaped[0]);
+    $t->fail('The escaped object is read only (unset)');
+} catch (sfException $e) {
+    $t->pass('The escaped object is read only (unset)');
 }
 
-try
-{
-  $escaped[0] = 12;
-  $t->fail('The escaped object is read only (set)');
-}
-catch (sfException $e)
-{
-  $t->pass('The escaped object is read only (set)');
+try {
+    $escaped[0] = 12;
+    $t->fail('The escaped object is read only (set)');
+} catch (sfException $e) {
+    $t->pass('The escaped object is read only (set)');
 }
 
 // Iterator interface
 $t->diag('Iterator interface');
-foreach ($escaped as $key => $value)
-{
-  switch ($key)
-  {
-    case 0:
-      $t->is($value, '&lt;strong&gt;escaped!&lt;/strong&gt;', 'The escaped object behaves like an array');
-      break;
-    case 1:
-      $t->is($value, 1, 'The escaped object behaves like an array');
-      break;
-    case 2:
-      $t->is($value, null, 'The escaped object behaves like an array');
-      break;
-    case 3:
-      break;
-    default:
-      $t->fail('The escaped object behaves like an array');
-  }
+foreach ($escaped as $key => $value) {
+    switch ($key) {
+        case 0:
+            $t->is($value, '&lt;strong&gt;escaped!&lt;/strong&gt;', 'The escaped object behaves like an array');
+            break;
+        case 1:
+            $t->is($value, 1, 'The escaped object behaves like an array');
+            break;
+        case 2:
+            $t->is($value, null, 'The escaped object behaves like an array');
+            break;
+        case 3:
+            break;
+        default:
+            $t->fail('The escaped object behaves like an array');
+    }
 }
 
 // ->valid()
 $t->diag('->valid()');
 
-$escaped = sfOutputEscaper::escape('esc_entities', array(1, 2, 3));
+$escaped = sfOutputEscaper::escape('esc_entities', [1, 2, 3]);
 $t->is($escaped->valid(), true, '->valid() returns true if called before iteration');

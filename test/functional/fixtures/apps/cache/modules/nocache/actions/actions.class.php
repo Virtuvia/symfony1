@@ -10,11 +10,11 @@
  */
 class nocacheActions extends sfActions
 {
-  /**
-   * Executes index action
-   *
-   */
-  public function executeIndex()
-  {
-  }
+    /**
+     * Executes index action
+     *
+     */
+    public function executeIndex()
+    {
+    }
 }

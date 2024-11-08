@@ -12,9 +12,9 @@ $t = new lime_test(3);
 
 class TestsfGuardGroupForm extends PluginsfGuardGroupForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }
 
 // ->__construct()

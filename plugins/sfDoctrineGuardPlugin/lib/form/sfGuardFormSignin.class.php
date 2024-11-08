@@ -10,11 +10,11 @@
  */
 class sfGuardFormSignin extends BasesfGuardFormSignin
 {
-  /**
-   * @see sfForm
-   */
-  public function configure()
-  {
-  	$this->widgetSchema->getFormFormatter()->setTranslationCatalogue('sf_guard');
-  }
+    /**
+     * @see sfForm
+     */
+    public function configure()
+    {
+        $this->widgetSchema->getFormFormatter()->setTranslationCatalogue('sf_guard');
+    }
 }

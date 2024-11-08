@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__).'/../lib/sfGuardGroupGeneratorConfiguration.class.php';
-require_once dirname(__FILE__).'/../lib/sfGuardGroupGeneratorHelper.class.php';
+require_once dirname(__FILE__) . '/../lib/sfGuardGroupGeneratorConfiguration.class.php';
+require_once dirname(__FILE__) . '/../lib/sfGuardGroupGeneratorHelper.class.php';
 
 /**
  * sfGuardGroup actions.

@@ -8,16 +8,16 @@
  * file that was distributed with this source code.
  */
 
-require_once dirname(__FILE__).'/../bootstrap.php';
-require_once dirname(__FILE__).'/../../lib/form/sfFormLanguage.class.php';
+require_once dirname(__FILE__) . '/../bootstrap.php';
+require_once dirname(__FILE__) . '/../../lib/form/sfFormLanguage.class.php';
 
 $t = new lime_test(10, new lime_output_color());
 
 // initialize objects
 $dispatcher = new sfEventDispatcher();
 
-$sessionPath = sys_get_temp_dir().'/sessions_'.rand(11111, 99999);
-$storage = new sfSessionTestStorage(array('session_path' => $sessionPath));
+$sessionPath = sys_get_temp_dir() . '/sessions_' . rand(11111, 99999);
+$storage = new sfSessionTestStorage(['session_path' => $sessionPath]);
 $user = new sfUser($dispatcher, $storage);
 $user->setCulture('en');
 
@@ -25,21 +25,18 @@ $request = new sfWebRequest($dispatcher);
 
 // __construct()
 $t->diag('__construct()');
-try
-{
-  new sfFormLanguage($user);
-  $t->fail('__construct() throws a RuntimeException if you don\'t pass a "languages" option');
+try {
+    new sfFormLanguage($user);
+    $t->fail('__construct() throws a RuntimeException if you don\'t pass a "languages" option');
+} catch (RuntimeException $e) {
+    $t->pass('__construct() throws a RuntimeException if you don\'t pass a "languages" option');
 }
-catch (RuntimeException $e)
-{
-  $t->pass('__construct() throws a RuntimeException if you don\'t pass a "languages" option');
-}
-$form = new sfFormLanguage($user, array('languages' => array('en', 'fr')));
+$form = new sfFormLanguage($user, ['languages' => ['en', 'fr']]);
 $t->is($form->getDefault('language'), 'en', '__construct() sets the default language value to the user language');
 $w = $form->getWidgetSchema();
-$t->is($w['language']->getOption('languages'), array('en', 'fr'), '__construct() uses the "languages" option for the select form widget');
+$t->is($w['language']->getOption('languages'), ['en', 'fr'], '__construct() uses the "languages" option for the select form widget');
 $v = $form->getValidatorSchema();
-$t->is($v['language']->getOption('languages'), array('en', 'fr'), '__construct() uses the "languages" option for the validator');
+$t->is($v['language']->getOption('languages'), ['en', 'fr'], '__construct() uses the "languages" option for the validator');
 
 // ->process()
 $t->diag('->process()');
@@ -48,7 +45,7 @@ $t->diag('->process()');
 $t->diag('with CSRF disabled');
 sfForm::disableCSRFProtection();
 
-$form = new sfFormLanguage($user, array('languages' => array('en', 'fr')));
+$form = new sfFormLanguage($user, ['languages' => ['en', 'fr']]);
 $request->setParameter('language', 'fr');
 $t->is($form->process($request), true, '->process() returns true if the form is valid');
 $t->is($user->getCulture(), 'fr', '->process() changes the user culture');
@@ -64,7 +61,7 @@ sfToolkit::clearDirectory($sessionPath);
 $t->diag('with CSRF enabled');
 sfForm::enableCSRFProtection('secret');
 
-$form = new sfFormLanguage($user, array('languages' => array('en', 'fr')));
+$form = new sfFormLanguage($user, ['languages' => ['en', 'fr']]);
 $request->setParameter('language', 'fr');
 $request->setParameter('_csrf_token', $form->getCSRFToken('secret'));
 $t->is($form->process($request), true, '->process() returns true if the form is valid');

@@ -18,88 +18,85 @@
  */
 class sfNoRouting extends sfRouting
 {
-  /**
-   * @see sfRouting
-   */
-  public function getCurrentInternalUri($with_route_name = false)
-  {
-    $parameters = $this->mergeArrays($this->defaultParameters, $_GET);
-    $action = sprintf('%s/%s', $parameters['module'], $parameters['action']);
-
-    // other parameters
-    unset($parameters['module'], $parameters['action']);
-    ksort($parameters);
-    $parameters = count($parameters) ? '?'.http_build_query($parameters, arg_separator: '&') : '';
-
-    return sprintf('%s%s', $action, $parameters);
-  }
-
- /**
-  * @see sfRouting
-  */
-  public function generate($name, $params = array(), $absolute = false)
-  {
-    $parameters = $this->mergeArrays($this->defaultParameters, $params);
-    if ($this->getDefaultParameter('module') == $parameters['module'])
+    /**
+     * @see sfRouting
+     */
+    public function getCurrentInternalUri($with_route_name = false)
     {
-      unset($parameters['module']);
-    }
-    if ($this->getDefaultParameter('action') == $parameters['action'])
-    {
-      unset($parameters['action']);
+        $parameters = $this->mergeArrays($this->defaultParameters, $_GET);
+        $action = sprintf('%s/%s', $parameters['module'], $parameters['action']);
+
+        // other parameters
+        unset($parameters['module'], $parameters['action']);
+        ksort($parameters);
+        $parameters = count($parameters) ? '?' . http_build_query($parameters, arg_separator: '&') : '';
+
+        return sprintf('%s%s', $action, $parameters);
     }
 
-    $parameters = http_build_query($parameters, arg_separator: '&');
-
-    return $this->fixGeneratedUrl('/'.($parameters ? '?'.$parameters : ''), $absolute);
-  }
-
- /**
-  * @see sfRouting
-  */
-  public function parse($url)
-  {
-    return array();
-  }
-
-  /**
-   * @see sfRouting
-   */
-  public function getRoutes()
-  {
-    return array();
-  }
-
-  /**
-   * @see sfRouting
-   */
-  public function setRoutes($routes)
-  {
-    return array();
-  }
-
-  /**
-   * @see sfRouting
-   */
-  public function hasRoutes()
-  {
-    return false;
-  }
-
-  /**
-   * @see sfRouting
-   */
-  public function clearRoutes()
-  {
-  }
-
-  protected function mergeArrays($arr1, $arr2)
-  {
-    foreach ($arr2 as $key => $value)
+    /**
+     * @see sfRouting
+     */
+    public function generate($name, $params = [], $absolute = false)
     {
-      $arr1[$key] = $value;
+        $parameters = $this->mergeArrays($this->defaultParameters, $params);
+        if ($this->getDefaultParameter('module') == $parameters['module']) {
+            unset($parameters['module']);
+        }
+        if ($this->getDefaultParameter('action') == $parameters['action']) {
+            unset($parameters['action']);
+        }
+
+        $parameters = http_build_query($parameters, arg_separator: '&');
+
+        return $this->fixGeneratedUrl('/' . ($parameters ? '?' . $parameters : ''), $absolute);
     }
 
-    return $arr1;
-  }
+    /**
+     * @see sfRouting
+     */
+    public function parse($url)
+    {
+        return [];
+    }
+
+    /**
+     * @see sfRouting
+     */
+    public function getRoutes()
+    {
+        return [];
+    }
+
+    /**
+     * @see sfRouting
+     */
+    public function setRoutes($routes)
+    {
+        return [];
+    }
+
+    /**
+     * @see sfRouting
+     */
+    public function hasRoutes()
+    {
+        return false;
+    }
+
+    /**
+     * @see sfRouting
+     */
+    public function clearRoutes()
+    {
+    }
+
+    protected function mergeArrays($arr1, $arr2)
+    {
+        foreach ($arr2 as $key => $value) {
+            $arr1[$key] = $value;
+        }
+
+        return $arr1;
+    }
 }

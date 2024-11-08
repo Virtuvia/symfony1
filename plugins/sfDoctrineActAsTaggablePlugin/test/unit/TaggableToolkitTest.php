@@ -35,42 +35,42 @@ $tag = TaggableToolkit::explodeTagString('test1 test2');
 $t->is($tag, 'test1 test2', 'single tag with whitespace');
 
 $tag = TaggableToolkit::explodeTagString('test1,test2');
-$t->is($tag, array('test1','test2'), 'double tag');
+$t->is($tag, ['test1','test2'], 'double tag');
 
 $tag = TaggableToolkit::explodeTagString(' test1  , test2');
-$t->is($tag, array('test1','test2'), 'double dirty tag');
+$t->is($tag, ['test1','test2'], 'double dirty tag');
 
 $tag = TaggableToolkit::explodeTagString(' test1  ,
     test2');
-$t->is($tag, array('test1','test2'), 'double extra dirty tag');
+$t->is($tag, ['test1','test2'], 'double extra dirty tag');
 
 $tag = TaggableToolkit::explodeTagString(', test1  ,
     ');
-$t->is($tag, array('test1'), 'single extra dirty tag');
+$t->is($tag, ['test1'], 'single extra dirty tag');
 
 
 $t->diag('::extractTriple');
 
 $tag = TaggableToolkit::extractTriple('test1');
-$t->is($tag, array('test1', null, null, null), 'no triple');
+$t->is($tag, ['test1', null, null, null], 'no triple');
 
 $tag = TaggableToolkit::extractTriple('namespace:key=value');
-$t->is($tag, array('namespace:key=value', 'namespace', 'key', 'value'), 'correct triple');
+$t->is($tag, ['namespace:key=value', 'namespace', 'key', 'value'], 'correct triple');
 
 $tag = TaggableToolkit::extractTriple('namespace:=value');
-$t->is($tag, array('namespace:=value', null, null, null), 'empty key');
+$t->is($tag, ['namespace:=value', null, null, null], 'empty key');
 
 $tag = TaggableToolkit::extractTriple(':=value');
-$t->is($tag, array(':=value', null, null, null), 'empty namespace, key');
+$t->is($tag, [':=value', null, null, null], 'empty namespace, key');
 
 $tag = TaggableToolkit::extractTriple(':=');
-$t->is($tag, array(':=', null, null, null), 'empty namespace, key, value');
+$t->is($tag, [':=', null, null, null], 'empty namespace, key, value');
 
 $tag = TaggableToolkit::extractTriple('1_incorrect_namespace:key=value');
-$t->is($tag, array('1_incorrect_namespace:key=value', null, null, null), 'incorrect namespace');
+$t->is($tag, ['1_incorrect_namespace:key=value', null, null, null], 'incorrect namespace');
 
 $tag = TaggableToolkit::extractTriple('namespace:1_incorrect_key=value');
-$t->is($tag, array('namespace:1_incorrect_key=value', null, null, null), 'incorrect key');
+$t->is($tag, ['namespace:1_incorrect_key=value', null, null, null], 'incorrect key');
 
 
 $t->diag('::formatTagString');
@@ -84,26 +84,25 @@ $t->is($tag, '"bird", "cat" and "dog"', 'multi tag string');
 $tag = TaggableToolkit::formatTagString('dog, cat, bird,');
 $t->is($tag, '"bird", "cat" and "dog"', 'not cleaned multi tag string');
 
-$tag = TaggableToolkit::formatTagString(array('dog', 'cat', 'bird'));
+$tag = TaggableToolkit::formatTagString(['dog', 'cat', 'bird']);
 $t->is($tag, '"bird", "cat" and "dog"', 'simple tag array');
 
 
 class Doctrine
 {
-  public static function isValidModelClass($model)
-  {
-    if (is_object($model))
+    public static function isValidModelClass($model)
     {
-      $model = get_class($model);
+        if (is_object($model)) {
+            $model = get_class($model);
+        }
+
+        return in_array($model, ['ValidModel', 'InValidModel']);
     }
 
-    return in_array($model, array('ValidModel', 'InValidModel'));
-  }
-
-  public static function getTable($model)
-  {
-    return call_user_func(array($model, 'getTable'));
-  }
+    public static function getTable($model)
+    {
+        return call_user_func([$model, 'getTable']);
+    }
 }
 
 class ValidModelTable
@@ -143,26 +142,22 @@ $t->ok(TaggableToolkit::isTaggable(new ValidModel()), 'valid model object');
 $t->ok(!TaggableToolkit::isTaggable('InValidModel'), 'invalid model name');
 $t->ok(!TaggableToolkit::isTaggable(new InValidModel()), 'invalid model object');
 
-try
-{
-  TaggableToolkit::isTaggable('MyClass');
-  $t->fail('no exception for no doctrine model name');
-}
-catch(Exception $e)
-{
-  $t->pass('no doctrine model name');
+try {
+    TaggableToolkit::isTaggable('MyClass');
+    $t->fail('no exception for no doctrine model name');
+} catch (Exception $e) {
+    $t->pass('no doctrine model name');
 }
 
-class MyClass{}
-
-try
+class MyClass
 {
-  TaggableToolkit::isTaggable(new MyClass());
-  $t->fail('no exception for no doctrine model class');
 }
-catch(Exception $e)
-{
-  $t->pass('no doctrine model class');
+
+try {
+    TaggableToolkit::isTaggable(new MyClass());
+    $t->fail('no exception for no doctrine model class');
+} catch (Exception $e) {
+    $t->pass('no doctrine model class');
 }
 
 
@@ -172,6 +167,6 @@ $t->todo('test normalize');
 
 $t->diag('::triplify');
 
-$tags = array('peter', 'wolf');
+$tags = ['peter', 'wolf'];
 array_walk($tags, 'TaggableToolkit::triplify', 'namespace:key');
-$t->is($tags, array('namespace:key=peter', 'namespace:key=wolf'), 'simple tags');
+$t->is($tags, ['namespace:key=peter', 'namespace:key=wolf'], 'simple tags');

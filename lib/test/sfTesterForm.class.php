@@ -18,221 +18,182 @@
  */
 class sfTesterForm extends sfTester
 {
-  protected
-    $form = null;
+    protected $form = null;
 
-  /**
-   * Constructor.
-   *
-   * @param sfTestFunctionalBase $browser A browser
-   * @param lime_test            $tester  A tester object
-   */
-  public function __construct(sfTestFunctionalBase $browser, $tester)
-  {
-    parent::__construct($browser, $tester);
-
-    $this->browser->addListener('template.filter_parameters', array($this, 'filterTemplateParameters'));
-  }
-
-  /**
-   * Prepares the tester.
-   */
-  public function prepare()
-  {
-    $this->form = null;
-  }
-
-  /**
-   * Initiliazes the tester.
-   */
-  public function initialize()
-  {
-    if (null === $this->form)
+    /**
+     * Constructor.
+     *
+     * @param sfTestFunctionalBase $browser A browser
+     * @param lime_test            $tester  A tester object
+     */
+    public function __construct(sfTestFunctionalBase $browser, $tester)
     {
-      $action = $this->browser->getContext()->getActionStack()->getLastEntry()->getActionInstance();
+        parent::__construct($browser, $tester);
 
-      foreach ($action->getVarHolder()->getAll() as $name => $value)
-      {
-        if ($value instanceof sfForm && $value->isBound())
-        {
-          $this->form = $value;
-          break;
+        $this->browser->addListener('template.filter_parameters', [$this, 'filterTemplateParameters']);
+    }
+
+    /**
+     * Prepares the tester.
+     */
+    public function prepare()
+    {
+        $this->form = null;
+    }
+
+    /**
+     * Initiliazes the tester.
+     */
+    public function initialize()
+    {
+        if (null === $this->form) {
+            $action = $this->browser->getContext()->getActionStack()->getLastEntry()->getActionInstance();
+
+            foreach ($action->getVarHolder()->getAll() as $name => $value) {
+                if ($value instanceof sfForm && $value->isBound()) {
+                    $this->form = $value;
+                    break;
+                }
+            }
         }
-      }
-    }
-  }
-
-  /**
-   * Returns the current form.
-   *
-   * @return sfForm The current sfForm form instance
-   */
-  public function getForm()
-  {
-    return $this->form;
-  }
-
-  /**
-   * Tests if the submitted form has some error.
-   *
-   * @param bool|integer $value Whether to check if the form has error or not, or the number of errors
-   *
-   * @return sfTestFunctionalBase|sfTester
-   */
-  public function hasErrors($value = true)
-  {
-    if (null === $this->form)
-    {
-      throw new LogicException('no form has been submitted.');
     }
 
-    if (is_int($value))
+    /**
+     * Returns the current form.
+     *
+     * @return sfForm The current sfForm form instance
+     */
+    public function getForm()
     {
-      $this->tester->is(count($this->form->getErrorSchema()), $value, sprintf('the submitted form has "%s" errors.', $value));
-    }
-    else
-    {
-      $this->tester->is($this->form->hasErrors(), $value, sprintf('the submitted form %s.', ($value) ? 'has some errors' : 'is valid'));
-    }
-
-    return $this->getObjectToReturn();
-  }
-
-  /**
-   * Tests if the submitted form has a specific error.
-   *
-   * @param mixed $value The error message or the number of errors for the field (optional)
-   *
-   * @return sfTestFunctionalBase|sfTester
-   */
-  public function hasGlobalError($value = true)
-  {
-    return $this->isError(null, $value);
-  }
-
-  /**
-   * Tests if the submitted form has a specific error.
-   *
-   * @param string $field The field name to check for an error (null for global errors)
-   * @param mixed  $value The error message or the number of errors for the field (optional)
-   *
-   * @return sfTestFunctionalBase|sfTester
-   */
-  public function isError($field, $value = true)
-  {
-    if (null === $this->form)
-    {
-      throw new LogicException('no form has been submitted.');
+        return $this->form;
     }
 
-    if (null === $field)
+    /**
+     * Tests if the submitted form has some error.
+     *
+     * @param bool|int $value Whether to check if the form has error or not, or the number of errors
+     *
+     * @return sfTestFunctionalBase|sfTester
+     */
+    public function hasErrors($value = true)
     {
-      $error = new sfValidatorErrorSchema(new sfValidatorPass(), $this->form->getGlobalErrors());
-    }
-    else
-    {
-      $error = $this->getFormField($field)->getError();
-    }
-
-    if (false === $value)
-    {
-      $this->tester->ok(!$error || 0 == count($error), sprintf('the submitted form has no "%s" error.', $field));
-    }
-    else if (true === $value)
-    {
-      $this->tester->ok($error && count($error) > 0, sprintf('the submitted form has a "%s" error.', $field));
-    }
-    else if (is_int($value))
-    {
-      $this->tester->ok($error && count($error) == $value, sprintf('the submitted form has %s "%s" error(s).', $value, $field));
-    }
-    else if (preg_match('/^(!)?([^a-zA-Z0-9\\\\]).+?\\2[ims]?$/', $value, $match))
-    {
-      if (!$error)
-      {
-        $this->tester->fail(sprintf('the submitted form has a "%s" error.', $field));
-      }
-      else
-      {
-        if ($match[1] == '!')
-        {
-          $this->tester->unlike($error->getCodeString(), substr($value, 1), sprintf('the submitted form has a "%s" error that does not match "%s".', $field, $value));
+        if (null === $this->form) {
+            throw new LogicException('no form has been submitted.');
         }
-        else
-        {
-          $this->tester->like($error->getCodeString(), $value, sprintf('the submitted form has a "%s" error that matches "%s".', $field, $value));
+
+        if (is_int($value)) {
+            $this->tester->is(count($this->form->getErrorSchema()), $value, sprintf('the submitted form has "%s" errors.', $value));
+        } else {
+            $this->tester->is($this->form->hasErrors(), $value, sprintf('the submitted form %s.', ($value) ? 'has some errors' : 'is valid'));
         }
-      }
-    }
-    else
-    {
-      if (!$error)
-      {
-        $this->tester->fail(sprintf('the submitted form has a "%s" error (%s).', $field, $value));
-      }
-      else
-      {
-        $this->tester->is($error->getCodeString(), $value, sprintf('the submitted form has a "%s" error (%s).', $field, $value));
-      }
+
+        return $this->getObjectToReturn();
     }
 
-    return $this->getObjectToReturn();
-  }
-
-  /**
-   * Listens to the template.filter_parameters event to get the submitted form object.
-   *
-   * @param sfEvent $event      The event
-   * @param array   $parameters An array of parameters passed to the template
-   *
-   * @return array The array of parameters passed to the template
-   */
-  public function filterTemplateParameters(sfEvent $event, $parameters)
-  {
-    if (!isset($parameters['sf_type']))
+    /**
+     * Tests if the submitted form has a specific error.
+     *
+     * @param mixed $value The error message or the number of errors for the field (optional)
+     *
+     * @return sfTestFunctionalBase|sfTester
+     */
+    public function hasGlobalError($value = true)
     {
-      return $parameters;
+        return $this->isError(null, $value);
     }
 
-    if ('action' == $parameters['sf_type'])
+    /**
+     * Tests if the submitted form has a specific error.
+     *
+     * @param string $field The field name to check for an error (null for global errors)
+     * @param mixed  $value The error message or the number of errors for the field (optional)
+     *
+     * @return sfTestFunctionalBase|sfTester
+     */
+    public function isError($field, $value = true)
     {
-      foreach ($parameters as $key => $value)
-      {
-        if ($value instanceof sfForm && $value->isBound())
-        {
-          $this->form = $value;
-          break;
+        if (null === $this->form) {
+            throw new LogicException('no form has been submitted.');
         }
-      }
+
+        if (null === $field) {
+            $error = new sfValidatorErrorSchema(new sfValidatorPass(), $this->form->getGlobalErrors());
+        } else {
+            $error = $this->getFormField($field)->getError();
+        }
+
+        if (false === $value) {
+            $this->tester->ok(!$error || 0 == count($error), sprintf('the submitted form has no "%s" error.', $field));
+        } elseif (true === $value) {
+            $this->tester->ok($error && count($error) > 0, sprintf('the submitted form has a "%s" error.', $field));
+        } elseif (is_int($value)) {
+            $this->tester->ok($error && count($error) == $value, sprintf('the submitted form has %s "%s" error(s).', $value, $field));
+        } elseif (preg_match('/^(!)?([^a-zA-Z0-9\\\\]).+?\\2[ims]?$/', $value, $match)) {
+            if (!$error) {
+                $this->tester->fail(sprintf('the submitted form has a "%s" error.', $field));
+            } else {
+                if ($match[1] == '!') {
+                    $this->tester->unlike($error->getCodeString(), substr($value, 1), sprintf('the submitted form has a "%s" error that does not match "%s".', $field, $value));
+                } else {
+                    $this->tester->like($error->getCodeString(), $value, sprintf('the submitted form has a "%s" error that matches "%s".', $field, $value));
+                }
+            }
+        } else {
+            if (!$error) {
+                $this->tester->fail(sprintf('the submitted form has a "%s" error (%s).', $field, $value));
+            } else {
+                $this->tester->is($error->getCodeString(), $value, sprintf('the submitted form has a "%s" error (%s).', $field, $value));
+            }
+        }
+
+        return $this->getObjectToReturn();
     }
 
-    return $parameters;
-  }
-
-  /**
-   * @param string $path
-   * @return sfFormField
-   */
-
-  public function getFormField($path)
-  {
-    if (false !== $pos = strpos($path, '['))
+    /**
+     * Listens to the template.filter_parameters event to get the submitted form object.
+     *
+     * @param sfEvent $event      The event
+     * @param array   $parameters An array of parameters passed to the template
+     *
+     * @return array The array of parameters passed to the template
+     */
+    public function filterTemplateParameters(sfEvent $event, $parameters)
     {
-      $field = $this->form[substr($path, 0, $pos)];
-    }
-    else
-    {
-      return $this->form[$path];
+        if (!isset($parameters['sf_type'])) {
+            return $parameters;
+        }
+
+        if ('action' == $parameters['sf_type']) {
+            foreach ($parameters as $key => $value) {
+                if ($value instanceof sfForm && $value->isBound()) {
+                    $this->form = $value;
+                    break;
+                }
+            }
+        }
+
+        return $parameters;
     }
 
-    if (preg_match_all('/\[(?P<part>[^]]+)\]/', $path, $matches))
-    {
-      foreach($matches['part'] as $part)
-      {
-        $field = $field[$part];
-      }
-    }
+    /**
+     * @param string $path
+     * @return sfFormField
+     */
 
-    return $field;
-  }
+    public function getFormField($path)
+    {
+        if (false !== $pos = strpos($path, '[')) {
+            $field = $this->form[substr($path, 0, $pos)];
+        } else {
+            return $this->form[$path];
+        }
+
+        if (preg_match_all('/\[(?P<part>[^]]+)\]/', $path, $matches)) {
+            foreach ($matches['part'] as $part) {
+                $field = $field[$part];
+            }
+        }
+
+        return $field;
+    }
 }

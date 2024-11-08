@@ -20,25 +20,22 @@
  */
 class sfImageSketchyGD extends sfImageTransformAbstract
 {
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    $resource = $image->getAdapter()->getHolder();
-
-    if (function_exists('imagefilter'))
+    /**
+     * Apply the transform to the sfImage object.
+     *
+     * @param sfImage
+     * @return sfImage
+     */
+    protected function transform(sfImage $image)
     {
-      imagefilter($resource, IMG_FILTER_MEAN_REMOVAL);
-    }
-    else
-    {
-      throw new sfImageTransformException(sprintf('Cannot perform transform, GD does not support imagefilter '));
-    }
+        $resource = $image->getAdapter()->getHolder();
 
-    return $image;
-  }
+        if (function_exists('imagefilter')) {
+            imagefilter($resource, IMG_FILTER_MEAN_REMOVAL);
+        } else {
+            throw new sfImageTransformException(sprintf('Cannot perform transform, GD does not support imagefilter '));
+        }
+
+        return $image;
+    }
 }

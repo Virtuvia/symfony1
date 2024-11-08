@@ -10,18 +10,18 @@
  */
 class BasesfGuardRegisterForm extends sfGuardUserAdminForm
 {
-  public function setup()
-  {
-    parent::setup();
+    public function setup()
+    {
+        parent::setup();
 
-    unset(
-      $this['is_active'],
-      $this['is_super_admin'],
-      $this['updated_at'],
-      $this['groups_list'],
-      $this['permissions_list']
-    );
+        unset(
+            $this['is_active'],
+            $this['is_super_admin'],
+            $this['updated_at'],
+            $this['groups_list'],
+            $this['permissions_list'],
+        );
 
-    $this->validatorSchema['password']->setOption('required', true);
-  }
+        $this->validatorSchema['password']->setOption('required', true);
+    }
 }

@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/../../../bootstrap/unit.php');
+require_once(dirname(__FILE__) . '/../../../bootstrap/unit.php');
 
 $t = new lime_test(1);
 
@@ -18,5 +18,5 @@ $dom->validateOnParse = true;
 // ->configure()
 $t->diag('->configure()');
 
-$w = new sfWidgetFormI18nDateTime(array('culture' => 'fr'));
+$w = new sfWidgetFormI18nDateTime(['culture' => 'fr']);
 $t->is($w->getOption('format'), '%date% %time%', '->configure() automatically changes the date format for the given culture');

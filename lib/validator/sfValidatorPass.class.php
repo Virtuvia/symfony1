@@ -9,7 +9,7 @@
  */
 
 /**
- * sfValidatorPass is an identity validator. It simply returns the value unmodified. 
+ * sfValidatorPass is an identity validator. It simply returns the value unmodified.
  *
  * @package    symfony
  * @subpackage validator
@@ -18,19 +18,19 @@
  */
 class sfValidatorPass extends sfValidatorBase
 {
-  /**
-   * @see sfValidatorBase
-   */
-  public function clean($value)
-  {
-    return $this->doClean($value);
-  }
+    /**
+     * @see sfValidatorBase
+     */
+    public function clean($value)
+    {
+        return $this->doClean($value);
+    }
 
-  /**
-   * @see sfValidatorBase
-   */
-  protected function doClean($value)
-  {
-    return $value;
-  }
+    /**
+     * @see sfValidatorBase
+     */
+    protected function doClean($value)
+    {
+        return $value;
+    }
 }
