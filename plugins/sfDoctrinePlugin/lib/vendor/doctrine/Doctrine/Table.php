@@ -60,7 +60,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
     readonly protected Doctrine_Connection $_conn;
 
     /**
-     * @var array $identityMap                          first level cache
+     * @var array<array-key, Doctrine_Record> $identityMap                          first level cache
      */
     protected $_identityMap        = [];
 
