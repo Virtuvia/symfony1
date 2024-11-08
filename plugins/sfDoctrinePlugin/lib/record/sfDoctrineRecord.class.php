@@ -119,7 +119,7 @@ abstract class sfDoctrineRecord extends Doctrine_Record
             } else {
                 $failed = true;
             }
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $failed = true;
         }
         if ($failed) {
