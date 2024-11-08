@@ -32,6 +32,8 @@
  */
 class Doctrine_Record_Listener implements Doctrine_Record_Listener_Interface
 {
+    use Doctrine_Record_ListenerTrait;
+
     /**
      * @var array $_options        an array containing options
      */
@@ -78,65 +80,5 @@ class Doctrine_Record_Listener implements Doctrine_Record_Listener_Interface
         }
 
         return null;
-    }
-
-    public function preDqlSelect(Doctrine_Event $event)
-    {
-    }
-
-    public function preSave(Doctrine_Event $event)
-    {
-    }
-
-    public function postSave(Doctrine_Event $event)
-    {
-    }
-
-    public function preDqlDelete(Doctrine_Event $event)
-    {
-    }
-
-    public function preDelete(Doctrine_Event $event)
-    {
-    }
-
-    public function postDelete(Doctrine_Event $event)
-    {
-    }
-
-    public function preDqlUpdate(Doctrine_Event $event)
-    {
-    }
-
-    public function preUpdate(Doctrine_Event $event)
-    {
-    }
-
-    public function postUpdate(Doctrine_Event $event)
-    {
-    }
-
-    public function preInsert(Doctrine_Event $event)
-    {
-    }
-
-    public function postInsert(Doctrine_Event $event)
-    {
-    }
-
-    public function preHydrate(Doctrine_Event $event)
-    {
-    }
-
-    public function postHydrate(Doctrine_Event $event)
-    {
-    }
-
-    public function preValidate(Doctrine_Event $event)
-    {
-    }
-
-    public function postValidate(Doctrine_Event $event)
-    {
     }
 }
