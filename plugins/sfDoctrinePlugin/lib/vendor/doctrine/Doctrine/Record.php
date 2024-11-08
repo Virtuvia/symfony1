@@ -895,7 +895,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             return true;
         }
 
-        $reference = $this->$name;
+        $reference = $this->get($name);
         if ($reference instanceof Doctrine_Record) {
             $exists = $reference->exists();
         } elseif ($reference instanceof Doctrine_Collection) {
@@ -1335,10 +1335,10 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             $this->_data[$name] = [];
         } elseif (isset($this->_references[$name])) {
             if ($this->_references[$name] instanceof Doctrine_Record) {
-                $this->_pendingDeletes[] = $this->$name;
+                $this->_pendingDeletes[] = $this->get($name);
                 $this->_references[$name] = self::$_null;
             } elseif ($this->_references[$name] instanceof Doctrine_Collection) {
-                $this->_pendingDeletes[] = $this->$name;
+                $this->_pendingDeletes[] = $this->get($name);
                 $this->_references[$name]->setData([]);
             }
         }
@@ -1653,7 +1653,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             }
 
             if ($deep && $this->getTable()->hasRelation($key)) {
-                if (! $this->$key) {
+                if (! $this->get($key)) {
                     $this->refreshRelated($key);
                 }
 
@@ -1662,7 +1662,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
                         $this->unlink($key, [], false);
                         $this->link($key, $value, false);
                     } else {
-                        $this->$key->fromArray($value, $deep);
+                        $this->get($key)->fromArray($value, $deep);
                     }
                 }
             } elseif ($this->getTable()->hasField($key) || array_key_exists($key, $this->_values)) {
@@ -2055,7 +2055,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
                 ->execute();
 
             foreach ($records as $record) {
-                if ($this->$alias instanceof Doctrine_Record) {
+                if ($this->get($alias) instanceof Doctrine_Record) {
                     $this->set($alias, $record);
                 } else {
                     if ($c = $this->get($alias)) {
