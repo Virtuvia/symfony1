@@ -1192,16 +1192,6 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     }
 
     /**
-     * alias for @see count()
-     *
-     * @return int          the number of columns in this record
-     */
-    public function columnCount()
-    {
-        return $this->count();
-    }
-
-    /**
      * returns the record representation as an array
      *
      * @link http://www.doctrine-project.org/documentation/manual/1_1/en/working-with-models
