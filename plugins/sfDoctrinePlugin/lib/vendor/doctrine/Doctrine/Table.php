@@ -2121,44 +2121,45 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
     {
         if ($value === self::$_null) {
             return self::$_null;
-        } elseif ($value === null) {
+        }
+
+        if ($value === null) {
             return null;
-        } else {
-            $type = is_null($typeHint) ? $this->getTypeOf($fieldName) : $typeHint;
+        }
 
-            switch ($type) {
-                case 'enum':
-                case 'integer':
-                case 'string':
-                    // don't do any casting here PHP INT_MAX is smaller than what the databases support
-                    break;
-                case 'set':
-                    return explode(',', $value);
-                    break;
-                case 'boolean':
-                    return (bool) $value;
-                    break;
-                case 'array':
-                case 'object':
-                    if (is_string($value)) {
-                        $value = empty($value) ? null : unserialize($value);
+        $type = is_null($typeHint) ? $this->getTypeOf($fieldName) : $typeHint;
 
-                        if ($value === false) {
-                            throw new Doctrine_Table_Exception('Unserialization of ' . $fieldName . ' failed.');
-                        }
-                        return $value;
-                    }
-                    break;
-                case 'gzip':
-                    $value = gzuncompress($value);
+        switch ($type) {
+            case 'timestamp':
+                return (new Doctrine_Type_Timestamp())->convertToPHPValue($value);
+            case 'enum':
+            case 'integer':
+            case 'string':
+                // don't do any casting here PHP INT_MAX is smaller than what the databases support
+                break;
+            case 'set':
+                return explode(',', $value);
+            case 'boolean':
+                return (bool) $value;
+            case 'array':
+            case 'object':
+                if (is_string($value)) {
+                    $value = empty($value) ? null : unserialize($value);
 
                     if ($value === false) {
-                        throw new Doctrine_Table_Exception('Uncompressing of ' . $fieldName . ' failed.');
+                        throw new Doctrine_Table_Exception('Unserialization of ' . $fieldName . ' failed.');
                     }
-                    return $value;
-                    break;
-            }
+                }
+
+                break;
+            case 'gzip':
+                $value = gzuncompress($value);
+
+                if ($value === false) {
+                    throw new Doctrine_Table_Exception('Uncompressing of ' . $fieldName . ' failed.');
+                }
         }
+
         return $value;
     }
 

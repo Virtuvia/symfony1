@@ -1144,6 +1144,9 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             }
 
             switch ($type) {
+                case 'timestamp':
+                    $a[$field] = (new Doctrine_Type_Timestamp())->convertToDatabaseValue($this->_data[$field]);
+                    break;
                 case 'array':
                 case 'object':
                     $a[$field] = serialize($this->_data[$field]);

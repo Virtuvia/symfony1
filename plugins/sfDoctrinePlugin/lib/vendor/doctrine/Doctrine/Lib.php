@@ -204,6 +204,8 @@ final class Doctrine_Lib
     {
         // based on logic in \Doctrine_Table::prepareValue
         switch ($doctrineType) {
+            case 'timestamp':
+                return (new Doctrine_Type_Timestamp())->getPhpType();
             case 'bool':
             case 'boolean':
                 return 'bool';
