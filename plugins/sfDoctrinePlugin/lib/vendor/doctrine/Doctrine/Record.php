@@ -732,7 +732,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * @throws Doctrine_Record_Exception        if trying to get a value of unknown property / related component
      * @return mixed
      */
-    public function get(string $fieldName, bool $load = true): mixed
+    final public function get(string $fieldName, bool $load = true): mixed
     {
         $accessor = 'get' . Doctrine_Inflector::classify($fieldName);
 
@@ -820,7 +820,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * @throws Doctrine_Record_Exception    if trying to set a value for unknown property / related component
      * @throws Doctrine_Record_Exception    if trying to set a value of wrong type for related component
      */
-    public function set(string $fieldName, mixed $value, bool $load = true): static
+    final public function set(string $fieldName, mixed $value, bool $load = true): static
     {
         $mutator = 'set' . Doctrine_Inflector::classify($fieldName);
 
