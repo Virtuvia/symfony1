@@ -782,7 +782,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
 
             return $this->_references[$fieldName];
         } catch (Doctrine_Table_Exception $e) {
-            throw new Doctrine_Record_UnknownPropertyException(sprintf('Unknown record property / related component "%s" on "%s"', $fieldName, static::class));
+            throw new Doctrine_Record_UnknownPropertyException(sprintf('Unknown record property / related component "%s" on "%s"', $fieldName, static::class), previous: $e);
         }
     }
 
@@ -875,7 +875,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             try {
                 $this->coreSetRelated($fieldName, $value);
             } catch (Doctrine_Table_Exception $e) {
-                throw new Doctrine_Record_UnknownPropertyException(sprintf('Unknown record property / related component "%s" on "%s"', $fieldName, static::class));
+                throw new Doctrine_Record_UnknownPropertyException(sprintf('Unknown record property / related component "%s" on "%s"', $fieldName, static::class), previous: $e);
             }
         }
 
