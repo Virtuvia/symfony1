@@ -645,20 +645,18 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * returns the value of a property (column). If the property is not yet loaded
      * this method does NOT load it.
      *
-     * @param $name                         name of the property
+     * @deprecated use appropriate get* method
+     * @see Doctrine_Record::get()
+     * @see Doctrine_Record::internalGetData()
+     *
+     * @param string $fieldName
+     *
      * @throws Doctrine_Record_Exception    if trying to get an unknown property
      * @return mixed
      */
     public function rawGet($fieldName)
     {
-        if (! array_key_exists($fieldName, $this->_data)) {
-            throw new Doctrine_Record_Exception('Unknown property ' . $fieldName);
-        }
-        if ($this->_data[$fieldName] === self::$_null) {
-            return null;
-        }
-
-        return $this->_data[$fieldName];
+        return $this->internalGetData($fieldName, false);
     }
 
     /**
@@ -743,47 +741,85 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         return $this->_get($fieldName, $load);
     }
 
+    /**
+     * @param string $fieldName
+     * @param bool $load
+     *
+     * @deprecated use alternate internalGet* methods
+     * @see Doctrine_Record::internalGetValue()
+     * @see Doctrine_Record::internalGetData()
+     * @see Doctrine_Record::internalGetReference()
+     * @see Doctrine_Record::internalGetReferenceOrNull()
+     *
+     * @final
+     *
+     * @throws Doctrine_Record_UnknownPropertyException
+     * @return Doctrine_Collection|Doctrine_Record|mixed|null
+     */
     protected function _get($fieldName, $load = true)
     {
-        $value = self::$_null;
-
         if (array_key_exists($fieldName, $this->_values)) {
-            return $this->_values[$fieldName];
+            return $this->internalGetValue($fieldName);
         }
 
         if (array_key_exists($fieldName, $this->_data)) {
-            // check if the value is the Doctrine_Null object located in self::$_null)
-            if ($this->_data[$fieldName] === self::$_null && $load) {
-                $this->load();
-            }
-
-            if ($this->_data[$fieldName] === self::$_null) {
-                $value = null;
-            } else {
-                $value = $this->_data[$fieldName];
-            }
-
-            return $value;
+            return $this->internalGetData($fieldName, $load);
         }
 
         try {
-            if (! isset($this->_references[$fieldName])) {
-                if ($load) {
-                    $rel = $this->_table->getRelation($fieldName);
-                    $this->_references[$fieldName] = $rel->fetchRelatedFor($this);
-                } else {
-                    return null;
-                }
-            }
-
-            if ($this->_references[$fieldName] === self::$_null) {
-                return null;
-            }
-
-            return $this->_references[$fieldName];
+            return $this->internalGetReference($fieldName, $load);
         } catch (Doctrine_Table_Exception $e) {
             throw new Doctrine_Record_UnknownPropertyException(sprintf('Unknown record property / related component "%s" on "%s"', $fieldName, static::class), previous: $e);
         }
+    }
+
+    final protected function internalGetValue(string $fieldName): mixed
+    {
+        if (!$this->hasMappedValue($fieldName)) {
+            throw new Doctrine_Record_UnknownPropertyException('Unknown property ' . $fieldName);
+        }
+
+        return $this->_values[$fieldName];
+    }
+
+    final protected function internalGetData(string $fieldName, bool $load = true): mixed
+    {
+        if (!array_key_exists($fieldName, $this->_data)) {
+            throw new Doctrine_Record_UnknownPropertyException('Unknown property ' . $fieldName);
+        }
+
+        // check if the value is the Doctrine_Null object located in self::$_null)
+        if ($this->_data[$fieldName] === self::$_null && $load) {
+            $this->load();
+        }
+
+        if ($this->_data[$fieldName] === self::$_null) {
+            $value = null;
+        } else {
+            $value = $this->_data[$fieldName];
+        }
+
+        return $value;
+    }
+
+    /**
+     * @throws Doctrine_Table_Exception when relation is invalid
+     */
+    final protected function internalGetReference(string $fieldName, bool $load = true): Doctrine_Record|Doctrine_Collection|null
+    {
+        if (!isset($this->_references[$fieldName])) {
+            if ($load) {
+                $this->loadReference($fieldName);
+            } else {
+                return null;
+            }
+        }
+
+        if ($this->_references[$fieldName] === self::$_null) {
+            return null;
+        }
+
+        return $this->_references[$fieldName];
     }
 
     /**
