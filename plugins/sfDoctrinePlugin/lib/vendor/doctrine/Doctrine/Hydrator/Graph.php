@@ -268,50 +268,22 @@ abstract class Doctrine_Hydrator_Graph extends Doctrine_Hydrator_Abstract
 
         foreach ($data as $key => $value) {
             // Parse each column name only once. Cache the results.
-            if (! isset($cache[$key])) {
-                $e = explode('__', $key);
-                $last = strtolower(array_pop($e));
-                $cache[$key]['dqlAlias'] = $this->_tableAliases[strtolower(implode('__', $e))];
-                $table = $this->_queryComponents[$cache[$key]['dqlAlias']]['table'];
-                $fieldName = $table->getFieldName($last);
-                $cache[$key]['fieldName'] = $fieldName;
-                if ($table->isIdentifier($fieldName)) {
-                    $cache[$key]['isIdentifier'] = true;
-                } else {
-                    $cache[$key]['isIdentifier'] = false;
-                }
-                $type = $table->getTypeOfColumn($last);
-                if ($type == 'integer' || $type == 'string') {
-                    $cache[$key]['isSimpleType'] = true;
-                } else {
-                    $cache[$key]['type'] = $type;
-                    $cache[$key]['isSimpleType'] = false;
-                }
-            }
+            $cache[$key] ??= $this->buildColumnCache($key);
 
             $table = $this->_queryComponents[$cache[$key]['dqlAlias']]['table'];
             $dqlAlias = $cache[$key]['dqlAlias'];
             $fieldName = $cache[$key]['fieldName'];
-            $agg = false;
-            if (isset($this->_queryComponents[$dqlAlias]['agg'][$fieldName])) {
-                $fieldName = $this->_queryComponents[$dqlAlias]['agg'][$fieldName];
-                $agg = true;
-            }
 
             if ($cache[$key]['isIdentifier']) {
                 $id[$dqlAlias] .= '|' . $value;
             }
 
-            if ($cache[$key]['isSimpleType']) {
-                $preparedValue = $value;
-            } else {
-                $preparedValue = $table->prepareValue($fieldName, $value, $cache[$key]['type']);
-            }
+            $preparedValue = $cache[$key]['type'] ? $table->prepareValue($fieldName, $value, $cache[$key]['type']) : $value;
 
             // Ticket #1380
             // Hydrate aggregates in to the root component as well.
             // So we know that all aggregate values will always be available in the root component
-            if ($agg) {
+            if ($cache[$key]['isAgg']) {
                 $rowData[$this->_rootAlias][$fieldName] = $preparedValue;
                 if (isset($rowData[$dqlAlias])) {
                     $rowData[$dqlAlias][$fieldName] = $preparedValue;

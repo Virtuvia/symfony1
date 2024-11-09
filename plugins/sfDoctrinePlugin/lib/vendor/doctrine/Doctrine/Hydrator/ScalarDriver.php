@@ -49,32 +49,7 @@ class Doctrine_Hydrator_ScalarDriver extends Doctrine_Hydrator_Abstract
         $rowData = [];
         foreach ($data as $key => $value) {
             // Parse each column name only once. Cache the results.
-            if (! isset($cache[$key])) {
-                // cache general information like the column name <-> field name mapping
-                $e = explode('__', $key);
-                $columnName = strtolower(array_pop($e));
-                $cache[$key]['dqlAlias'] = $this->_tableAliases[strtolower(implode('__', $e))];
-                $table = $this->_queryComponents[$cache[$key]['dqlAlias']]['table'];
-                // check whether it's an aggregate value or a regular field
-                if (isset($this->_queryComponents[$cache[$key]['dqlAlias']]['agg'][$columnName])) {
-                    $fieldName = $this->_queryComponents[$cache[$key]['dqlAlias']]['agg'][$columnName];
-                    $cache[$key]['isAgg'] = true;
-                } else {
-                    $fieldName = $table->getFieldName($columnName);
-                    $cache[$key]['isAgg'] = false;
-                }
-
-                $cache[$key]['fieldName'] = $fieldName;
-
-                // cache type information
-                $type = $table->getTypeOfColumn($columnName);
-                if ($type == 'integer' || $type == 'string') {
-                    $cache[$key]['isSimpleType'] = true;
-                } else {
-                    $cache[$key]['type'] = $type;
-                    $cache[$key]['isSimpleType'] = false;
-                }
-            }
+            $cache[$key] ??= $this->buildColumnCache($key);
 
             $table = $this->_queryComponents[$cache[$key]['dqlAlias']]['table'];
             $dqlAlias = $cache[$key]['dqlAlias'];
@@ -82,12 +57,7 @@ class Doctrine_Hydrator_ScalarDriver extends Doctrine_Hydrator_Abstract
 
             $rowDataKey = $aliasPrefix ? $dqlAlias . '_' . $fieldName : $fieldName;
 
-            if ($cache[$key]['isSimpleType'] || $cache[$key]['isAgg']) {
-                $rowData[$rowDataKey] = $value;
-            } else {
-                $rowData[$rowDataKey] = $table->prepareValue(
-                    $fieldName, $value, $cache[$key]['type']);
-            }
+            $rowData[$rowDataKey] = $cache[$key]['type'] ? $table->prepareValue($fieldName, $value, $cache[$key]['type']) : $value;
         }
         return $rowData;
     }

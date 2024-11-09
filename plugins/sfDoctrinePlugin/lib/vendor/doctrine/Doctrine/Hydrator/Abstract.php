@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /*
  *  $Id: Hydrate.php 3192 2007-11-19 17:55:23Z romanb $
  *
@@ -100,4 +103,37 @@ abstract class Doctrine_Hydrator_Abstract
      * @return mixed
      */
     abstract public function hydrateResultSet($stmt);
+
+    protected function buildColumnCache(string $key): array
+    {
+        $cache = [];
+        // cache general information like the column name <-> field name mapping
+
+        $e = explode('__', $key);
+        $columnName = strtolower(array_pop($e));
+        $cache['dqlAlias'] = $this->_tableAliases[strtolower(implode('__', $e))];
+        $table = $this->_queryComponents[$cache['dqlAlias']]['table'];
+
+        // check whether it's an aggregate value or a regular field
+        if (isset($this->_queryComponents[$cache['dqlAlias']]['agg'][$columnName])) {
+            $fieldName = $this->_queryComponents[$cache['dqlAlias']]['agg'][$columnName];
+            $cache['isAgg'] = true;
+        } else {
+            $fieldName = $table->getFieldName($columnName);
+            $cache['isAgg'] = false;
+        }
+
+        $cache['fieldName'] = $fieldName;
+
+        if ($table->isIdentifier($fieldName)) {
+            $cache['isIdentifier'] = true;
+        } else {
+            $cache['isIdentifier'] = false;
+        }
+
+        // cache type information
+        $cache['type'] = $table->getTypeOfColumn($columnName);
+
+        return $cache;
+    }
 }
