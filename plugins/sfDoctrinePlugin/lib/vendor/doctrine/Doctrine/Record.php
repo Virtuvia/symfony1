@@ -1053,7 +1053,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
 
                 if ($rel instanceof Doctrine_Relation_LocalKey) {
                     if ($value !== self::$_null &&  ! empty($foreignFieldName) && $foreignFieldName != $value->getTable()->getIdentifier()) {
-                        $this->set($localFieldName, $value->rawGet($foreignFieldName), false);
+                        $this->set($localFieldName, $value->internalGetData($foreignFieldName, false), false);
                     } else {
                         // FIX: Ticket #1280 fits in this situation
                         $this->set($localFieldName, $value, false);
