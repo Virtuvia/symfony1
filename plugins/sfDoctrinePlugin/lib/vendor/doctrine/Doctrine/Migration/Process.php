@@ -107,10 +107,18 @@ class Doctrine_Migration_Process
      */
     public function processRenamedColumn(array $column)
     {
-        $columnList = $this->getConnection()->import->listTableColumns($column['tableName']);
-        if (isset($columnList[$column['oldColumnName']])) {
-            $this->getConnection()->export->alterTable($column['tableName'], ['rename' => [$column['oldColumnName'] => ['name' => $column['newColumnName'], 'definition' => $columnList[$column['oldColumnName']]]]]);
+        $columnList = $this->getConnection()->getImport()->listTableColumns($column['tableName']);
+        if (!isset($columnList[$column['oldColumnName']])) {
+            throw new Doctrine_Migration_Exception(
+                sprintf(
+                    'Could not locate existing column with name "%s" to rename to "%s"',
+                    $column['oldColumnName'],
+                    $column['newColumnName']
+                )
+            );
         }
+
+        $this->getConnection()->export->alterTable($column['tableName'], ['rename' => [$column['oldColumnName'] => ['name' => $column['newColumnName'], 'definition' => $columnList[$column['oldColumnName']]]]]);
     }
 
     /**
