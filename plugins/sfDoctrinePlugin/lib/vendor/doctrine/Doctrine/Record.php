@@ -823,6 +823,39 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     }
 
     /**
+     * Check to see if a reference exists, and optionally lazy load it, otherwise return null
+     *
+     * @param string $fieldName name of the related component
+     * @param bool $load      whether or not to invoke the loading procedure
+     *
+     * @throws Doctrine_Table_Exception when relation is invalid
+     */
+    final protected function internalGetReferenceOrNull(string $fieldName, bool $load = true): Doctrine_Record|Doctrine_Collection|null
+    {
+        if (!$this->hasReference($fieldName) && $load) {
+            // trigger a load of the reference, and retrieve the value
+            $reference = $this->internalGetReference($fieldName, true);
+
+            if ($reference instanceof Doctrine_Record && !$reference->exists()) {
+                // remove the proxy reference from our object
+                $this->clearRelated($fieldName);
+
+                return null;
+            }
+
+            if ($reference instanceof Doctrine_Collection && $reference->count() === 0) {
+                // remove the empty collection from our object
+                $this->clearRelated($fieldName);
+
+                return null;
+            }
+        }
+
+        // return the retrieved value (if last block ran) or try to fetch it normally
+        return $reference ?? $this->internalGetReference($fieldName, $load);
+    }
+
+    /**
      * sets a value that will be managed as if it were a field by magic accessor and mutators, @see get() and @see set().
      * Normally used by Doctrine for the mapping of aggregate values.
      *
