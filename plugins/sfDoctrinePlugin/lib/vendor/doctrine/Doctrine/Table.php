@@ -448,21 +448,14 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
                             $definition, true);
                     }
                 } else {
-                    $identifierOptions = $this->getAttribute(Doctrine_Core::ATTR_DEFAULT_IDENTIFIER_OPTIONS);
-                    $name = (isset($identifierOptions['name']) && $identifierOptions['name']) ? $identifierOptions['name'] : 'id';
-                    $name = sprintf($name, $this->getTableName());
+                    $name = 'id';
 
-                    $definition = ['type' => (isset($identifierOptions['type']) && $identifierOptions['type']) ? $identifierOptions['type'] : 'integer',
-                        'length' => (isset($identifierOptions['length']) && $identifierOptions['length']) ? $identifierOptions['length'] : 8,
-                        'autoincrement' => isset($identifierOptions['autoincrement']) ? $identifierOptions['autoincrement'] : true,
-                        'primary' => isset($identifierOptions['primary']) ? $identifierOptions['primary'] : true];
-
-                    unset($identifierOptions['name'], $identifierOptions['type'], $identifierOptions['length']);
-                    foreach ($identifierOptions as $key => $value) {
-                        if (! isset($definition[$key]) || ! $definition[$key]) {
-                            $definition[$key] = $value;
-                        }
-                    }
+                    $definition = [
+                        'type' => 'integer',
+                        'length' => 8,
+                        'autoincrement' => true,
+                        'primary' => true,
+                    ];
 
                     $this->setColumn($name, $definition['type'], $definition['length'], $definition, true);
                     $this->_identifier = $name;

@@ -194,7 +194,6 @@ class Doctrine_Core
     public const ATTR_AUTO_FREE_QUERY_OBJECTS      = 166;
     public const ATTR_DEFAULT_TABLE_CHARSET        = 167;
     public const ATTR_DEFAULT_TABLE_COLLATE        = 168;
-    public const ATTR_DEFAULT_IDENTIFIER_OPTIONS   = 169;
     public const ATTR_DEFAULT_COLUMN_OPTIONS       = 170;
     public const ATTR_HYDRATE_OVERWRITE            = 172;
     public const ATTR_QUERY_CLASS                  = 173;

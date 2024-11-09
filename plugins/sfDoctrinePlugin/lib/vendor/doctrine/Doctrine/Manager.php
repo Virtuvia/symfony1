@@ -196,7 +196,6 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
                 Doctrine_Core::ATTR_AUTOLOAD_TABLE_CLASSES       => false,
                 Doctrine_Core::ATTR_USE_DQL_CALLBACKS            => false,
                 Doctrine_Core::ATTR_AUTO_FREE_QUERY_OBJECTS      => false,
-                Doctrine_Core::ATTR_DEFAULT_IDENTIFIER_OPTIONS   => [],
                 Doctrine_Core::ATTR_DEFAULT_COLUMN_OPTIONS       => [],
                 Doctrine_Core::ATTR_HYDRATE_OVERWRITE            => true,
                 Doctrine_Core::ATTR_QUERY_CLASS                  => 'Doctrine_Query',
