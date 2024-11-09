@@ -35,6 +35,7 @@
  */
 abstract class Doctrine_Hydrator_Graph extends Doctrine_Hydrator_Abstract
 {
+    /** @var array<string, Doctrine_Table> */
     protected $_tables = [];
     protected string $_rootAlias;
 
@@ -162,7 +163,7 @@ abstract class Doctrine_Hydrator_Graph extends Doctrine_Hydrator_Abstract
             foreach ($rowData as $dqlAlias => $data) {
                 $index = false;
                 $map = $this->_queryComponents[$dqlAlias];
-                $table = $map['table'];
+                $table = $this->_queryComponents[$dqlAlias]['table'];
                 $componentName = $table->getComponentName();
                 $event->set('data', $data);
                 $event->setInvoker($table);
@@ -288,8 +289,7 @@ abstract class Doctrine_Hydrator_Graph extends Doctrine_Hydrator_Abstract
                 }
             }
 
-            $map = $this->_queryComponents[$cache[$key]['dqlAlias']];
-            $table = $map['table'];
+            $table = $this->_queryComponents[$cache[$key]['dqlAlias']]['table'];
             $dqlAlias = $cache[$key]['dqlAlias'];
             $fieldName = $cache[$key]['fieldName'];
             $agg = false;

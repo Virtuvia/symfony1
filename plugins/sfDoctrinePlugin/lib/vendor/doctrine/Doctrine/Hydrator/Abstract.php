@@ -32,6 +32,7 @@
  */
 abstract class Doctrine_Hydrator_Abstract
 {
+    /** @var array<string, array{table: Doctrine_Table}> */
     protected $_queryComponents = [];
     protected $_tableAliases = [];
     protected $_priorRow;
@@ -79,7 +80,7 @@ abstract class Doctrine_Hydrator_Abstract
         $this->_hydrationMode = $hydrationMode;
     }
 
-    public function getRootComponent()
+    public function getRootComponent(): Doctrine_Table
     {
         $queryComponents = array_values($this->_queryComponents);
         return $queryComponents[0]['table'];
