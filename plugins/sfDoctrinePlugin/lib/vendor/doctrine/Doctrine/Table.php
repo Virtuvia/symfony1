@@ -2097,9 +2097,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      * This method returns a representation of a field data, depending on
      * the type of the given column.
      *
-     * 1. It unserializes array and object typed columns
-     * 2. Uncompresses gzip typed columns
-     * 3. Initializes special null object pointer for null values (for fast column existence checking purposes)
+     * Initializes special null object pointer for null values (for fast column existence checking purposes)
      *
      * example:
      * <code type='php'>
@@ -2108,16 +2106,16 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      * $table->prepareValue($field, $value); // Doctrine_Null
      * </code>
      *
-     * @throws Doctrine_Table_Exception     if unserialization of array/object typed column fails or
-     * @throws Doctrine_Table_Exception     if uncompression of gzip typed column fails         *
-     * @param string $field     the name of the field
-     * @param string $value     field value
-     * @param string $typeHint  Type hint used to pass in the type of the value to prepare
+     * @throws Doctrine_Type_Exception_UnknownType
+     * @throws Doctrine_Type_Exception_ConversionFailed
+     * @param string $fieldName     the name of the field
+     * @param mixed $value     field value
+     * @param ?string $typeHint  Type hint used to pass in the type of the value to prepare
      *                          if it is already known. This enables the method to skip
      *                          the type determination. Used i.e. during hydration.
      * @return mixed            prepared value
      */
-    public function prepareValue($fieldName, $value, $typeHint = null)
+    public function prepareValue(string $fieldName, mixed $value, ?string $typeHint = null): mixed
     {
         if ($value === self::$_null) {
             return self::$_null;
@@ -2129,38 +2127,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
 
         $type = is_null($typeHint) ? $this->getTypeOf($fieldName) : $typeHint;
 
-        switch ($type) {
-            case 'timestamp':
-                return (new Doctrine_Type_Timestamp())->convertToPHPValue($value);
-            case 'enum':
-            case 'integer':
-            case 'string':
-                // don't do any casting here PHP INT_MAX is smaller than what the databases support
-                break;
-            case 'set':
-                return explode(',', $value);
-            case 'boolean':
-                return (bool) $value;
-            case 'array':
-            case 'object':
-                if (is_string($value)) {
-                    $value = empty($value) ? null : unserialize($value);
-
-                    if ($value === false) {
-                        throw new Doctrine_Table_Exception('Unserialization of ' . $fieldName . ' failed.');
-                    }
-                }
-
-                break;
-            case 'gzip':
-                $value = gzuncompress($value);
-
-                if ($value === false) {
-                    throw new Doctrine_Table_Exception('Uncompressing of ' . $fieldName . ' failed.');
-                }
-        }
-
-        return $value;
+        return $this->getConnection()->convertToPHPValue($type, $value);
     }
 
     /**

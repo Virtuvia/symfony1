@@ -191,32 +191,4 @@ final class Doctrine_Lib
 
         return true;
     }
-
-    /**
-     * Converts a Doctrine Type to a PHP Type
-     *
-     * This method was built to be used for phpDoc generation
-     *
-     * @param string $doctrineType
-     * @return string
-     */
-    public static function convertDoctrineTypeToPhpType(string $doctrineType): string
-    {
-        // based on logic in \Doctrine_Table::prepareValue
-        switch ($doctrineType) {
-            case 'timestamp':
-                return (new Doctrine_Type_Timestamp())->getPhpType();
-            case 'bool':
-            case 'boolean':
-                return 'bool';
-            case 'object':
-            case 'array':
-                return 'mixed';
-            case 'set':
-                return 'array';
-        }
-
-        // most values from the database are strings in PHP
-        return 'string';
-    }
 }

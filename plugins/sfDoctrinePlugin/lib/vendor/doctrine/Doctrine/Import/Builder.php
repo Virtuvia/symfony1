@@ -630,13 +630,9 @@ EOF;
         return $ret;
     }
 
-    /**
-     * @param array $column
-     * @return string
-     */
-    protected function getPhpTypeForColumn(array $column)
+    protected function getPhpTypeForColumn(array $column): string
     {
-        return Doctrine_Lib::convertDoctrineTypeToPhpType($column['type']);
+        return Doctrine_Manager::getInstance()->getType($column['type'])->getPhpType();
     }
 
     /**

@@ -104,6 +104,8 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
      */
     protected $pendingAttributes  = [];
 
+    protected Doctrine_Type_Registry $typeRegistry;
+
     /**
      * @var array $modules                      an array containing all modules
      *              transaction                 Doctrine_Transaction driver, handles savepoint and transaction isolation abstraction
@@ -224,6 +226,32 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
     public function getImport(): Doctrine_Import
     {
         return $this->import;
+    }
+
+    /**
+     * @throws Doctrine_Type_Exception_ConversionFailed
+     * @throws Doctrine_Type_Exception_UnknownType
+     */
+    public function convertToDatabaseValue(string $type, mixed $phpValue): mixed
+    {
+        return $this->getManager()->convertToDatabaseValue($type, $phpValue);
+    }
+
+    /**
+     * @throws Doctrine_Type_Exception_ConversionFailed
+     * @throws Doctrine_Type_Exception_UnknownType
+     */
+    public function convertToPhpValue(string $type, mixed $databaseValue): mixed
+    {
+        return $this->getManager()->convertToPhpValue($type, $databaseValue);
+    }
+
+    /**
+     * @throws Doctrine_Type_Exception_UnknownType
+     */
+    public function isValueModified(string $type, mixed $old, mixed $new): bool
+    {
+        return $this->getManager()->isValueModified($type, $old, $new);
     }
 
     /**

@@ -980,31 +980,17 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * and change it in the database when it is not necessary
      *
      * @param string $type  Doctrine type of the column
-     * @param string $old   Old value
-     * @param string $new   New value
+     * @param mixed $old   Old value
+     * @param mixed $new   New value
      * @return bool $modified  Whether or not Doctrine considers the value modified
      */
-    protected function _isValueModified($type, $old, $new)
+    private function _isValueModified(string $type, mixed $old, mixed $new): bool
     {
         if ($new instanceof Doctrine_Expression) {
             return true;
         }
 
-        if ($type == 'boolean' && (is_bool($old) || is_numeric($old)) && (is_bool($new) || is_numeric($new)) && $old == $new) {
-            return false;
-        } elseif (in_array($type, ['decimal', 'float']) && is_numeric($old) && is_numeric($new)) {
-            return $old * 100 != $new * 100;
-        } elseif (in_array($type, ['integer', 'int']) && is_numeric($old) && is_numeric($new)) {
-            return $old != $new;
-        } elseif ($type == 'timestamp' || $type == 'date') {
-            $oldStrToTime = $old === null ? null : strtotime($old);
-            $newStrToTime = $new === null ? null : strtotime($new);
-            if ($oldStrToTime !== false && $newStrToTime !== false) {
-                return $oldStrToTime !== $newStrToTime;
-            }
-        }
-
-        return $old !== $new;
+        return $this->getTable()->getConnection()->isValueModified($type, $old, $new);
     }
 
     /**
@@ -1192,62 +1178,35 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * adds column aggregation inheritance and converts Records into primary
      * key values.
      *
-     * @param array $array
-     * @return array
-     * @todo What about a little bit more expressive name? getPreparedData?
+     * @internal used by {@see Doctrine_Connection_UnitOfWork}
+     *
+     * @throws Doctrine_Type_Exception_ConversionFailed
+     * @throws Doctrine_Type_Exception_UnknownType
      */
-    public function getPrepared(array $array = [])
+    public function prepareModifiedDataForDatabase(): array
     {
         $a = [];
 
-        if (empty($array)) {
-            $modifiedFields = $this->_modified;
-        }
-
-        foreach ($modifiedFields as $field) {
-            $type = $this->_table->getTypeOf($field);
+        foreach ($this->_modified as $field) {
+            $type = $this->getTable()->getTypeOf($field);
 
             if ($this->_data[$field] === self::$_null) {
                 $a[$field] = null;
                 continue;
             }
 
-            switch ($type) {
-                case 'timestamp':
-                    $a[$field] = (new Doctrine_Type_Timestamp())->convertToDatabaseValue($this->_data[$field]);
-                    break;
-                case 'array':
-                case 'object':
-                    $a[$field] = serialize($this->_data[$field]);
-                    break;
-                case 'gzip':
-                    $a[$field] = gzcompress($this->_data[$field], 5);
-                    break;
-                case 'boolean':
-                    $a[$field] = $this->getTable()->getConnection()->convertBooleans($this->_data[$field]);
-                    break;
-                case 'set':
-                    if (is_array($this->_data[$field])) {
-                        $a[$field] = implode(',', $this->_data[$field]);
-                    } else {
-                        $a[$field] = $this->_data[$field];
-                    }
-                    break;
-                default:
-                    if ($this->_data[$field] instanceof Doctrine_Record) {
-                        $a[$field] = $this->_data[$field]->getIncremented();
-                        if ($a[$field] !== null) {
-                            $this->_data[$field] = $a[$field];
-                        }
-                    } else {
-                        $a[$field] = $this->_data[$field];
-                    }
-                    /** TODO:
-                    if ($this->_data[$v] === null) {
-                        throw new Doctrine_Record_Exception('Unexpected null value.');
-                    }
-                    */
+            // @TODO is this case even possible anymore?
+            if ($this->_data[$field] instanceof Doctrine_Record) {
+                $value = $this->_data[$field]->getIncremented();
+
+                if ($value !== null) {
+                    $this->_data[$field] = $value;
+                }
+            } else {
+                $value = $this->_data[$field];
             }
+
+            $a[$field] = $this->getTable()->getConnection()->convertToDatabaseValue($type, $value);
         }
 
         return $a;

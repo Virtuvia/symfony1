@@ -96,6 +96,8 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
 
     private $_initialized = false;
 
+    private Doctrine_Type_Registry $typeRegistry;
+
     /**
      * constructor
      *
@@ -108,6 +110,56 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
         Doctrine_Table::initNullObject($null);
         Doctrine_Hydrator_RecordDriver::initNullObject($null);
         Doctrine_Record_Iterator::initNullObject($null);
+
+        $this->typeRegistry = new Doctrine_Type_Registry();
+        $this->registerType('blob', new Doctrine_Type_BlobType());
+        $this->registerType('boolean', new Doctrine_Type_BooleanType());
+        $this->registerType('clob', new Doctrine_Type_ClobType());
+        $this->registerType('date', new Doctrine_Type_DateType());
+        $this->registerType('decimal', new Doctrine_Type_DecimalType());
+        $this->registerType('double', new Doctrine_Type_DoubleType());
+        $this->registerType('enum', new Doctrine_Type_EnumType());
+        $this->registerType('float', new Doctrine_Type_FloatType());
+        $this->registerType('integer', new Doctrine_Type_IntegerType());
+        $this->registerType('string', new Doctrine_Type_StringType());
+        $this->registerType('timestamp', new Doctrine_Type_TimestampType());
+        $this->registerType('time', new Doctrine_Type_TimeType());
+    }
+
+    /**
+     * @throws Doctrine_Type_Exception_ConversionFailed
+     * @throws Doctrine_Type_Exception_UnknownType
+     */
+    public function convertToDatabaseValue(string $type, mixed $phpValue): mixed
+    {
+        return $this->typeRegistry->getType($type)->convertToDatabaseValue($phpValue);
+    }
+
+    /**
+     * @throws Doctrine_Type_Exception_ConversionFailed
+     * @throws Doctrine_Type_Exception_UnknownType
+     */
+    public function convertToPhpValue(string $type, mixed $databaseValue): mixed
+    {
+        return $this->typeRegistry->getType($type)->convertToPhpValue($databaseValue);
+    }
+
+    /**
+     * @throws Doctrine_Type_Exception_UnknownType
+     */
+    public function isValueModified(string $type, mixed $old, mixed $new): bool
+    {
+        return $this->typeRegistry->getType($type)->isValueModified($old, $new);
+    }
+
+    public function getType(string $type): Doctrine_Type
+    {
+        return $this->typeRegistry->getType($type);
+    }
+
+    public function registerType(string $name, Doctrine_Type $type): void
+    {
+        $this->typeRegistry->registerType($name, $type);
     }
 
     /**

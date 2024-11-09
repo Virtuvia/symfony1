@@ -533,7 +533,7 @@ class Doctrine_Connection_UnitOfWork extends Doctrine_Connection_Module
                     $this->_updateCTIRecord($table, $record);
                     //--
                 } else {
-                    $array = $record->getPrepared();
+                    $array = $record->prepareModifiedDataForDatabase();
                     $this->conn->update($table, $array, $identifier);
                 }
                 $record->assignIdentifier(true);
@@ -601,7 +601,7 @@ class Doctrine_Connection_UnitOfWork extends Doctrine_Connection_Module
 
                 $table = $record->getTable();
                 $identifier = (array) $table->getIdentifier();
-                $data = $record->getPrepared();
+                $data = $record->prepareModifiedDataForDatabase();
 
                 foreach ($data as $key  => $value) {
                     if ($value instanceof Doctrine_Expression) {
@@ -634,7 +634,7 @@ class Doctrine_Connection_UnitOfWork extends Doctrine_Connection_Module
      */
     public function processSingleInsert(Doctrine_Record $record)
     {
-        $fields = $record->getPrepared();
+        $fields = $record->prepareModifiedDataForDatabase();
         $table = $record->getTable();
 
         // Populate fields with a blank array so that a blank records can be inserted
@@ -879,7 +879,7 @@ class Doctrine_Connection_UnitOfWork extends Doctrine_Connection_Module
         $table = $record->getTable();
         $dataSet = [];
         $component = $table->getComponentName();
-        $array = $record->getPrepared();
+        $array = $record->prepareModifiedDataForDatabase();
 
         foreach ($table->getColumns() as $columnName => $definition) {
             if (! isset($dataSet[$component])) {
