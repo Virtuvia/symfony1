@@ -54,6 +54,7 @@
  * @author      Lukas Smith <smith@pooteeweet.org> (MDB2 library)
  *
  * @property-read Doctrine_Connection_UnitOfWork $unitOfWork
+ * @property-read Doctrine_Import $import
  */
 abstract class Doctrine_Connection extends Doctrine_Configurable implements Countable, IteratorAggregate
 {
@@ -218,6 +219,11 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
     public function getUnitOfWork(): Doctrine_Connection_UnitOfWork
     {
         return $this->unitOfWork;
+    }
+
+    public function getImport(): Doctrine_Import
+    {
+        return $this->import;
     }
 
     /**
