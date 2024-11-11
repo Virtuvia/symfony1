@@ -278,7 +278,7 @@ abstract class Doctrine_Hydrator_Graph extends Doctrine_Hydrator_Abstract
                 $id[$dqlAlias] .= '|' . $value;
             }
 
-            $preparedValue = $cache[$key]['type'] ? $table->prepareValue($fieldName, $value, $cache[$key]['type']) : $value;
+            $preparedValue = $cache[$key]['type'] ? $table->convertToPhpValue($fieldName, $value, $cache[$key]['type']) : $value;
 
             // Ticket #1380
             // Hydrate aggregates in to the root component as well.

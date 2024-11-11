@@ -1188,14 +1188,6 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         $a = [];
 
         foreach ($this->_modified as $field) {
-            $type = $this->getTable()->getTypeOf($field);
-
-            if ($this->_data[$field] === self::$_null) {
-                $a[$field] = null;
-                continue;
-            }
-
-            // @TODO is this case even possible anymore?
             if ($this->_data[$field] instanceof Doctrine_Record) {
                 $value = $this->_data[$field]->getIncremented();
 
@@ -1206,7 +1198,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
                 $value = $this->_data[$field];
             }
 
-            $a[$field] = $this->getTable()->getConnection()->convertToDatabaseValue($type, $value);
+            $a[$field] = $this->getTable()->convertToDatabaseValue($field, $value);
         }
 
         return $a;
@@ -1242,10 +1234,6 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         $a = [];
 
         foreach ($this as $column => $value) {
-            if ($value === self::$_null || is_object($value)) {
-                $value = null;
-            }
-
             $columnValue = $this->get($column, false);
 
             if ($columnValue instanceof Doctrine_Record) {

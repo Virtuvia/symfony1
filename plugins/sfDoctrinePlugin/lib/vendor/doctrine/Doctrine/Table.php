@@ -2112,19 +2112,32 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      *                          the type determination. Used i.e. during hydration.
      * @return mixed            prepared value
      */
-    public function prepareValue(string $fieldName, mixed $value, ?string $typeHint = null): mixed
+    public function convertToPhpValue(string $fieldName, mixed $value, ?string $typeHint = null): mixed
     {
         if ($value === self::$_null) {
             return self::$_null;
         }
 
-        if ($value === null) {
+        $type = $typeHint ?? $this->getTypeOf($fieldName);
+
+        return $this->getConnection()->convertToPhpValue($type, $value);
+    }
+
+    /**
+     * @internal
+     * @see Doctrine_Record
+     *
+     * @throws Doctrine_Type_Exception_ConversionFailed
+     * @throws Doctrine_Type_Exception_UnknownType
+     */
+    public function convertToDatabaseValue(string $fieldName, mixed $value): mixed
+    {
+        if ($value === self::$_null) {
             return null;
         }
 
-        $type = is_null($typeHint) ? $this->getTypeOf($fieldName) : $typeHint;
-
-        return $this->getConnection()->convertToPHPValue($type, $value);
+        $type = $this->getTypeOf($fieldName);
+        return $this->getConnection()->convertToDatabaseValue($type, $value);
     }
 
     /**

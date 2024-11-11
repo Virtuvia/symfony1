@@ -57,7 +57,7 @@ class Doctrine_Hydrator_ScalarDriver extends Doctrine_Hydrator_Abstract
 
             $rowDataKey = $aliasPrefix ? $dqlAlias . '_' . $fieldName : $fieldName;
 
-            $rowData[$rowDataKey] = $cache[$key]['type'] ? $table->prepareValue($fieldName, $value, $cache[$key]['type']) : $value;
+            $rowData[$rowDataKey] = $cache[$key]['type'] ? $table->convertToPhpValue($fieldName, $value, $cache[$key]['type']) : $value;
         }
         return $rowData;
     }
