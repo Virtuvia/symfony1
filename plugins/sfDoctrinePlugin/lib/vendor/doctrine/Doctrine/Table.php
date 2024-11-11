@@ -2099,6 +2099,10 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      * $table->prepareValue($field, $value); // Doctrine_Null
      * </code>
      *
+     * @internal
+     * @see Doctrine_Hydrator_Graph
+     * @see Doctrine_Hydrator_ScalarDriver
+     *
      * @throws Doctrine_Type_Exception_UnknownType
      * @throws Doctrine_Type_Exception_ConversionFailed
      * @param string $fieldName     the name of the field
