@@ -45,7 +45,7 @@ class sfImageTransformManager
    * options configured in the thumbnailing.yml and uses them to call sfImageTransformPlugins transformations.
    * Additionally the generated thumbnail can be cached.
    *
-   * @param  string  $uri     Image source URI (sfImageSource://...)
+   * @param  string  $uri
    * @param  array   $options Thumbnail parameters taken from the thumbnail URL referencing a format and id
    * @return sfImage
    */
@@ -86,101 +86,6 @@ class sfImageTransformManager
    */
   private function transform(sfImage $sourceImage, $transformation)
   {
-    $parameters = $this->prepareParameters($sourceImage, $transformation['transformation'], $transformation['param']);
-
-    call_user_func_array(array($sourceImage, $transformation['transformation']), $parameters);
-  }
-
-  /**
-   * Extends current transformation parameters by autoboxing to objects
-   *
-   * This is needed for transformations that need certain objects in their parameters,
-   * that need to be instantiated first which can not be done in a yaml file.
-   *
-   * If any parameter is prefixed with "className|" then the method autoboxClassName()
-   * would be called passing the remaining parameter returning an instance of className.
-   *
-   * @param  sfImage $sourceImage The image to transform
-   * @param  string  $method      The current transformation method
-   * @param  array   $parameters  The current transformations parameters as set in the yaml
-   * @return array   Extended parameters
-   */
-  private function prepareParameters(sfImage $sourceImage, $method, $parameters)
-  {
-    foreach($parameters as $key => $parameter)
-    {
-      if(2 == count($parts = explode('|', $parameter, 2)))
-      {
-        $methodName = "autobox".ucfirst($parts[0]);
-        $parameter  = $parts[1];
-
-        if(!method_exists($this, $methodName))
-        {
-          throw new InvalidArgumentException('Don\'t know how to autobox to "'.$parts[0].'"!');
-        }
-
-        $parameters[$key] = $this->$methodName($parameter);
-      }
-    }
-
-    return $parameters;
-  }
-
-  /**
-   * Autoboxes a filepath to an image into an instance of sfImage if the file exists
-   *
-   * @param string $parameter A filepath as specified in the thumbnailing.yml
-   * @return sfImage
-   */
-  private function autoboxSfImage($parameter)
-  {
-    $pathinfo = pathinfo($parameter);
-    if(in_array($pathinfo['extension'], array('jpg', 'jpeg', 'gif', 'png')))
-    {
-      $filepath = $pathinfo['dirname'];
-      $filename = $pathinfo['basename'];
-
-      $pluginDirs = ProjectConfiguration::getActive()->getAllPluginPaths();
-      $pluginDir = $pluginDirs['sfImageTransformExtraPlugin'];
-
-      $resourcePaths = array_merge(
-        sfConfig::get('app_sfImageTransformExtraPlugin_additional_resource_paths', array()),
-        array(
-          sfConfig::get('sf_data_dir') . '/resources/',
-          $pluginDir . '/data/example-resources/'
-        )
-      );
-
-      array_walk($resourcePaths, array($this, 'extendResourcePaths'), $filepath);
-
-      $files = sfFinder::type('file')
-        ->name($filename)
-        ->maxdepth(1)
-        ->in($resourcePaths);
-
-      if(0 == count($files))
-      {
-        throw new InvalidArgumentException('Could not find resource "'.$parameter.'"!');
-      }
-
-      $parameter = new sfImage($files[0]);
-    }
-
-    return $parameter;
-  }
-
-  /**
-   * Extending known resource paths (from app.yml) with current filepath
-   * Used as callback for array_walk in sfImageTransformManager::autoboxSfImage()
-   * @see array_merge()
-   *
-   * @param  string &$path         One of the resource path as configured in app.yml
-   * @param  string $index         Current key/index
-   * @param  string $pathExtension The current filepath to look up
-   * @return string
-   */
-  public function extendResourcePaths(&$path, $index, $pathExtension)
-  {
-    $path = $path.'/'.$pathExtension;
+    call_user_func_array(array($sourceImage, $transformation['transformation']), $transformation['param']);
   }
 }
