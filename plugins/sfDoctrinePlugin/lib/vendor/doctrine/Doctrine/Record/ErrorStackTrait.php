@@ -5,9 +5,9 @@ declare(strict_types=1);
 trait Doctrine_Record_ErrorStackTrait
 {
     /**
-     * @var Doctrine_Validator_ErrorStack   error stack object
+     * @var null|Doctrine_Validator_ErrorStack   error stack object
      */
-    private $_errorStack;
+    private ?Doctrine_Validator_ErrorStack $_errorStack = null;
 
     /**
      * Get the record error stack as a human readable string.

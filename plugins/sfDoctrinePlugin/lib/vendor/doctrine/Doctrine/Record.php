@@ -46,76 +46,76 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     use Doctrine_Record_PersistanceTrait;
 
     /**
-     * @var int $_id                    the primary keys of this object
+     * @var array $_id                    the primary keys of this object
      */
-    private $_id           = [];
+    private array $_id           = [];
 
     /**
      * each element is one of 3 following types:
      * - simple type (int, string) - field has a scalar value
      * - null - field has NULL value in DB
      * - Doctrine_Null - field value is unknown, it wasn't loaded yet
+     * - Doctrine_Record
      *
      * @var array $_data                    the record data
      */
-    private $_data         = [];
+    private array $_data         = [];
 
     /**
      * @var array $_values                  the values array, aggregate values and such are mapped into this array
      */
-    private $_values       = [];
+    private array $_values       = [];
 
     /**
-     * @var int $_state                 the state of this record
-     * @see STATE_* constants
+     * @var int<self::STATE_*> $_state                 the state of this record
      */
-    private $_state;
+    private int $_state;
 
     /**
      * @var array $_lastModified             an array containing field names that were modified in the previous transaction
      */
-    private $_lastModified = [];
+    private array $_lastModified = [];
 
     /**
      * @var array $_modified                an array containing field names that have been modified
      * @todo Better name? $_modifiedFields?
      */
-    private $_modified     = [];
+    private array $_modified     = [];
 
     /**
      * @var array $_oldValues               an array of the old values from set properties
      */
-    private $_oldValues   = [];
+    private array $_oldValues   = [];
 
 
     /**
      * @var array $_references              an array containing all the references
      */
-    private $_references     = [];
+    private array $_references     = [];
 
     /**
      * Doctrine_Collection of objects needing to be deleted on save
      *
      * @var array
      */
-    private $_pendingDeletes = [];
+    private array $_pendingDeletes = [];
 
     /**
      * Array of pending un links in format alias => keys to be executed after save
      *
      * @var array $_pendingUnlinks
      */
-    private $_pendingUnlinks = [];
+    private array $_pendingUnlinks = [];
 
     /**
      * @var int $index                  this index is used for creating object identifiers
      */
-    private static $_index = 1;
+    private static int $_index = 1;
 
     /**
      * @var int $oid                    object identifier, each Record object has a unique object identifier
      */
-    private $_oid;
+    private int $_oid;
 
     /**
      * constructor

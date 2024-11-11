@@ -9,7 +9,7 @@ trait Doctrine_Record_SaveHooksTrait
      *
      * @var array
      */
-    private $_invokedSaveHooks = false;
+    private array $_invokedSaveHooks = [];
 
     /**
      * calls a subclass hook. Idempotent until @see clearInvokedSaveHooks() is called.
@@ -30,10 +30,6 @@ trait Doctrine_Record_SaveHooksTrait
         if (is_null($event)) {
             $constant = constant('Doctrine_Event::RECORD_' . strtoupper($type));
             $event = new Doctrine_Event($this, $constant);
-        }
-
-        if ($this->_invokedSaveHooks === false) {
-            $this->_invokedSaveHooks = [];
         }
 
         if (! isset($this->_invokedSaveHooks[$func])) {

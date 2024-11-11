@@ -7,7 +7,7 @@ trait Doctrine_Record_TreeNodeTrait
     /**
      * @var null|Doctrine_Node_Interface        node object
      */
-    private $_node;
+    private ?Doctrine_Node_Interface $_node;
 
     /**
      * getter for node associated with this record
