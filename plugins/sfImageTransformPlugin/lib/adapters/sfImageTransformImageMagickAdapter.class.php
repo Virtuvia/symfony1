@@ -23,7 +23,7 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
     /**
      * The image resource.
      * @access protected
-     * @var resource
+     * @var Imagick
      *
      * @throws sfImageTransformException
     */
