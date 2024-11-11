@@ -110,6 +110,10 @@ class sfDateFormat
             return null;
         }
 
+        if ($time instanceof Stringable) {
+            $time = (string) $time;
+        }
+
         // if the type is not a php timestamp
         $isString = (string) $time !== (string) (int) $time;
 
