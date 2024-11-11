@@ -365,6 +365,9 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * hydrate
      * hydrates this object from given array
      *
+     * @internal
+     * @see Doctrine_Table
+     *
      * @param array $data
      * @param bool $overwriteLocalChanges  whether to overwrite the unsaved (dirty) data
      * @return void
