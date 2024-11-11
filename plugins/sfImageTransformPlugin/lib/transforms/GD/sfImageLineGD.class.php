@@ -271,7 +271,7 @@ class sfImageLineGD extends sfImageTransformAbstract
         $resource = $image->getAdapter()->getHolder();
 
         if (!is_null($this->style)) {
-            imagesetstyle($this->style);
+            imagesetstyle($resource, $this->style);
         }
 
         if ($this->thickness === 1) {
