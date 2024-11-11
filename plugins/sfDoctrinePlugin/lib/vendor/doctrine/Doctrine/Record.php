@@ -342,7 +342,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * @param array $data   data array to be cleaned
      * @return array        values cleaned from data
      */
-    public function cleanData(&$data)
+    private function cleanData(&$data)
     {
         $tmp = $data;
         $data = [];
