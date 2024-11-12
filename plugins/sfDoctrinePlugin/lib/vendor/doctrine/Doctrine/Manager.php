@@ -122,6 +122,7 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
         $this->registerType('float', new Doctrine_Type_FloatType());
         $this->registerType('integer', new Doctrine_Type_IntegerType());
         $this->registerType('string', new Doctrine_Type_StringType());
+        $this->registerType('text', new Doctrine_Type_TextType());
         $this->registerType('timestamp', new Doctrine_Type_TimestampType());
         $this->registerType('time', new Doctrine_Type_TimeType());
     }
@@ -152,6 +153,9 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
         return $this->typeRegistry->getType($type)->isValueModified($old, $new);
     }
 
+    /**
+     * @throws Doctrine_Type_Exception_UnknownType
+     */
     public function getType(string $type): Doctrine_Type
     {
         return $this->typeRegistry->getType($type);
