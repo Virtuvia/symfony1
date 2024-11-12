@@ -376,11 +376,11 @@ class Doctrine_Template_Sortable extends Doctrine_Template
     public function queryAddSortableUniqueBy($q, $object)
     {
         foreach ($this->_options['uniqueBy'] as $field) {
-            if (is_object($object[$field])) {
-                if (is_null($object[$field]['id'])) {
+            if ($object[$field] instanceof Doctrine_Record) {
+                if (is_null($object[$field]->getId())) {
                     $q->addWhere($field . ' IS NULL');
                 } else {
-                    $q->addWhere($field . ' = ?', $object[$field]['id']);
+                    $q->addWhere($field . ' = ?', $object[$field]->getId());
                 }
             } else {
                 if (is_null($object[$field])) {
