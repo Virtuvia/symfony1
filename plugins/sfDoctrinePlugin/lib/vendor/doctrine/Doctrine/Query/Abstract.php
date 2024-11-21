@@ -167,7 +167,7 @@ abstract class Doctrine_Query_Abstract
     ];
 
     /**
-     * @var array $_queryComponents   Two dimensional array containing the components of this query,
+     * @var array<array-key, array{table: Doctrine_Table}> $_queryComponents   Two dimensional array containing the components of this query,
      *                                informations about their relations and other related information.
      *                                The components are constructed during query parsing.
      *
