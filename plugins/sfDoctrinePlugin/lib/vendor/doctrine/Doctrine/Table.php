@@ -64,10 +64,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      */
     protected $_identityMap        = [];
 
-    /**
-     * @var Doctrine_Table_Repository $repository       record repository
-     */
-    protected $_repository;
+    private ?Doctrine_Table_Repository $_repository = null;
 
     /**
      * @var array $columns                  an array of column definitions,
@@ -980,10 +977,8 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
 
     /**
      * Gets the internal record repository.
-     *
-     * @return Doctrine_Table_Repository
      */
-    public function getRepository()
+    public function getRepository(): ?Doctrine_Table_Repository
     {
         return $this->_repository;
     }
