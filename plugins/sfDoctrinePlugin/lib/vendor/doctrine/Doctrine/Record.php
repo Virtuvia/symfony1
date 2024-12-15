@@ -347,7 +347,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         $tmp = $data;
         $data = [];
 
-        foreach ($this->getTable()->getFieldNames() as $fieldName) {
+        foreach ($this->getTable()->getRecordFieldNames() as $fieldName) {
             if (isset($tmp[$fieldName])) {
                 $data[$fieldName] = $tmp[$fieldName];
             } elseif (array_key_exists($fieldName, $tmp)) {
@@ -719,7 +719,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
                 $count++;
             }
         }
-        if ($count < $this->_table->getColumnCount()) {
+        if ($count < $this->_table->getRecordFieldCount()) {
             return true;
         }
         return false;
@@ -910,6 +910,10 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         if (array_key_exists($fieldName, $this->_values)) {
             $this->_values[$fieldName] = $value;
         } elseif (array_key_exists($fieldName, $this->_data)) {
+            if (!$this->_table->isRecordFieldName($fieldName)) {
+                throw new \Doctrine_Record_UnknownPropertyException(sprintf('"%s" is not a valid Record Field.', $fieldName));
+            }
+
             $type = $this->_table->getTypeOf($fieldName);
             if ($value instanceof Doctrine_Record) {
                 $id = $value->getIncremented();

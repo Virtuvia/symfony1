@@ -475,7 +475,7 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
 
         // check for wildcards
         if (in_array('*', $fields)) {
-            $fields = $table->getFieldNames();
+            $fields = $table->getSelectableFieldNames();
         } else {
             $driverClassName = $this->_hydrator->getHydratorDriverClassName();
             // only auto-add the primary key fields if this query object is not
@@ -551,7 +551,7 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
         if ($field === '*') {
             $sql = [];
 
-            foreach ($table->getColumnNames() as $field) {
+            foreach ($table->getSelectableFieldNames() as $field) {
                 $sql[] = $this->parseSelectField($componentAlias . '.' . $field);
             }
 

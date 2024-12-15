@@ -126,6 +126,7 @@ class Doctrine_Import_Schema
             'charset',
             'collation',
             'nativeTypeDeclaration',
+            'generated',
         ],
 
         'relation'   =>  ['key',

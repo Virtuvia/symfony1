@@ -219,7 +219,7 @@ class Doctrine_RawSql extends Doctrine_Query_Abstract
             $componentAlias = $this->getComponentAlias($e[0]);
 
             if ($e[1] == '*') {
-                foreach ($this->_queryComponents[$componentAlias]['table']->getColumnNames() as $name) {
+                foreach ($this->_queryComponents[$componentAlias]['table']->getSelectableFieldNames() as $name) {
                     $field = $formatter->quoteIdentifier($e[0]) . '.' . $formatter->quoteIdentifier($name);
 
                     $select[$componentAlias][$field] = $field . ' AS ' . $formatter->quoteIdentifier($e[0] . '__' . $name);

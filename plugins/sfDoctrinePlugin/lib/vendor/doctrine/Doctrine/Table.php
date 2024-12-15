@@ -84,42 +84,44 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      *                                      -- notblank     notblank validator + notnull constraint
      *                                      ... many more
      */
-    protected $_columns          = [];
+    protected array $_columns = [];
 
     /**
      * Array of unique sets of fields. These values are validated on save
      *
      * @var array $_uniques
      */
-    protected $_uniques = [];
+    protected array $_uniques = [];
 
     /**
-     * @var array $_fieldNames            an array of field names, used to look up field names
+     * @var array<string, string> $_fieldNames            an array of field names, used to look up field names
      *                                    from column names. Keys are column
      *                                    names and values are field names.
      *                                    Alias for columns are here.
      */
-    protected $_fieldNames    = [];
+    protected array $_fieldNames    = [];
+
+    protected array $recordFields = [];
 
     /**
      *
-     * @var array $_columnNames             an array of column names
+     * @var array<string, string> $_columnNames             an array of column names
      *                                      keys are field names and values column names.
      *                                      used to look up column names from field names.
      *                                      this is the reverse lookup map of $_fieldNames.
      */
-    protected $_columnNames = [];
+    protected array $_columnNames = [];
 
     /**
-     * @var int $columnCount            cached column count, Doctrine_Record uses this column count in when
+     * @var int $recordFieldCount           cached record field count, Doctrine_Record uses this count in when
      *                                      determining its state
      */
-    protected $columnCount;
+    private int $recordFieldCount = 0;
 
     /**
      * @var bool $hasDefaultValues       whether or not this table has default values
      */
-    protected $hasDefaultValues;
+    protected bool $hasDefaultValues = false;
 
     /**
      * @var array $options                  an array containing all options
@@ -403,7 +405,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
             $this->getTree()->setTableDefinition();
         }
 
-        $this->columnCount = count($this->_columns);
+        $this->recordFieldCount = count($this->recordFields);
 
         if (! isset($this->_options['tableName'])) {
             $this->setTableName(Doctrine_Inflector::tableize($class->getName()));
@@ -461,7 +463,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
                     $this->_identifier = $name;
                     $this->_identifierType = Doctrine_Core::IDENTIFIER_AUTOINC;
                 }
-                $this->columnCount++;
+                $this->recordFieldCount++;
                 break;
             case 1:
                 foreach ($this->_identifier as $pk) {
@@ -1209,6 +1211,12 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
             $this->_fieldNames[$name] = $fieldName;
         }
 
+        $generated = $options['generated'] ?? false;
+
+        if (!$generated) {
+            $this->recordFields[] = $fieldName;
+        }
+
         $defaultOptions = $this->getAttribute(Doctrine_Core::ATTR_DEFAULT_COLUMN_OPTIONS);
 
         if (isset($defaultOptions['length']) && $defaultOptions['length'] && $length == null) {
@@ -1945,12 +1953,9 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
         }
     }
 
-    /**
-     * @return int      the number of columns in this table
-     */
-    public function getColumnCount()
+    public function getRecordFieldCount(): int
     {
-        return $this->columnCount;
+        return $this->recordFieldCount;
     }
 
     /**
@@ -2011,14 +2016,34 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
         return $this->getColumnNames((array) $this->getIdentifier());
     }
 
-    /**
-     * Returns an array containing all the field names.
-     *
-     * @return array numeric array
-     */
-    public function getFieldNames()
+    public function getQueryableFieldNames(): array
     {
         return array_values($this->_fieldNames);
+    }
+
+    public function isQueryableFieldName(string $fieldName): bool
+    {
+        return in_array($fieldName, $this->getQueryableFieldNames(), true);
+    }
+
+    public function getRecordFieldNames(): array
+    {
+        return $this->recordFields;
+    }
+
+    public function isRecordFieldName(string $fieldName): bool
+    {
+        return in_array($fieldName, $this->getRecordFieldNames(), true);
+    }
+
+    public function getInsertableFieldNames(): array
+    {
+        return $this->recordFields;
+    }
+
+    public function getSelectableFieldNames(): array
+    {
+        return $this->recordFields;
     }
 
     /**
@@ -2445,10 +2470,10 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
         return (strlen($a) > strlen($b)) ? 1 : -1;
     }
 
-    public function buildFindByWhere($fieldName)
+    private function buildFindByWhere(string $fieldName): string
     {
         // Get all variations of possible field names
-        $fields = array_merge($this->getFieldNames(), $this->getColumnNames());
+        $fields = array_merge($this->getQueryableFieldNames(), $this->getColumnNames());
         $fields = array_merge($fields, array_map(['Doctrine_Inflector', 'classify'], $fields));
         $fields = array_merge($fields, array_map('ucfirst', $fields));
 
@@ -2506,18 +2531,21 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      * to get the column or field name.
      *
      * @param string $name
-     * @return string $fieldName
+     * @return ?string $fieldName
      */
-    protected function _resolveFindByFieldName($name)
+    private function _resolveFindByFieldName(string $name): ?string
     {
-        $fieldName = Doctrine_Inflector::tableize($name);
         if ($this->hasColumn($name) || $this->hasField($name)) {
-            return $this->getFieldName($this->getColumnName($name));
-        } elseif ($this->hasColumn($fieldName) || $this->hasField($fieldName)) {
-            return $this->getFieldName($this->getColumnName($fieldName));
+            $fieldName = $this->getFieldName($this->getColumnName($name));
         } else {
-            return false;
+            $fieldName = Doctrine_Inflector::tableize($name);
+
+            if ($this->hasColumn($fieldName) || $this->hasField($fieldName)) {
+                $fieldName = $this->getFieldName($this->getColumnName($fieldName));
+            }
         }
+
+        return $this->isQueryableFieldName($fieldName) ? $fieldName : null;
     }
 
     /**
@@ -2529,7 +2557,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      *
      * @return mixed the result of the finder
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $arguments): mixed
     {
         $lcMethod = strtolower($method);
 
@@ -2554,7 +2582,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
             } else {
                 $hydrationMode = null;
             }
-            if ($this->hasField($fieldName)) {
+            if ($fieldName && $this->hasField($fieldName)) {
                 return $this->$method($fieldName, $arguments[0], $hydrationMode);
             } elseif ($this->hasRelation($by)) {
                 $relation = $this->getRelation($by);
