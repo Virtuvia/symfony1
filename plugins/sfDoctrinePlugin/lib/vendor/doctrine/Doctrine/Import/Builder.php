@@ -608,6 +608,12 @@ EOF;
 
         $ret = '';
         foreach ($definition['columns'] as $name => $column) {
+            $generated = $column['generated'] ?? false;
+
+            if ($generated) {
+                continue;
+            }
+
             $ret .= PHP_EOL . $accessorTemplate($name, $this->getPhpTypeForColumn($column));
 
             // check for primary
@@ -661,6 +667,12 @@ EOF;
 
         if ((isset($definition['is_base_class']) && $definition['is_base_class']) || ! $this->generateBaseClasses()) {
             foreach ($definition['columns'] as $name => $column) {
+                $generated = $column['generated'] ?? false;
+
+                if ($generated) {
+                    continue;
+                }
+
                 $name = isset($column['name']) ? $column['name'] : $name;
                 // extract column name & field name
                 if (stripos($name, ' as ')) {
