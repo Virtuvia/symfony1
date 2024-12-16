@@ -98,7 +98,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      */
     protected array $_fieldNames    = [];
 
-    protected array $recordFields = [];
+    private array $recordFields = [];
 
     /**
      *
@@ -1197,19 +1197,22 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
 
         $name = trim($name);
         $fieldName = trim($fieldName);
+        $generated = $options['generated'] ?? false;
 
         if ($prepend) {
             $this->_columnNames = array_merge([$fieldName => $name], $this->_columnNames);
             $this->_fieldNames = array_merge([$name => $fieldName], $this->_fieldNames);
+
+            if (!$generated) {
+                array_unshift($this->recordFields, $fieldName);
+            }
         } else {
             $this->_columnNames[$fieldName] = $name;
             $this->_fieldNames[$name] = $fieldName;
-        }
 
-        $generated = $options['generated'] ?? false;
-
-        if (!$generated) {
-            $this->recordFields[] = $fieldName;
+            if (!$generated) {
+                $this->recordFields[] = $fieldName;
+            }
         }
 
         $defaultOptions = $this->getAttribute(Doctrine_Core::ATTR_DEFAULT_COLUMN_OPTIONS);
@@ -2386,7 +2389,9 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
                    || $name == 'fixed'
                    || $name == 'comment'
                    || $name == 'alias'
-                   || $name == 'extra') {
+                   || $name == 'extra'
+                   || $name === 'generated'
+            ) {
                 continue;
             }
             if ($name == 'notnull' && isset($this->_columns[$columnName]['autoincrement'])
