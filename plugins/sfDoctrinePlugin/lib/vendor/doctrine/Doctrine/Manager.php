@@ -99,6 +99,11 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
     private Doctrine_Type_Registry $typeRegistry;
 
     /**
+     * @var array<string, class-string<Doctrine_Template>>
+     */
+    private array $templateNameClassMap = [];
+
+    /**
      * constructor
      *
      * this is private constructor (use getInstance to get an instance of this class)
@@ -164,6 +169,35 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
     public function registerType(string $name, Doctrine_Type $type): void
     {
         $this->typeRegistry->registerType($name, $type);
+    }
+
+    /**
+     * @param class-string<Doctrine_Template> $className
+     */
+    public function registerTemplateClass(string $name, string $className): void
+    {
+        if (!is_subclass_of($className, Doctrine_Template::class)) {
+            throw new Doctrine_Exception(sprintf('Class "%s" must extend "%s".', $className, Doctrine_Template::class));
+        }
+
+        $this->templateNameClassMap[$name] = $className;
+    }
+
+    /**
+     * @return class-string<Doctrine_Template>
+     */
+    public function getTemplateClass(string $name): string
+    {
+        if (isset($this->templateNameClassMap[$name])) {
+            return $this->templateNameClassMap[$name];
+        }
+
+        $nonNamespacedName = "Doctrine_Template_$name";
+        if (class_exists($nonNamespacedName, true)) {
+            return $nonNamespacedName;
+        }
+
+        return $name;
     }
 
     /**
