@@ -235,31 +235,9 @@ abstract class Doctrine_Record_Abstract
      * This method loads a behavior in the record. It will add the behavior
      * also to the record table if it.
      * It is tipically called in @see setUp().
-     *
-     * @param mixed $tpl        if an object, must be a subclass of Doctrine_Template.
-     *                          If a string, Doctrine will try to instantiate an object of the classes Doctrine_Template_$tpl and subsequently $tpl, using also autoloading capabilities if defined.
-     * @param array $options    argument to pass to the template constructor if $tpl is a class name
-     * @throws Doctrine_Record_Exception    if $tpl is neither an instance of Doctrine_Template subclass or a valid class name, that could be instantiated.
-     * @return Doctrine_Record  this object; provides a fluent interface.
      */
-    public function actAs($tpl, array $options = [])
+    final protected function actAs(Doctrine_Template $tpl): void
     {
-        if (! is_object($tpl)) {
-            $className = 'Doctrine_Template_' . $tpl;
-
-            if (class_exists($className, true)) {
-                $tpl = new $className($options);
-            } elseif (class_exists($tpl, true)) {
-                $tpl = new $tpl($options);
-            } else {
-                throw new Doctrine_Record_Exception('Could not load behavior named: "' . $tpl . '"');
-            }
-        }
-
-        if (! ($tpl instanceof Doctrine_Template)) {
-            throw new Doctrine_Record_Exception('Loaded behavior class is not an instance of Doctrine_Template.');
-        }
-
         $className = get_class($tpl);
 
         $this->_table->addTemplate($className, $tpl);
@@ -268,7 +246,5 @@ abstract class Doctrine_Record_Abstract
         $tpl->setTable($this->_table);
         $tpl->setUp();
         $tpl->setTableDefinition();
-
-        return $this;
     }
 }
