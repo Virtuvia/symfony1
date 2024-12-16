@@ -2223,28 +2223,30 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      * @param string $template              name of the behavior
      * @throws Doctrine_Table_Exception     if the given template is
      *                                      not set on this table
-     * @return Doctrine_Template
      */
-    public function getTemplate($template)
+    public function getTemplate(string $template): Doctrine_Template
     {
-        if (isset($this->_templates['Doctrine_Template_' . $template])) {
-            return $this->_templates['Doctrine_Template_' . $template];
-        } elseif (isset($this->_templates[$template])) {
-            return $this->_templates[$template];
+        $className = $this->_conn->getManager()->getTemplateClass($template);
+
+        if (isset($this->_templates[$className])) {
+            return $this->_templates[$className];
         }
 
         throw new Doctrine_Table_Exception('Template ' . $template . ' not loaded');
     }
 
     /**
-     * Checks if the table has a given template.
-     *
-     * @param string $template  name of template; @see getTemplate()
-     * @return bool
+     * Checks if the table has a given template by name or by implementation.
      */
-    public function hasTemplate($template)
+    public function hasTemplate(string|Doctrine_Template $template): bool
     {
-        return isset($this->_templates[$template]) || isset($this->_templates['Doctrine_Template_' . $template]);
+        if ($template instanceof Doctrine_Template) {
+            $className = $template::class;
+        } else {
+            $className = $this->_conn->getManager()->getTemplateClass($template);
+        }
+
+        return isset($this->_templates[$className]);
     }
 
     /**

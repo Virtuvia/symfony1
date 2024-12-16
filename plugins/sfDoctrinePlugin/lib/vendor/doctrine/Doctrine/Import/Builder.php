@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /*
  *  $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  *
@@ -36,7 +39,7 @@
  * @author      Nicolas Bérard-Nault <nicobn@php.net>
  * @author      Jonathan H. Wage <jwage@mac.com>
  */
-class Doctrine_Import_Builder extends Doctrine_Builder
+final class Doctrine_Import_Builder extends Doctrine_Builder
 {
     /**
      * Path where to generated files
@@ -734,16 +737,15 @@ EOF;
      *
      * @param int $level
      * @param string $name
-     * @param string $option
+     * @param ?string $option
      * @return string assignation code
      */
-    private function emitAssign($level, $name, $option)
+    private function emitAssign(int $level, string $name, ?string $option): string
     {
         // find class matching $name
-        $classname = $name;
-        if (class_exists("Doctrine_Template_$name", true)) {
-            $classname = "Doctrine_Template_$name";
-        }
+        // could be a Doctrine_Template or something else
+        $classname = Doctrine_Manager::getInstance()->getTemplateClass($name);
+
         return "        \$" . strtolower($name) . "$level = new $classname($option);" . PHP_EOL;
     }
 
