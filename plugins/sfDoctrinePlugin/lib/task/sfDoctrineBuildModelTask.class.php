@@ -75,7 +75,7 @@ EOF;
             $packagePath = isset($definition['package']) ? '/' . substr($definition['package'], 0, strpos($definition['package'], '.')) : '';
             $modelPackagePaths[$model] = $packagePath;
 
-            if (isset($definition['concrete_accessors']) && $definition['concrete_accessors']) {
+            if (($definition['concrete_accessors'] ?? true) === true) {
                 continue;
             }
 

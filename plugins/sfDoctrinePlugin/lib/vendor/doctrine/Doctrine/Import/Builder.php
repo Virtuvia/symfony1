@@ -996,7 +996,7 @@ EOF;
             $tableDefinitionCode = $this->buildTableDefinition($definition);
             $setUpCode = $this->buildSetUp($definition);
 
-            if (isset($definition['concrete_accessors']) && $definition['concrete_accessors'] === true) {
+            if (($definition['concrete_accessors'] ?? true) !== false) {
                 $accessors = $this->buildAccessors($definition);
             } else {
                 $accessors = null;
