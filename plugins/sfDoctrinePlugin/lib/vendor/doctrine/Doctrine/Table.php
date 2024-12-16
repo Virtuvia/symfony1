@@ -187,9 +187,9 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
 
     /**
      * @see Doctrine_Template
-     * @var array $_templates                   an array containing all templates attached to this table
+     * @var array<string, Doctrine_Template> $_templates                   an array containing all templates attached to this table
      */
-    protected $_templates   = [];
+    private array $_templates = [];
 
     /**
      * @see Doctrine_Record_Generator
@@ -2209,7 +2209,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      *
      * @return array     an array containing all templates
      */
-    public function getTemplates()
+    public function getTemplates(): array
     {
         return $this->_templates;
     }
@@ -2252,13 +2252,16 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      *
      * @param string $template          template name
      * @param Doctrine_Template $impl   behavior to attach
-     * @return Doctrine_Table
+     *
+     * @throws Doctrine_Table_Exception if template was previously added
      */
-    public function addTemplate($template, Doctrine_Template $impl)
+    public function addTemplate(Doctrine_Template $impl): void
     {
-        $this->_templates[$template] = $impl;
+        if ($this->hasTemplate($impl)) {
+            throw new Doctrine_Table_Exception(sprintf('Template "%s" already added.', $impl::class));
+        }
 
-        return $this;
+        $this->_templates[$impl::class] = $impl;
     }
 
     /**

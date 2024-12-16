@@ -256,7 +256,7 @@ abstract class Doctrine_Record_Generator extends Doctrine_Record_Abstract
                     $this->_table->addGenerator($child->getPlugin(), get_class($child->getPlugin()));
                 }
 
-                $this->_table->addTemplate(get_class($child), $child);
+                $this->_table->addTemplate($child);
 
                 $child->setInvoker($this);
                 $child->setTable($this->_table);

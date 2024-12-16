@@ -238,9 +238,7 @@ abstract class Doctrine_Record_Abstract
      */
     final protected function actAs(Doctrine_Template $tpl): void
     {
-        $className = get_class($tpl);
-
-        $this->_table->addTemplate($className, $tpl);
+        $this->_table->addTemplate($tpl);
 
         $tpl->setInvoker($this);
         $tpl->setTable($this->_table);
