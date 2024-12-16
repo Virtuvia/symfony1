@@ -2391,6 +2391,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
                    || $name == 'alias'
                    || $name == 'extra'
                    || $name === 'generated'
+                   || $name === 'nativeTypeDeclaration'
             ) {
                 continue;
             }
