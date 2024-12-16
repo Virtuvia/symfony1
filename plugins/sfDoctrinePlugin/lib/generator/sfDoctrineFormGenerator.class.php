@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the symfony package.
  * (c) Fabien Potencier <fabien.potencier@symfony-project.com>
@@ -35,6 +37,10 @@ class sfDoctrineFormGenerator extends sfGenerator
      * @var array
      */
     public $pluginModels = [];
+
+    protected ?\Doctrine_Table $table = null;
+    protected ?string $modelName = null;
+    protected array $params = [];
 
     /**
      * Initializes the current sfGenerator instance.
