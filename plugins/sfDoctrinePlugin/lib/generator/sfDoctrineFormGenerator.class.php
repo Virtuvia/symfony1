@@ -488,6 +488,10 @@ class sfDoctrineFormGenerator extends sfGenerator
 
         $columns = [];
         foreach (array_diff(array_keys($this->table->getColumns()), $parentColumns) as $name) {
+            if (!$this->includeColumnFromTable($name)) {
+                continue;
+            }
+
             $columns[] = new sfDoctrineColumn($name, $this->table);
         }
 
@@ -556,6 +560,12 @@ class sfDoctrineFormGenerator extends sfGenerator
         }
 
         return $models;
+    }
+
+    protected function includeColumnFromTable(string $name): bool
+    {
+        $column = $this->table->getDefinitionOf($name);
+        return $column['symfony']['form'] ?? true;
     }
 
     /**

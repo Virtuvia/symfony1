@@ -127,6 +127,7 @@ class Doctrine_Import_Schema
             'collation',
             'nativeTypeDeclaration',
             'generated',
+            'symfony',
         ],
 
         'relation'   =>  ['key',

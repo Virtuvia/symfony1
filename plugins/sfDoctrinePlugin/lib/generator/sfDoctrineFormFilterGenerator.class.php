@@ -329,6 +329,13 @@ class sfDoctrineFormFilterGenerator extends sfDoctrineFormGenerator
         return $models;
     }
 
+    protected function includeColumnFromTable(string $name): bool
+    {
+        $column = $this->table->getDefinitionOf($name);
+
+        return $column['symfony']['filter'] ?? true;
+    }
+
     /**
      * Get the name of the form class to extend based on the inheritance of the model
      *
