@@ -38,7 +38,7 @@ abstract class PluginsfGuardUser extends BasesfGuardUser
      *
      * @param string $password
      */
-    public function setPassword($password)
+    public function setPassword($password, $load = true): void
     {
         if (!$password && 0 == strlen($password)) {
             return;
@@ -58,7 +58,7 @@ abstract class PluginsfGuardUser extends BasesfGuardUser
         }
         $this->setAlgorithm($algorithmAsStr);
 
-        $this->_set('password', call_user_func_array($algorithm, [$salt . $password]));
+        $this->_set('password', call_user_func_array($algorithm, [$salt . $password]), $load);
     }
 
     /**
