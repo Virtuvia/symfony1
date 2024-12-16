@@ -106,30 +106,18 @@ abstract class Doctrine_Configurable
         return $this->setListener($listener);
     }
 
-    /**
-     * addRecordListener
-     *
-     * @param Doctrine_EventListener_Interface|Doctrine_Overloadable $listener
-     * @return Doctrine_Configurable        this object
-     */
-    public function addRecordListener($listener, $name = null)
+    public function addRecordListener(Doctrine_Record_Listener_Interface|Doctrine_Overloadable $listener, string $name = null): void
     {
         if (! isset($this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER]) ||
              ! ($this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER] instanceof Doctrine_Record_Listener_Chain)) {
 
             $this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER] = new Doctrine_Record_Listener_Chain();
         }
-        $this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER]->add($listener, $name);
 
-        return $this;
+        $this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER]->add($listener, $name);
     }
 
-    /**
-     * getListener
-     *
-     * @return Doctrine_EventListener_Interface|Doctrine_Overloadable
-     */
-    public function getRecordListener()
+    public function getRecordListener(): null|Doctrine_Record_Listener_Interface|Doctrine_Overloadable
     {
         if (! isset($this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER])) {
             if (isset($this->parent)) {
@@ -137,6 +125,7 @@ abstract class Doctrine_Configurable
             }
             return null;
         }
+
         return $this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER];
     }
 

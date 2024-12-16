@@ -56,25 +56,12 @@ abstract class Doctrine_Record_Abstract
         return $this->_table;
     }
 
-    /**
-     * addListener
-     *
-     * @param Doctrine_EventListener_Interface|Doctrine_Overloadable $listener
-     * @return Doctrine_Record
-     */
-    public function addListener($listener, $name = null)
+    public function addListener(Doctrine_Record_Listener_Interface|Doctrine_Overloadable $listener, string $name = null): void
     {
         $this->_table->addRecordListener($listener, $name);
-
-        return $this;
     }
 
-    /**
-     * getListener
-     *
-     * @return Doctrine_EventListener_Interface|Doctrine_Overloadable
-     */
-    public function getListener()
+    public function getListener(): null|Doctrine_Record_Listener_Interface|Doctrine_Overloadable
     {
         return $this->_table->getRecordListener();
     }
