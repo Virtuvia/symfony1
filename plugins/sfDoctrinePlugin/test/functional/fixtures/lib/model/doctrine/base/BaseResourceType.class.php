@@ -13,11 +13,6 @@
  * @property string $id
  * @property string $name
  *
- * @method string       getId($load = true) Returns the current record's "id" value
- * @method string       getName($load = true) Returns the current record's "name" value
- * @method ResourceType setId($value, $load = true) Sets the current record's "id" value
- * @method ResourceType setName($value, $load = true) Sets the current record's "name" value
- *
  */
 abstract class BaseResourceType extends myDoctrineRecord
 {
@@ -45,6 +40,48 @@ abstract class BaseResourceType extends myDoctrineRecord
     {
         parent::setUp();
         
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param string $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getName($load = true)
+    {
+        return $this->_get('name', $load);
+    }
+
+    /**
+     * @param string $name
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setName($name, $load = true)
+    {
+        return $this->_set('name', $name, $load);
     }
 
 }

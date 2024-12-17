@@ -15,15 +15,6 @@
  * @property Doctrine_Collection $Articles
  * @property string $id
  *
- * @method string              getName($load = true) Returns the current record's "name" value
- * @method string              getType($load = true) Returns the current record's "type" value
- * @method Doctrine_Collection getArticles($load = true) Returns the current record's "Articles" collection
- * @method string              getId($load = true) Returns the current record's "id" value
- * @method Author              setName($value, $load = true) Sets the current record's "name" value
- * @method Author              setType($value, $load = true) Sets the current record's "type" value
- * @method Author              setArticles($value, $load = true) Sets the current record's "Articles" collection
- * @method Author              setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseAuthor extends myDoctrineRecord
 {
@@ -58,6 +49,90 @@ abstract class BaseAuthor extends myDoctrineRecord
         $this->hasMany('Article as Articles', [
              'local' => 'id',
              'foreign' => 'author_id']);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getName($load = true)
+    {
+        return $this->_get('name', $load);
+    }
+
+    /**
+     * @param string $name
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setName($name, $load = true)
+    {
+        return $this->_set('name', $name, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getType($load = true)
+    {
+        return $this->_get('type', $load);
+    }
+
+    /**
+     * @param string $type
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setType($type, $load = true)
+    {
+        return $this->_set('type', $type, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return Doctrine_Collection
+     */
+    public function getArticles($load = true)
+    {
+        return $this->_get('Articles', $load);
+    }
+
+    /**
+     * @param Doctrine_Collection $Articles
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setArticles($Articles, $load = true)
+    {
+        return $this->_set('Articles', $Articles, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

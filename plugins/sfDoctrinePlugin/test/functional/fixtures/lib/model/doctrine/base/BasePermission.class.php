@@ -15,15 +15,6 @@
  * @property Doctrine_Collection $Groups
  * @property string $id
  *
- * @method string              getName($load = true) Returns the current record's "name" value
- * @method Doctrine_Collection getUsers($load = true) Returns the current record's "Users" collection
- * @method Doctrine_Collection getGroups($load = true) Returns the current record's "Groups" collection
- * @method string              getId($load = true) Returns the current record's "id" value
- * @method Permission          setName($value, $load = true) Sets the current record's "name" value
- * @method Permission          setUsers($value, $load = true) Sets the current record's "Users" collection
- * @method Permission          setGroups($value, $load = true) Sets the current record's "Groups" collection
- * @method Permission          setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BasePermission extends myDoctrineRecord
 {
@@ -49,6 +40,90 @@ abstract class BasePermission extends myDoctrineRecord
              'refClass' => 'GroupPermission',
              'local' => 'permission_id',
              'foreign' => 'group_id']);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getName($load = true)
+    {
+        return $this->_get('name', $load);
+    }
+
+    /**
+     * @param string $name
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setName($name, $load = true)
+    {
+        return $this->_set('name', $name, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return Doctrine_Collection
+     */
+    public function getUsers($load = true)
+    {
+        return $this->_get('Users', $load);
+    }
+
+    /**
+     * @param Doctrine_Collection $Users
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setUsers($Users, $load = true)
+    {
+        return $this->_set('Users', $Users, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return Doctrine_Collection
+     */
+    public function getGroups($load = true)
+    {
+        return $this->_get('Groups', $load);
+    }
+
+    /**
+     * @param Doctrine_Collection $Groups
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setGroups($Groups, $load = true)
+    {
+        return $this->_set('Groups', $Groups, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

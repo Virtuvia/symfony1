@@ -13,11 +13,6 @@
  * @property string $file_path
  * @property string $id
  *
- * @method string     getFilePath($load = true) Returns the current record's "file_path" value
- * @method string     getId($load = true) Returns the current record's "id" value
- * @method Attachment setFilePath($value, $load = true) Sets the current record's "file_path" value
- * @method Attachment setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseAttachment extends myDoctrineRecord
 {
@@ -35,6 +30,48 @@ abstract class BaseAttachment extends myDoctrineRecord
     {
         parent::setUp();
         
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getFilePath($load = true)
+    {
+        return $this->_get('file_path', $load);
+    }
+
+    /**
+     * @param string $file_path
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setFilePath($file_path, $load = true)
+    {
+        return $this->_set('file_path', $file_path, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

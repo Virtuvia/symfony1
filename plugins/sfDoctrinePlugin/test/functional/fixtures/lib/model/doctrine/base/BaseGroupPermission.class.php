@@ -13,11 +13,6 @@
  * @property string $group_id
  * @property string $permission_id
  *
- * @method string          getGroupId($load = true) Returns the current record's "group_id" value
- * @method string          getPermissionId($load = true) Returns the current record's "permission_id" value
- * @method GroupPermission setGroupId($value, $load = true) Sets the current record's "group_id" value
- * @method GroupPermission setPermissionId($value, $load = true) Sets the current record's "permission_id" value
- *
  */
 abstract class BaseGroupPermission extends myDoctrineRecord
 {
@@ -44,6 +39,48 @@ abstract class BaseGroupPermission extends myDoctrineRecord
     {
         parent::setUp();
         
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getGroupId($load = true)
+    {
+        return $this->_get('group_id', $load);
+    }
+
+    /**
+     * @param string $group_id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setGroupId($group_id, $load = true)
+    {
+        return $this->_set('group_id', $group_id, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getPermissionId($load = true)
+    {
+        return $this->_get('permission_id', $load);
+    }
+
+    /**
+     * @param string $permission_id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setPermissionId($permission_id, $load = true)
+    {
+        return $this->_set('permission_id', $permission_id, $load);
     }
 
 }

@@ -16,17 +16,6 @@
  * @property User $User
  * @property string $id
  *
- * @method string  getUserId($load = true) Returns the current record's "user_id" value
- * @method string  getFirstName($load = true) Returns the current record's "first_name" value
- * @method string  getLastName($load = true) Returns the current record's "last_name" value
- * @method User    getUser($load = true) Returns the current record's "User" value
- * @method string  getId($load = true) Returns the current record's "id" value
- * @method Profile setUserId($value, $load = true) Sets the current record's "user_id" value
- * @method Profile setFirstName($value, $load = true) Sets the current record's "first_name" value
- * @method Profile setLastName($value, $load = true) Sets the current record's "last_name" value
- * @method Profile setUser($value, $load = true) Sets the current record's "User" value
- * @method Profile setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseProfile extends myDoctrineRecord
 {
@@ -53,6 +42,111 @@ abstract class BaseProfile extends myDoctrineRecord
         $this->hasOne('User', [
              'local' => 'user_id',
              'foreign' => 'id']);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getUserId($load = true)
+    {
+        return $this->_get('user_id', $load);
+    }
+
+    /**
+     * @param string $user_id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setUserId($user_id, $load = true)
+    {
+        return $this->_set('user_id', $user_id, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getFirstName($load = true)
+    {
+        return $this->_get('first_name', $load);
+    }
+
+    /**
+     * @param string $first_name
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setFirstName($first_name, $load = true)
+    {
+        return $this->_set('first_name', $first_name, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getLastName($load = true)
+    {
+        return $this->_get('last_name', $load);
+    }
+
+    /**
+     * @param string $last_name
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setLastName($last_name, $load = true)
+    {
+        return $this->_set('last_name', $last_name, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return User
+     */
+    public function getUser($load = true)
+    {
+        return $this->_get('User', $load);
+    }
+
+    /**
+     * @param User $User
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setUser($User, $load = true)
+    {
+        return $this->_set('User', $User, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

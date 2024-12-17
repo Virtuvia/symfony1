@@ -15,15 +15,6 @@
  * @property string $column__3
  * @property string $id
  *
- * @method string                  getColumn1($load = true) Returns the current record's "column_1" value
- * @method string                  getColumn2($load = true) Returns the current record's "column2" value
- * @method string                  getColumn3($load = true) Returns the current record's "column__3" value
- * @method string                  getId($load = true) Returns the current record's "id" value
- * @method ModelWithNumberInColumn setColumn1($value, $load = true) Sets the current record's "column_1" value
- * @method ModelWithNumberInColumn setColumn2($value, $load = true) Sets the current record's "column2" value
- * @method ModelWithNumberInColumn setColumn3($value, $load = true) Sets the current record's "column__3" value
- * @method ModelWithNumberInColumn setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseModelWithNumberInColumn extends myDoctrineRecord
 {
@@ -54,6 +45,90 @@ abstract class BaseModelWithNumberInColumn extends myDoctrineRecord
     {
         parent::setUp();
         
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getColumn1($load = true)
+    {
+        return $this->_get('column_1', $load);
+    }
+
+    /**
+     * @param string $column_1
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setColumn1($column_1, $load = true)
+    {
+        return $this->_set('column_1', $column_1, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getColumn2($load = true)
+    {
+        return $this->_get('column2', $load);
+    }
+
+    /**
+     * @param string $column2
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setColumn2($column2, $load = true)
+    {
+        return $this->_set('column2', $column2, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getColumn_3($load = true)
+    {
+        return $this->_get('column__3', $load);
+    }
+
+    /**
+     * @param string $column__3
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setColumn_3($column__3, $load = true)
+    {
+        return $this->_set('column__3', $column__3, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

@@ -15,15 +15,6 @@
  * @property Article $Article
  * @property string $id
  *
- * @method string    getArticleId($load = true) Returns the current record's "article_id" value
- * @method string    getTestCamelCase($load = true) Returns the current record's "testCamelCase" value
- * @method Article   getArticle($load = true) Returns the current record's "Article" value
- * @method string    getId($load = true) Returns the current record's "id" value
- * @method CamelCase setArticleId($value, $load = true) Sets the current record's "article_id" value
- * @method CamelCase setTestCamelCase($value, $load = true) Sets the current record's "testCamelCase" value
- * @method CamelCase setArticle($value, $load = true) Sets the current record's "Article" value
- * @method CamelCase setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseCamelCase extends myDoctrineRecord
 {
@@ -46,6 +37,90 @@ abstract class BaseCamelCase extends myDoctrineRecord
         $this->hasOne('Article', [
              'local' => 'article_id',
              'foreign' => 'id']);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getArticleId($load = true)
+    {
+        return $this->_get('article_id', $load);
+    }
+
+    /**
+     * @param string $article_id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setArticleId($article_id, $load = true)
+    {
+        return $this->_set('article_id', $article_id, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getTestCamelCase($load = true)
+    {
+        return $this->_get('testCamelCase', $load);
+    }
+
+    /**
+     * @param string $testCamelCase
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setTestCamelCase($testCamelCase, $load = true)
+    {
+        return $this->_set('testCamelCase', $testCamelCase, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return Article
+     */
+    public function getArticle($load = true)
+    {
+        return $this->_get('Article', $load);
+    }
+
+    /**
+     * @param Article $Article
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setArticle($Article, $load = true)
+    {
+        return $this->_set('Article', $Article, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

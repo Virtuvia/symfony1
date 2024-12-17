@@ -21,27 +21,6 @@
  * @property Doctrine_Collection $camelCase
  * @property string $id
  *
- * @method string              getAuthorId($load = true) Returns the current record's "author_id" value
- * @method bool                getIsOnHomepage($load = true) Returns the current record's "is_on_homepage" value
- * @method string              getTitle($load = true) Returns the current record's "title" value
- * @method string              getBody($load = true) Returns the current record's "body" value
- * @method string              getTestColumn($load = true) Returns the current record's "test_column" value
- * @method string              getViews($load = true) Returns the current record's "views" value
- * @method string              getType($load = true) Returns the current record's "type" value
- * @method Author              getAuthor($load = true) Returns the current record's "Author" value
- * @method Doctrine_Collection getCamelCase($load = true) Returns the current record's "camelCase" collection
- * @method string              getId($load = true) Returns the current record's "id" value
- * @method Article             setAuthorId($value, $load = true) Sets the current record's "author_id" value
- * @method Article             setIsOnHomepage($value, $load = true) Sets the current record's "is_on_homepage" value
- * @method Article             setTitle($value, $load = true) Sets the current record's "title" value
- * @method Article             setBody($value, $load = true) Sets the current record's "body" value
- * @method Article             setTestColumn($value, $load = true) Sets the current record's "test_column" value
- * @method Article             setViews($value, $load = true) Sets the current record's "views" value
- * @method Article             setType($value, $load = true) Sets the current record's "type" value
- * @method Article             setAuthor($value, $load = true) Sets the current record's "Author" value
- * @method Article             setCamelCase($value, $load = true) Sets the current record's "camelCase" collection
- * @method Article             setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseArticle extends myDoctrineRecord
 {
@@ -108,6 +87,216 @@ abstract class BaseArticle extends myDoctrineRecord
         $timestampable0 = new Doctrine_Template_Timestampable();
         $this->actAs($sluggable0);
         $this->actAs($timestampable0);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getAuthorId($load = true)
+    {
+        return $this->_get('author_id', $load);
+    }
+
+    /**
+     * @param string $author_id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setAuthorId($author_id, $load = true)
+    {
+        return $this->_set('author_id', $author_id, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return bool
+     */
+    public function getIsOnHomepage($load = true)
+    {
+        return $this->_get('is_on_homepage', $load);
+    }
+
+    /**
+     * @param bool $is_on_homepage
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setIsOnHomepage($is_on_homepage, $load = true)
+    {
+        return $this->_set('is_on_homepage', $is_on_homepage, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getTitle($load = true)
+    {
+        return $this->_get('title', $load);
+    }
+
+    /**
+     * @param string $title
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setTitle($title, $load = true)
+    {
+        return $this->_set('title', $title, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getBody($load = true)
+    {
+        return $this->_get('body', $load);
+    }
+
+    /**
+     * @param string $body
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setBody($body, $load = true)
+    {
+        return $this->_set('body', $body, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getTestColumn($load = true)
+    {
+        return $this->_get('test_column', $load);
+    }
+
+    /**
+     * @param string $test_column
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setTestColumn($test_column, $load = true)
+    {
+        return $this->_set('test_column', $test_column, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getViews($load = true)
+    {
+        return $this->_get('views', $load);
+    }
+
+    /**
+     * @param string $views
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setViews($views, $load = true)
+    {
+        return $this->_set('views', $views, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getType($load = true)
+    {
+        return $this->_get('type', $load);
+    }
+
+    /**
+     * @param string $type
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setType($type, $load = true)
+    {
+        return $this->_set('type', $type, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return Author
+     */
+    public function getAuthor($load = true)
+    {
+        return $this->_get('Author', $load);
+    }
+
+    /**
+     * @param Author $Author
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setAuthor($Author, $load = true)
+    {
+        return $this->_set('Author', $Author, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return Doctrine_Collection
+     */
+    public function getCamelCase($load = true)
+    {
+        return $this->_get('camelCase', $load);
+    }
+
+    /**
+     * @param Doctrine_Collection $camelCase
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setCamelCase($camelCase, $load = true)
+    {
+        return $this->_set('camelCase', $camelCase, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

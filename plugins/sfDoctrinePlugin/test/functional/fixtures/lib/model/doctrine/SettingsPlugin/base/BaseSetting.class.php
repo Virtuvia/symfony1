@@ -15,15 +15,6 @@
  * @property string $weight
  * @property string $id
  *
- * @method string  getName($load = true) Returns the current record's "name" value
- * @method string  getValue($load = true) Returns the current record's "value" value
- * @method string  getWeight($load = true) Returns the current record's "weight" value
- * @method string  getId($load = true) Returns the current record's "id" value
- * @method Setting setName($value, $load = true) Sets the current record's "name" value
- * @method Setting setValue($value, $load = true) Sets the current record's "value" value
- * @method Setting setWeight($value, $load = true) Sets the current record's "weight" value
- * @method Setting setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseSetting extends myDoctrineRecord
 {
@@ -56,6 +47,90 @@ abstract class BaseSetting extends myDoctrineRecord
              ),
              ));
         $this->actAs($timestampable0);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getName($load = true)
+    {
+        return $this->_get('name', $load);
+    }
+
+    /**
+     * @param string $name
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setName($name, $load = true)
+    {
+        return $this->_set('name', $name, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getValue($load = true)
+    {
+        return $this->_get('value', $load);
+    }
+
+    /**
+     * @param string $value
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setValue($value, $load = true)
+    {
+        return $this->_set('value', $value, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getWeight($load = true)
+    {
+        return $this->_get('weight', $load);
+    }
+
+    /**
+     * @param string $weight
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setWeight($weight, $load = true)
+    {
+        return $this->_set('weight', $weight, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

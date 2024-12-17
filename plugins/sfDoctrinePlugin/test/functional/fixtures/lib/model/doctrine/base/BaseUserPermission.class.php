@@ -13,11 +13,6 @@
  * @property string $user_id
  * @property string $permission_id
  *
- * @method string         getUserId($load = true) Returns the current record's "user_id" value
- * @method string         getPermissionId($load = true) Returns the current record's "permission_id" value
- * @method UserPermission setUserId($value, $load = true) Sets the current record's "user_id" value
- * @method UserPermission setPermissionId($value, $load = true) Sets the current record's "permission_id" value
- *
  */
 abstract class BaseUserPermission extends myDoctrineRecord
 {
@@ -44,6 +39,48 @@ abstract class BaseUserPermission extends myDoctrineRecord
     {
         parent::setUp();
         
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getUserId($load = true)
+    {
+        return $this->_get('user_id', $load);
+    }
+
+    /**
+     * @param string $user_id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setUserId($user_id, $load = true)
+    {
+        return $this->_set('user_id', $user_id, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getPermissionId($load = true)
+    {
+        return $this->_get('permission_id', $load);
+    }
+
+    /**
+     * @param string $permission_id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setPermissionId($permission_id, $load = true)
+    {
+        return $this->_set('permission_id', $permission_id, $load);
     }
 
 }

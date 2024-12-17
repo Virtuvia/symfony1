@@ -16,13 +16,6 @@ Doctrine_Manager::getInstance()->bindComponent('Subscription', 'doctrine2');
  * @property string $status
  * @property string $id
  *
- * @method string       getName($load = true) Returns the current record's "name" value
- * @method string       getStatus($load = true) Returns the current record's "status" value
- * @method string       getId($load = true) Returns the current record's "id" value
- * @method Subscription setName($value, $load = true) Sets the current record's "name" value
- * @method Subscription setStatus($value, $load = true) Sets the current record's "status" value
- * @method Subscription setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseSubscription extends myDoctrineRecord
 {
@@ -50,6 +43,69 @@ abstract class BaseSubscription extends myDoctrineRecord
     {
         parent::setUp();
         
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getName($load = true)
+    {
+        return $this->_get('name', $load);
+    }
+
+    /**
+     * @param string $name
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setName($name, $load = true)
+    {
+        return $this->_set('name', $name, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getStatus($load = true)
+    {
+        return $this->_get('status', $load);
+    }
+
+    /**
+     * @param string $status
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setStatus($status, $load = true)
+    {
+        return $this->_set('status', $status, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

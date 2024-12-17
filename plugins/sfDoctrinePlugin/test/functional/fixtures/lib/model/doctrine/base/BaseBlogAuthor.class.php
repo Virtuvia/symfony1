@@ -13,11 +13,6 @@
  * @property Doctrine_Collection $Articles
  * @property string $id
  *
- * @method Doctrine_Collection getArticles($load = true) Returns the current record's "Articles" collection
- * @method string              getId($load = true) Returns the current record's "id" value
- * @method BlogAuthor          setArticles($value, $load = true) Sets the current record's "Articles" collection
- * @method BlogAuthor          setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseBlogAuthor extends Author
 {
@@ -28,6 +23,48 @@ abstract class BaseBlogAuthor extends Author
         $this->hasMany('BlogArticle as Articles', [
              'local' => 'id',
              'foreign' => 'blog_author_id']);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return Doctrine_Collection
+     */
+    public function getArticles($load = true)
+    {
+        return $this->_get('Articles', $load);
+    }
+
+    /**
+     * @param Doctrine_Collection $Articles
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setArticles($Articles, $load = true)
+    {
+        return $this->_set('Articles', $Articles, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

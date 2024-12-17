@@ -13,11 +13,6 @@
  * @property string $additional
  * @property string $id
  *
- * @method string                    getAdditional($load = true) Returns the current record's "additional" value
- * @method string                    getId($load = true) Returns the current record's "id" value
- * @method AuthorInheritanceConcrete setAdditional($value, $load = true) Sets the current record's "additional" value
- * @method AuthorInheritanceConcrete setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseAuthorInheritanceConcrete extends Author
 {
@@ -43,6 +38,48 @@ abstract class BaseAuthorInheritanceConcrete extends Author
     {
         parent::setUp();
         
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getAdditional($load = true)
+    {
+        return $this->_get('additional', $load);
+    }
+
+    /**
+     * @param string $additional
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setAdditional($additional, $load = true)
+    {
+        return $this->_set('additional', $additional, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

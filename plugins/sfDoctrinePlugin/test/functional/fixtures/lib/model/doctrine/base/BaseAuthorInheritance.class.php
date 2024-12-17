@@ -12,9 +12,6 @@
  *
  * @property string $id
  *
- * @method string            getId($load = true) Returns the current record's "id" value
- * @method AuthorInheritance setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseAuthorInheritance extends Author
 {
@@ -23,6 +20,27 @@ abstract class BaseAuthorInheritance extends Author
     {
         parent::setUp();
         
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

@@ -14,13 +14,6 @@
  * @property string $name
  * @property Doctrine_Collection $SortableArticleUniqueBy
  *
- * @method string                  getId($load = true)          Returns the current record's "id" value
- * @method string                  getName($load = true)        Returns the current record's "name" value
- * @method Doctrine_Collection     getSortableArticleUniqueBy($load = true) Returns the current record's "SortableArticleUniqueBy" collection
- * @method SortableArticleCategory setId($value, $load = true)  Sets the current record's "id" value
- * @method SortableArticleCategory setName($value, $load = true) Sets the current record's "name" value
- * @method SortableArticleCategory setSortableArticleUniqueBy($value, $load = true) Sets the current record's "SortableArticleUniqueBy" collection
- *
  */
 abstract class BaseSortableArticleCategory extends sfDoctrineRecord
 {
@@ -47,6 +40,69 @@ abstract class BaseSortableArticleCategory extends sfDoctrineRecord
         $this->hasMany('SortableArticleUniqueBy', [
              'local' => 'id',
              'foreign' => 'category_id']);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param string $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getName($load = true)
+    {
+        return $this->_get('name', $load);
+    }
+
+    /**
+     * @param string $name
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setName($name, $load = true)
+    {
+        return $this->_set('name', $name, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return Doctrine_Collection
+     */
+    public function getSortableArticleUniqueBy($load = true)
+    {
+        return $this->_get('SortableArticleUniqueBy', $load);
+    }
+
+    /**
+     * @param Doctrine_Collection $SortableArticleUniqueBy
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setSortableArticleUniqueBy($SortableArticleUniqueBy, $load = true)
+    {
+        return $this->_set('SortableArticleUniqueBy', $SortableArticleUniqueBy, $load);
     }
 
 }

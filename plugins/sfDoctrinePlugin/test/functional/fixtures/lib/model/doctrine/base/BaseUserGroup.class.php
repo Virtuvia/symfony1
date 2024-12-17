@@ -13,11 +13,6 @@
  * @property string $user_id
  * @property string $group_id
  *
- * @method string    getUserId($load = true) Returns the current record's "user_id" value
- * @method string    getGroupId($load = true) Returns the current record's "group_id" value
- * @method UserGroup setUserId($value, $load = true) Sets the current record's "user_id" value
- * @method UserGroup setGroupId($value, $load = true) Sets the current record's "group_id" value
- *
  */
 abstract class BaseUserGroup extends myDoctrineRecord
 {
@@ -44,6 +39,48 @@ abstract class BaseUserGroup extends myDoctrineRecord
     {
         parent::setUp();
         
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getUserId($load = true)
+    {
+        return $this->_get('user_id', $load);
+    }
+
+    /**
+     * @param string $user_id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setUserId($user_id, $load = true)
+    {
+        return $this->_set('user_id', $user_id, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getGroupId($load = true)
+    {
+        return $this->_get('group_id', $load);
+    }
+
+    /**
+     * @param string $group_id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setGroupId($group_id, $load = true)
+    {
+        return $this->_set('group_id', $group_id, $load);
     }
 
 }

@@ -13,11 +13,6 @@
  * @property BlogAuthor $Author
  * @property string $id
  *
- * @method BlogAuthor  getAuthor($load = true) Returns the current record's "Author" value
- * @method string      getId($load = true) Returns the current record's "id" value
- * @method BlogArticle setAuthor($value, $load = true) Sets the current record's "Author" value
- * @method BlogArticle setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseBlogArticle extends Article
 {
@@ -28,6 +23,48 @@ abstract class BaseBlogArticle extends Article
         $this->hasOne('BlogAuthor as Author', [
              'local' => 'blog_author_id',
              'foreign' => 'id']);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return BlogAuthor
+     */
+    public function getAuthor($load = true)
+    {
+        return $this->_get('Author', $load);
+    }
+
+    /**
+     * @param BlogAuthor $Author
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setAuthor($Author, $load = true)
+    {
+        return $this->_set('Author', $Author, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

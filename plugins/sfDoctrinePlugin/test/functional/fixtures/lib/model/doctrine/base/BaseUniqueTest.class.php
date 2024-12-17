@@ -16,17 +16,6 @@
  * @property string $unique_test4
  * @property string $id
  *
- * @method string     getUniqueTest1($load = true) Returns the current record's "unique_test1" value
- * @method string     getUniqueTest2($load = true) Returns the current record's "unique_test2" value
- * @method string     getUniqueTest3($load = true) Returns the current record's "unique_test3" value
- * @method string     getUniqueTest4($load = true) Returns the current record's "unique_test4" value
- * @method string     getId($load = true) Returns the current record's "id" value
- * @method UniqueTest setUniqueTest1($value, $load = true) Sets the current record's "unique_test1" value
- * @method UniqueTest setUniqueTest2($value, $load = true) Sets the current record's "unique_test2" value
- * @method UniqueTest setUniqueTest3($value, $load = true) Sets the current record's "unique_test3" value
- * @method UniqueTest setUniqueTest4($value, $load = true) Sets the current record's "unique_test4" value
- * @method UniqueTest setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseUniqueTest extends myDoctrineRecord
 {
@@ -78,6 +67,111 @@ abstract class BaseUniqueTest extends myDoctrineRecord
     {
         parent::setUp();
         
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getUniqueTest1($load = true)
+    {
+        return $this->_get('unique_test1', $load);
+    }
+
+    /**
+     * @param string $unique_test1
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setUniqueTest1($unique_test1, $load = true)
+    {
+        return $this->_set('unique_test1', $unique_test1, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getUniqueTest2($load = true)
+    {
+        return $this->_get('unique_test2', $load);
+    }
+
+    /**
+     * @param string $unique_test2
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setUniqueTest2($unique_test2, $load = true)
+    {
+        return $this->_set('unique_test2', $unique_test2, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getUniqueTest3($load = true)
+    {
+        return $this->_get('unique_test3', $load);
+    }
+
+    /**
+     * @param string $unique_test3
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setUniqueTest3($unique_test3, $load = true)
+    {
+        return $this->_set('unique_test3', $unique_test3, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getUniqueTest4($load = true)
+    {
+        return $this->_get('unique_test4', $load);
+    }
+
+    /**
+     * @param string $unique_test4
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setUniqueTest4($unique_test4, $load = true)
+    {
+        return $this->_set('unique_test4', $unique_test4, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

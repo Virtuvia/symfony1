@@ -13,11 +13,6 @@
  * @property string $name
  * @property string $id
  *
- * @method string          getName($load = true) Returns the current record's "name" value
- * @method string          getId($load = true) Returns the current record's "id" value
- * @method SortableArticle setName($value, $load = true) Sets the current record's "name" value
- * @method SortableArticle setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseSortableArticle extends sfDoctrineRecord
 {
@@ -41,6 +36,48 @@ abstract class BaseSortableArticle extends sfDoctrineRecord
         parent::setUp();
         $sortable0 = new Doctrine_Template_Sortable();
         $this->actAs($sortable0);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getName($load = true)
+    {
+        return $this->_get('name', $load);
+    }
+
+    /**
+     * @param string $name
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setName($name, $load = true)
+    {
+        return $this->_set('name', $name, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

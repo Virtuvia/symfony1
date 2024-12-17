@@ -15,15 +15,6 @@
  * @property SortableArticleCategory $Category
  * @property string $id
  *
- * @method string                  getName($load = true) Returns the current record's "name" value
- * @method string                  getCategoryId($load = true) Returns the current record's "category_id" value
- * @method SortableArticleCategory getCategory($load = true) Returns the current record's "Category" value
- * @method string                  getId($load = true) Returns the current record's "id" value
- * @method SortableArticleUniqueBy setName($value, $load = true) Sets the current record's "name" value
- * @method SortableArticleUniqueBy setCategoryId($value, $load = true) Sets the current record's "category_id" value
- * @method SortableArticleUniqueBy setCategory($value, $load = true) Sets the current record's "Category" value
- * @method SortableArticleUniqueBy setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseSortableArticleUniqueBy extends sfDoctrineRecord
 {
@@ -62,6 +53,90 @@ abstract class BaseSortableArticleUniqueBy extends sfDoctrineRecord
              ),
              ));
         $this->actAs($sortable0);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getName($load = true)
+    {
+        return $this->_get('name', $load);
+    }
+
+    /**
+     * @param string $name
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setName($name, $load = true)
+    {
+        return $this->_set('name', $name, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getCategoryId($load = true)
+    {
+        return $this->_get('category_id', $load);
+    }
+
+    /**
+     * @param string $category_id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setCategoryId($category_id, $load = true)
+    {
+        return $this->_set('category_id', $category_id, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return SortableArticleCategory
+     */
+    public function getCategory($load = true)
+    {
+        return $this->_get('Category', $load);
+    }
+
+    /**
+     * @param SortableArticleCategory $Category
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setCategory($Category, $load = true)
+    {
+        return $this->_set('Category', $Category, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

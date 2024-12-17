@@ -13,11 +13,6 @@
  * @property string $name
  * @property string $id
  *
- * @method string           getName($load = true) Returns the current record's "name" value
- * @method string           getId($load = true) Returns the current record's "id" value
- * @method DefaultValueTest setName($value, $load = true) Sets the current record's "name" value
- * @method DefaultValueTest setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseDefaultValueTest extends myDoctrineRecord
 {
@@ -37,6 +32,48 @@ abstract class BaseDefaultValueTest extends myDoctrineRecord
     {
         parent::setUp();
         
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getName($load = true)
+    {
+        return $this->_get('name', $load);
+    }
+
+    /**
+     * @param string $name
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setName($name, $load = true)
+    {
+        return $this->_set('name', $name, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }

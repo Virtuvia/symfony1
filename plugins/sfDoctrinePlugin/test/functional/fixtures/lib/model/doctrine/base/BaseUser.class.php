@@ -18,21 +18,6 @@
  * @property Profile $Profile
  * @property string $id
  *
- * @method string              getUsername($load = true) Returns the current record's "username" value
- * @method string              getPassword($load = true) Returns the current record's "password" value
- * @method string              getTest($load = true) Returns the current record's "test" value
- * @method Doctrine_Collection getGroups($load = true) Returns the current record's "Groups" collection
- * @method Doctrine_Collection getPermissions($load = true) Returns the current record's "Permissions" collection
- * @method Profile             getProfile($load = true) Returns the current record's "Profile" value
- * @method string              getId($load = true) Returns the current record's "id" value
- * @method User                setUsername($value, $load = true) Sets the current record's "username" value
- * @method User                setPassword($value, $load = true) Sets the current record's "password" value
- * @method User                setTest($value, $load = true) Sets the current record's "test" value
- * @method User                setGroups($value, $load = true) Sets the current record's "Groups" collection
- * @method User                setPermissions($value, $load = true) Sets the current record's "Permissions" collection
- * @method User                setProfile($value, $load = true) Sets the current record's "Profile" value
- * @method User                setId($value, $load = true) Sets the current record's "id" value
- *
  */
 abstract class BaseUser extends myDoctrineRecord
 {
@@ -71,6 +56,153 @@ abstract class BaseUser extends myDoctrineRecord
         $this->hasOne('Profile', [
              'local' => 'id',
              'foreign' => 'user_id']);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getUsername($load = true)
+    {
+        return $this->_get('username', $load);
+    }
+
+    /**
+     * @param string $username
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setUsername($username, $load = true)
+    {
+        return $this->_set('username', $username, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getPassword($load = true)
+    {
+        return $this->_get('password', $load);
+    }
+
+    /**
+     * @param string $password
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setPassword($password, $load = true)
+    {
+        return $this->_set('password', $password, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return string
+     */
+    public function getTest($load = true)
+    {
+        return $this->_get('test', $load);
+    }
+
+    /**
+     * @param string $test
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setTest($test, $load = true)
+    {
+        return $this->_set('test', $test, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return Doctrine_Collection
+     */
+    public function getGroups($load = true)
+    {
+        return $this->_get('Groups', $load);
+    }
+
+    /**
+     * @param Doctrine_Collection $Groups
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setGroups($Groups, $load = true)
+    {
+        return $this->_set('Groups', $Groups, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return Doctrine_Collection
+     */
+    public function getPermissions($load = true)
+    {
+        return $this->_get('Permissions', $load);
+    }
+
+    /**
+     * @param Doctrine_Collection $Permissions
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setPermissions($Permissions, $load = true)
+    {
+        return $this->_set('Permissions', $Permissions, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return Profile
+     */
+    public function getProfile($load = true)
+    {
+        return $this->_get('Profile', $load);
+    }
+
+    /**
+     * @param Profile $Profile
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setProfile($Profile, $load = true)
+    {
+        return $this->_set('Profile', $Profile, $load);
+    }
+
+    /**
+     * @param bool $load
+     *
+     * @return integer
+     */
+    public function getId($load = true)
+    {
+        return $this->_get('id', $load);
+    }
+
+    /**
+     * @param integer $id
+     * @param bool $load
+     *
+     * @return self
+     */
+    public function setId($id, $load = true)
+    {
+        return $this->_set('id', $id, $load);
     }
 
 }
