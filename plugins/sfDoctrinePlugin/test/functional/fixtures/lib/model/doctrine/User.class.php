@@ -5,8 +5,8 @@
  */
 class User extends BaseUser
 {
-    public function setPassword($password)
+    public function setPassword($password, $load = true)
     {
-        return $this->_set('password', md5($password));
+        return $this->_set('password', md5($password), $load);
     }
 }
