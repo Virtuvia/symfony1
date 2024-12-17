@@ -14,6 +14,11 @@ interface Doctrine_Type_Interface
      */
     public function convertToPhpValue(mixed $databaseValue): mixed;
 
+    /**
+     * @throws Doctrine_Type_Exception_UnacceptableValue
+     */
+    public function acceptPhpValue(mixed $phpValue): mixed;
+
     public function isValueModified(mixed $old, mixed $new): bool;
 
     public function getPhpType(): string;

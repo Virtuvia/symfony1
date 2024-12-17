@@ -30,6 +30,11 @@ class Doctrine_Type_BooleanType extends Doctrine_Type
         return (bool) $databaseValue;
     }
 
+    public function acceptPhpValue(mixed $phpValue): ?bool
+    {
+        return self::convertToPhpValue($phpValue);
+    }
+
     public function isValueModified(mixed $old, mixed $new): bool
     {
         if ((is_bool($old) || is_numeric($old)) && (is_bool($new) || is_numeric($new)) && $old == $new) {

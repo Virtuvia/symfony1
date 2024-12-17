@@ -10,7 +10,12 @@ abstract class Doctrine_Type implements Doctrine_Type_Interface
             return null;
         }
 
-        return $databaseValue;
+        return self::acceptPhpValue($databaseValue);
+    }
+
+    public function acceptPhpValue(mixed $phpValue): mixed
+    {
+        return $phpValue;
     }
 
     public function convertToDatabaseValue(mixed $phpValue): mixed
