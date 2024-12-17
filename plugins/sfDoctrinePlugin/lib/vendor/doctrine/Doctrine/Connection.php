@@ -247,6 +247,15 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
     }
 
     /**
+     * @throws Doctrine_Type_Exception_ConversionFailed
+     * @throws Doctrine_Type_Exception_UnknownType
+     */
+    public function acceptPhpValue(string $type, mixed $phpValue): mixed
+    {
+        return $this->getManager()->acceptPhpValue($type, $phpValue);
+    }
+
+    /**
      * @throws Doctrine_Type_Exception_UnknownType
      */
     public function isValueModified(string $type, mixed $old, mixed $new): bool

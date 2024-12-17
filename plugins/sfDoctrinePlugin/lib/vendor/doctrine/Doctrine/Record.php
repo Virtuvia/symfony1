@@ -923,7 +923,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
                 }
             }
 
-            $value = $this->getTable()->convertToPhpValue($fieldName, $value);
+            $value = $this->getTable()->acceptPhpValue($fieldName, $value);
 
             if ($load) {
                 $old = $this->get($fieldName, $load);

@@ -2103,7 +2103,6 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      * $table->prepareValue($field, $value); // Doctrine_Null
      * </code>
      *
-     * @internal
      * @see Doctrine_Hydrator_Graph
      * @see Doctrine_Hydrator_ScalarDriver
      *
@@ -2116,7 +2115,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      *                          the type determination. Used i.e. during hydration.
      * @return mixed            prepared value
      */
-    public function convertToPhpValue(string $fieldName, mixed $value, ?string $typeHint = null): mixed
+    final public function convertToPhpValue(string $fieldName, mixed $value, ?string $typeHint = null): mixed
     {
         if ($value === self::$_null) {
             return self::$_null;
@@ -2127,14 +2126,24 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
         return $this->getConnection()->convertToPhpValue($type, $value);
     }
 
+    final public function acceptPhpValue(string $fieldName, mixed $value): mixed
+    {
+        if ($value === self::$_null) {
+            return self::$_null;
+        }
+
+        $type = $typeHint ?? $this->getTypeOf($fieldName);
+
+        return $this->getConnection()->acceptPhpValue($type, $value);
+    }
+
     /**
-     * @internal
      * @see Doctrine_Record
      *
      * @throws Doctrine_Type_Exception_ConversionFailed
      * @throws Doctrine_Type_Exception_UnknownType
      */
-    public function convertToDatabaseValue(string $fieldName, mixed $value): mixed
+    final public function convertToDatabaseValue(string $fieldName, mixed $value): mixed
     {
         if ($value === self::$_null) {
             return null;

@@ -151,6 +151,15 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
     }
 
     /**
+     * @throws Doctrine_Type_Exception_ConversionFailed
+     * @throws Doctrine_Type_Exception_UnknownType
+     */
+    public function acceptPhpValue(string $type, mixed $phpValue): mixed
+    {
+        return $this->typeRegistry->getType($type)->acceptPhpValue($phpValue);
+    }
+
+    /**
      * @throws Doctrine_Type_Exception_UnknownType
      */
     public function isValueModified(string $type, mixed $old, mixed $new): bool
