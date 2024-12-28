@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /*
  * $Id: Schema.php 1838 2007-06-26 00:58:21Z nicobn $
  *
@@ -220,13 +223,7 @@ class Doctrine_Import_Schema
         }
     }
 
-    /**
-     * setOptions
-     *
-     * @param string $options
-     * @return void
-     */
-    public function setOptions($options)
+    public function setOptions(array $options): void
     {
         if (! empty($options)) {
             $this->_options = $options;
@@ -294,6 +291,11 @@ class Doctrine_Import_Schema
         }
     }
 
+    protected function beforeParseSchema(array $schema): array
+    {
+        return $schema;
+    }
+
     /**
      * parseSchema
      *
@@ -321,6 +323,7 @@ class Doctrine_Import_Schema
             'detect_relations'    =>  false];
 
         $array = $this->parseSchemaFile($schema);
+        $array = $this->beforeParseSchema($array);
 
         // Loop over and build up all the global values and remove them from the array
         $globals = [];
