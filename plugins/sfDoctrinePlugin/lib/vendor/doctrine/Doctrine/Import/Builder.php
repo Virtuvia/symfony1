@@ -1177,6 +1177,7 @@ EOF;
 
         Doctrine_Lib::makeDirectories(dirname($writePath));
 
+        // track the class for later autoloading
         Doctrine_Core::loadModel($className, $writePath);
 
         if (! file_exists($writePath)) {
@@ -1316,9 +1317,8 @@ EOF;
 
         $this->dumpRecordCodeToFile($writePath, $code);
 
-        if ($definition['is_main_class'] ?? false) {
-            Doctrine_Core::loadModel($definition['className'], $writePath);
-        }
+        // track the class for later autoloading
+        Doctrine_Core::loadModel($definition['className'], $writePath);
 
         $definition['written'] = true;
         $definition['classPath'] = $writePath;
