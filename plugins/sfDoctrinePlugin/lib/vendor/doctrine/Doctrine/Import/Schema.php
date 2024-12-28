@@ -34,6 +34,8 @@
  */
 class Doctrine_Import_Schema
 {
+    public const SCHEMA_FORMAT = 'yml';
+
     /**
      * Schema definition keys that can be applied at the global level.
      *
@@ -219,32 +221,26 @@ class Doctrine_Import_Schema
      *
      * Loop throug directories of schema files and parse them all in to one complete array of schema information
      *
-     * @param  string   $schema Array of schema files or single schema file. Array of directories with schema files or single directory
-     * @param  string   $format Format of the files we are parsing and building from
-     * @return array    $array
+     * @param  string   $schema single schema file or directory with schema files
      */
-    public function buildSchema($schema, $format)
+    protected function buildSchema(string $schema): array
     {
         $array = [];
 
-        foreach ((array) $schema as $s) {
-            if (is_file($s)) {
-                $e = explode('.', $s);
-                if (end($e) === $format) {
-                    $array = array_merge($array, $this->parseSchema($s, $format));
-                }
-            } elseif (is_dir($s)) {
-                $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($s),
-                    RecursiveIteratorIterator::LEAVES_ONLY);
+        if (is_file($schema)) {
+            $e = explode('.', $schema);
+            if (end($e) === self::SCHEMA_FORMAT) {
+                $array = array_merge($array, $this->parseSchema($schema));
+            }
+        } elseif (is_dir($schema)) {
+            $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($schema),
+                RecursiveIteratorIterator::LEAVES_ONLY);
 
-                foreach ($it as $file) {
-                    $e = explode('.', $file->getFileName());
-                    if (end($e) === $format) {
-                        $array = array_merge($array, $this->parseSchema($file->getPathName(), $format));
-                    }
+            foreach ($it as $file) {
+                $e = explode('.', $file->getFileName());
+                if (end($e) === self::SCHEMA_FORMAT) {
+                    $array = array_merge($array, $this->parseSchema($file->getPathName()));
                 }
-            } else {
-                $array = array_merge($array, $this->parseSchema($s, $format));
             }
         }
 
@@ -260,31 +256,23 @@ class Doctrine_Import_Schema
      * A method to import a Schema and translate it into a Doctrine_Record object
      *
      * @param  string $schema       The file containing the XML schema
-     * @param  string $format       Format of the schema file
-     * @param  string $directory    The directory where the Doctrine_Record class will be written
-     * @param  array  $models       Optional array of models to import
-     *
-     * @return void
+     * @param  ?string $directory    The directory where the Doctrine_Record class will be written
      */
-    public function importSchema($schema, $format = 'yml', $directory = null, $models = [])
+    public function importSchema(string $schema, ?string $directory = null): void
     {
         $builder = Doctrine_Manager::getInstance()->createRecordBuilder();
         $builder->setTargetPath($directory);
         $builder->setOptions($this->getOptions());
 
-        $array = $this->buildSchema($schema, $format);
+        $array = $this->buildSchema($schema);
 
-        if (count($array) == 0) {
+        if (count($array) === 0) {
             throw new Doctrine_Import_Exception(
-                sprintf('No ' . $format . ' schema found in ' . implode(", ", $schema)),
+                sprintf('No YML schema found in ' . $schema)
             );
         }
 
         foreach ($array as $name => $definition) {
-            if (! empty($models) && !in_array($definition['className'], $models)) {
-                continue;
-            }
-
             $builder->buildRecord($definition);
         }
     }
@@ -299,7 +287,7 @@ class Doctrine_Import_Schema
      * @param  string $type     Format type of the schema we are parsing
      * @return array  $build    Built array of schema information
      */
-    public function parseSchema($schema, $type)
+    protected function parseSchema(string $schema): array
     {
         $defaults = ['abstract'            =>  false,
             'className'           =>  null,
