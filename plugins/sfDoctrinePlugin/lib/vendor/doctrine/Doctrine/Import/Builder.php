@@ -1095,13 +1095,17 @@ EOF;
             $baseClass['override_parent'] = false;
             $baseClass['is_base_class'] = true;
 
-            $this->writeDefinition($baseClass);
+            $finalBaseClassDefinition = $this->writeDefinition($baseClass);
 
             if (! empty($packageLevel)) {
                 $this->writeDefinition($packageLevel);
             }
 
-            $this->writeDefinition($topLevel);
+            $finalTopLevelClassDefinition = $this->writeDefinition($topLevel);
+
+            if ($finalBaseClassDefinition['written']) {
+                $this->postProcessRecordBaseClass($finalTopLevelClassDefinition['className'], $finalBaseClassDefinition['classPath']);
+            }
         } else {
             $this->writeDefinition($definition);
         }
@@ -1305,18 +1309,33 @@ EOF;
 
         Doctrine_Lib::makeDirectories(dirname($writePath));
 
-        if (isset($definition['generate_once']) && $definition['generate_once'] === true) {
-            if (! file_exists($writePath)) {
-                $bytes = file_put_contents($writePath, $code);
-            }
-        } else {
-            $bytes = file_put_contents($writePath, $code);
+        if (isset($definition['generate_once']) && $definition['generate_once'] === true && file_exists($writePath)) {
+            $definition['written'] = false;
+            return $definition;
         }
 
-        if (isset($bytes) && $bytes === false) {
-            throw new Doctrine_Import_Builder_Exception("Couldn't write file " . $writePath);
+        $this->dumpRecordCodeToFile($writePath, $code);
+
+        if ($definition['is_main_class'] ?? false) {
+            Doctrine_Core::loadModel($definition['className'], $writePath);
         }
 
-        Doctrine_Core::loadModel($definition['className'], $writePath);
+        $definition['written'] = true;
+        $definition['classPath'] = $writePath;
+
+        return $definition;
+    }
+
+    protected function dumpRecordCodeToFile(string $path, string $recordCode): void
+    {
+        $bytes = file_put_contents($path, $recordCode);
+
+        if ($bytes === false) {
+            throw new Doctrine_Import_Builder_Exception("Couldn't write file " . $path);
+        }
+    }
+
+    protected function postProcessRecordBaseClass(string $recordClassName, string $baseClassPath): void
+    {
     }
 }
