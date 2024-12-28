@@ -64,9 +64,7 @@ EOF;
 
         $schema = $this->prepareSchemaFile($config['yaml_schema_path']);
 
-        $import = new Doctrine_Import_Schema();
-        $import->setOptions($builderOptions);
-        $import->importSchema($schema, 'yml', $config['models_path']);
+        Doctrine_Core::generateModelsFromYaml($schema, $config['models_path'], $builderOptions);
 
         $modelPackagePaths = [];
 
