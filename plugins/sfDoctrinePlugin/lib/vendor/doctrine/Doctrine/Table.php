@@ -584,22 +584,6 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
     }
 
     /**
-     * Exports this table to database based on the schema definition.
-     *
-     * This method create a physical table in the database, using the
-     * definition that comes from the component Doctrine_Record instance.
-     *
-     * @throws Doctrine_Connection_Exception    if some error other than Doctrine_Core::ERR_ALREADY_EXISTS
-     *                                          occurred during the create table operation
-     * @return bool                          whether or not the export operation was successful
-     *                                          false if table already existed in the database
-     */
-    public function export()
-    {
-        $this->_conn->export->exportTable($this);
-    }
-
-    /**
      * Returns an exportable representation of this object.
      *
      * This method produces a array representation of the table schema, where
