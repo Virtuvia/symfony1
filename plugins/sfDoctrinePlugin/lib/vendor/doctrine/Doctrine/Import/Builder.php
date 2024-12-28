@@ -39,7 +39,7 @@ declare(strict_types=1);
  * @author      Nicolas Bérard-Nault <nicobn@php.net>
  * @author      Jonathan H. Wage <jwage@mac.com>
  */
-final class Doctrine_Import_Builder extends Doctrine_Builder
+class Doctrine_Import_Builder extends Doctrine_Builder
 {
     /**
      * Path where to generated files
