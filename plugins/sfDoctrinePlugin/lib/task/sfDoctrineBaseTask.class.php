@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Yaml\Yaml;
+
 /**
  * Base class for all symfony Doctrine tasks.
  *
@@ -97,6 +99,11 @@ abstract class sfDoctrineBaseTask extends sfBaseTask
         return $databases;
     }
 
+    protected function parseSchemaFile(string $schemaFile): array
+    {
+        return Doctrine_Manager::getInstance()->createSchemaImporter()->parseSchemaFile($schemaFile);
+    }
+
     /**
      * Merges all project and plugin schema files into one.
      *
@@ -126,7 +133,7 @@ abstract class sfDoctrineBaseTask extends sfBaseTask
         foreach ($this->configuration->getPlugins() as $name) {
             $plugin = $this->configuration->getPluginConfiguration($name);
             foreach ($finder->in($plugin->getRootDir() . '/config/doctrine') as $schema) {
-                $pluginModels = (array) sfYaml::load($schema);
+                $pluginModels = $this->parseSchemaFile($schema);
                 $globals = $this->filterSchemaGlobals($pluginModels);
 
                 foreach ($pluginModels as $model => $definition) {
@@ -153,7 +160,7 @@ abstract class sfDoctrineBaseTask extends sfBaseTask
 
         // project models
         foreach ($finder->in($yamlSchemaPath) as $schema) {
-            $projectModels = (array) sfYaml::load($schema);
+            $projectModels = $this->parseSchemaFile($schema);
             $globals = $this->filterSchemaGlobals($projectModels);
 
             foreach ($projectModels as $model => $definition) {
@@ -171,7 +178,7 @@ abstract class sfDoctrineBaseTask extends sfBaseTask
         // create one consolidated schema file
         $file = realpath(sys_get_temp_dir()) . '/doctrine_schema_' . rand(11111, 99999) . '.yml';
         $this->logSection('file+', $file);
-        file_put_contents($file, sfYaml::dump($models, 4));
+        file_put_contents($file, Yaml::dump($models, 4));
 
         return $file;
     }

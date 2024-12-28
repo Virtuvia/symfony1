@@ -19,6 +19,8 @@
  * <http://www.doctrine-project.org>.
  */
 
+use Symfony\Component\Yaml\Yaml;
+
 /**
  * Doctrine_Import_Schema
  *
@@ -169,6 +171,21 @@ class Doctrine_Import_Schema
         return self::$_globalDefinitionKeys;
     }
 
+    public function parseSchemaFile(string $schemaFile): array
+    {
+        $parsed = Yaml::parseFile($schemaFile, Yaml::PARSE_CONSTANT);
+
+        if ($parsed === null) {
+            return [];
+        }
+
+        if (!is_array($parsed)) {
+            throw new InvalidArgumentException(sprintf('The schema file "%s" must be a map of Model names and their configuration.', $schemaFile));
+        }
+
+        return $parsed;
+    }
+
     /**
      * getOption
      *
@@ -303,7 +320,7 @@ class Doctrine_Import_Schema
             'inheritance'         =>  [],
             'detect_relations'    =>  false];
 
-        $array = Doctrine_Parser::load($schema, $type);
+        $array = $this->parseSchemaFile($schema);
 
         // Loop over and build up all the global values and remove them from the array
         $globals = [];

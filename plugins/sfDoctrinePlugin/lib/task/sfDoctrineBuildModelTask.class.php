@@ -69,7 +69,7 @@ EOF;
         $modelPackagePaths = [];
 
         // markup base classes with magic methods
-        foreach (sfYaml::load($schema) as $model => $definition) {
+        foreach ($this->parseSchemaFile($schema) as $model => $definition) {
             $packagePath = isset($definition['package']) ? '/' . substr($definition['package'], 0, strpos($definition['package'], '.')) : '';
             $modelPackagePaths[$model] = $packagePath;
 

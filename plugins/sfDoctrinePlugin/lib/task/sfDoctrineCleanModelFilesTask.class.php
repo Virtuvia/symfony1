@@ -92,7 +92,7 @@ EOF;
      */
     protected function getYamlSchema($yamlSchemaPath)
     {
-        return (array) sfYaml::load($this->prepareSchemaFile($yamlSchemaPath));
+        return $this->parseSchemaFile($this->prepareSchemaFile($yamlSchemaPath));
     }
 
     /**
