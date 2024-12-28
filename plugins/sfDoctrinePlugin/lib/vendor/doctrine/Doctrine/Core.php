@@ -760,19 +760,18 @@ class Doctrine_Core
     }
 
     /**
-     * Generate a yaml schema file from an existing directory of models
+     * Generate Doctrine_Records from yaml schema file(s)
      *
      * @param string $yamlPath Path to your yaml schema files
      * @param string $directory Directory to generate your models in
      * @param array  $options Array of options to pass to the schema importer
-     * @return void
      */
-    public static function generateModelsFromYaml($yamlPath, $directory, $options = [])
+    public static function generateModelsFromYaml(string $yamlPath, string $directory, array $options = []): void
     {
         $import = Doctrine_Manager::getInstance()->createSchemaImporter();
         $import->setOptions($options);
 
-        return $import->importSchema($yamlPath, 'yml', $directory);
+        $import->importSchema($yamlPath, $directory);
     }
 
     /**
