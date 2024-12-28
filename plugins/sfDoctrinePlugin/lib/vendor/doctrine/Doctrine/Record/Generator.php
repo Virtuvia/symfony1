@@ -460,7 +460,7 @@ abstract class Doctrine_Record_Generator extends Doctrine_Record_Abstract
             $definition['listeners'] = $this->_options['listeners'];
         }
 
-        $builder = new Doctrine_Import_Builder();
+        $builder = Doctrine_Manager::getInstance()->createRecordBuilder();
         $builderOptions = isset($this->_options['builderOptions']) ? (array) $this->_options['builderOptions'] : [];
         $builder->setOptions($builderOptions);
 

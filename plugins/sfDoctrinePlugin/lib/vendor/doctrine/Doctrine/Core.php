@@ -769,7 +769,7 @@ class Doctrine_Core
      */
     public static function generateModelsFromYaml($yamlPath, $directory, $options = [])
     {
-        $import = new Doctrine_Import_Schema();
+        $import = Doctrine_Manager::getInstance()->createSchemaImporter();
         $import->setOptions($options);
 
         return $import->importSchema($yamlPath, 'yml', $directory);

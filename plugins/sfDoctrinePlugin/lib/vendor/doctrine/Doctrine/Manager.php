@@ -104,6 +104,16 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
     private array $templateNameClassMap = [];
 
     /**
+     * @var Closure(): Doctrine_Import_Schema
+     */
+    private Closure $schemaImporterFactory;
+
+    /**
+     * @var Closure(): Doctrine_Import_Builder
+     */
+    private Closure $recordBuilderFactory;
+
+    /**
      * constructor
      *
      * this is private constructor (use getInstance to get an instance of this class)
@@ -130,6 +140,9 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
         $this->registerType('text', new Doctrine_Type_TextType());
         $this->registerType('timestamp', new Doctrine_Type_TimestampType());
         $this->registerType('time', new Doctrine_Type_TimeType());
+
+        $this->schemaImporterFactory = fn () => new Doctrine_Import_Schema();
+        $this->recordBuilderFactory = fn () => new Doctrine_Import_Builder();
     }
 
     /**
@@ -207,6 +220,36 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
         }
 
         return $name;
+    }
+
+    public function createSchemaImporter(): Doctrine_Import_Schema
+    {
+        $schemaImporterFactory = $this->schemaImporterFactory;
+
+        return $schemaImporterFactory();
+    }
+
+    public function createRecordBuilder(): Doctrine_Import_Builder
+    {
+        $recordBuilderFactory = $this->recordBuilderFactory;
+
+        return $recordBuilderFactory();
+    }
+
+    /**
+     * @param Closure(): Doctrine_Import_Schema $factory
+     */
+    public function setSchemaImporterFactory(Closure $factory): void
+    {
+        $this->schemaImporterFactory = $factory;
+    }
+
+    /**
+     * @param Closure(): Doctrine_Import_Builder $factory
+     */
+    public function setRecordBuilderFactory(Closure $factory): void
+    {
+        $this->recordBuilderFactory = $factory;
     }
 
     /**
