@@ -291,6 +291,9 @@ class Doctrine_Import_Builder extends Doctrine_Builder
         }
 
         self::$_tpl = <<<EOF
+
+declare(strict_types=1);
+
 /**
  * ##COPYRIGHT PLACEHOLDER##
  */
