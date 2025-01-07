@@ -291,9 +291,6 @@ class Doctrine_Import_Builder extends Doctrine_Builder
         }
 
         self::$_tpl = <<<EOF
-
-declare(strict_types=1);
-
 /**
  * ##COPYRIGHT PLACEHOLDER##
  */
@@ -1298,7 +1295,8 @@ EOF;
             $writePath = $this->_path . DIRECTORY_SEPARATOR . $fileName;
         }
 
-        $code = "<?php" . PHP_EOL;
+        $code = "<?php" . PHP_EOL . PHP_EOL;
+        $code .= "declare(strict_types=1);" . PHP_EOL;
 
         if (isset($definition['connection']) && $definition['connection']) {
             $code .= "// Connection Component Binding" . PHP_EOL;
