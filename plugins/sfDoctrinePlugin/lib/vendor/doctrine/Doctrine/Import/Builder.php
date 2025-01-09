@@ -1025,19 +1025,7 @@ EOF;
         return $content;
     }
 
-    /**
-     * buildRecord
-     *
-     * @param array $options
-     * @param array $columns
-     * @param array $relations
-     * @param array $indexes
-     * @param array $attributes
-     * @param array $templates
-     * @param array $actAs
-     * @return void=
-     */
-    public function buildRecord(array $definition)
+    public function buildRecord(array $definition): void
     {
         if (! isset($definition['className'])) {
             throw new Doctrine_Import_Builder_Exception('Missing class name.');
@@ -1208,18 +1196,9 @@ EOF;
     }
 
     /**
-     * writeDefinition
-     *
-     * @param array $options
-     * @param array $columns
-     * @param array $relations
-     * @param array $indexes
-     * @param array $attributes
-     * @param array $templates
-     * @param array $actAs
-     * @return void
+     * @return array the modified definition that was written
      */
-    public function writeDefinition(array $definition)
+    public function writeDefinition(array $definition): array
     {
         $originalClassName = $definition['className'];
         if ($prefix = $this->_classPrefix) {
@@ -1336,6 +1315,9 @@ EOF;
         }
     }
 
+    /**
+     * @param class-string<\Doctrine_Record> $recordClassName
+     */
     protected function postProcessRecordBaseClass(string $recordClassName, string $baseClassPath): void
     {
     }
