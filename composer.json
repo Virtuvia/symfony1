@@ -19,8 +19,6 @@
             "plugins/sfDoctrineGuardPlugin/lib",
             "plugins/sfDoctrineGuardPlugin/modules",
             "plugins/sfFormExtraPlugin/lib",
-            "plugins/sfImageTransformExtraPlugin/lib",
-            "plugins/sfImageTransformPlugin/lib",
             "plugins/sfJqueryReloadedPlugin/lib"
         ],
         "files": [
