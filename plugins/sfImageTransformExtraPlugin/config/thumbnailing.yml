@@ -1,9 +1,0 @@
-all:
-  .settings:
-    formats:
-# -------------------------------------------------------------------------------
-# --- // original image. no transformation
-      original:
-        quality:                    100
-        mime_type:                  image/jpg
-        transformations:            []
