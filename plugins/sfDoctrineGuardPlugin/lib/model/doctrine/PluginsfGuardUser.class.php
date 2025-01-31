@@ -14,26 +14,6 @@ abstract class PluginsfGuardUser extends BasesfGuardUser
     protected $_allPermissions = null;
 
     /**
-     * Returns the string representation of the object: "Full Name (username)"
-     *
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return (string) $this->getName() . ' (' . $this->getUsername() . ')';
-    }
-
-    /**
-     * Returns the first and last name of the user concatenated together
-     *
-     * @return string $name
-     */
-    public function getName()
-    {
-        return trim($this->getFirstName() . ' ' . $this->getLastName());
-    }
-
-    /**
      * Sets the user password.
      *
      * @param string $password
@@ -67,34 +47,7 @@ abstract class PluginsfGuardUser extends BasesfGuardUser
      * @param string $password
      * @return bool
      */
-    public function checkPassword($password)
-    {
-        if ($callable = sfConfig::get('app_sf_guard_plugin_check_password_callable')) {
-            return call_user_func_array($callable, [$this->getUsername(), $password, $this]);
-        } else {
-            return $this->checkPasswordByGuard($password);
-        }
-    }
-
-    /**
-     * Returns whether or not the given password is valid.
-     *
-     * @param string $password
-     * @return bool
-     * @throws sfException
-     */
-    public function checkPasswordByGuard($password)
-    {
-        $algorithm = $this->getAlgorithm();
-        if (false !== $pos = strpos($algorithm, '::')) {
-            $algorithm = [substr($algorithm, 0, $pos), substr($algorithm, $pos + 2)];
-        }
-        if (!is_callable($algorithm)) {
-            throw new sfException(sprintf('The algorithm callable "%s" is not callable.', $algorithm));
-        }
-
-        return $this->getPassword() == call_user_func_array($algorithm, [$this->getSalt() . $password]);
-    }
+    abstract public function checkPassword($password);
 
     /**
      * Adds the user a new group from its name.
@@ -251,21 +204,5 @@ abstract class PluginsfGuardUser extends BasesfGuardUser
     {
         $this->_groups         = null;
         $this->_allPermissions = null;
-    }
-
-    /**
-     * Sets the password hash.
-     *
-     * @param string $v
-     */
-    public function setPasswordHash($v)
-    {
-        if (!is_null($v) && !is_string($v)) {
-            $v = (string) $v;
-        }
-
-        if ($this->password !== $v) {
-            $this->_set('password', $v);
-        }
     }
 }

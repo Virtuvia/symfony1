@@ -19,22 +19,4 @@
  */
 class sfDoctrineGuardPluginConfiguration extends sfPluginConfiguration
 {
-    /**
-     * @see sfPluginConfiguration
-     */
-    public function initialize()
-    {
-        if (sfConfig::get('app_sf_guard_plugin_routes_register', true)) {
-            $enabledModules = sfConfig::get('sf_enabled_modules', []);
-            if (in_array('sfGuardAuth', $enabledModules)) {
-                $this->dispatcher->connect('routing.load_configuration', ['sfGuardRouting', 'listenToRoutingLoadConfigurationEvent']);
-            }
-
-            foreach (['sfGuardUser', 'sfGuardGroup', 'sfGuardPermission', 'sfGuardRegister', 'sfGuardForgotPassword'] as $module) {
-                if (in_array($module, $enabledModules)) {
-                    $this->dispatcher->connect('routing.load_configuration', ['sfGuardRouting', 'addRouteFor' . str_replace('sfGuard', '', $module)]);
-                }
-            }
-        }
-    }
 }

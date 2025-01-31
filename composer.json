@@ -17,7 +17,6 @@
             "plugins/csDoctrineActAsSortablePlugin/lib",
             "plugins/sfDoctrineActAsTaggablePlugin/lib",
             "plugins/sfDoctrineGuardPlugin/lib",
-            "plugins/sfDoctrineGuardPlugin/modules",
             "plugins/sfFormExtraPlugin/lib",
             "plugins/sfJqueryReloadedPlugin/lib"
         ],
