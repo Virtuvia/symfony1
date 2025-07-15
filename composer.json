@@ -16,9 +16,7 @@
             "plugins/sfDoctrinePlugin/lib",
             "plugins/csDoctrineActAsSortablePlugin/lib",
             "plugins/sfDoctrineActAsTaggablePlugin/lib",
-            "plugins/sfDoctrineGuardPlugin/lib",
-            "plugins/sfFormExtraPlugin/lib",
-            "plugins/sfJqueryReloadedPlugin/lib"
+            "plugins/sfDoctrineGuardPlugin/lib"
         ],
         "files": [
             "symfony_version.php",
