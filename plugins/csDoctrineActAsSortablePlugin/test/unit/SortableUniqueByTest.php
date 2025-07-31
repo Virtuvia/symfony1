@@ -4,11 +4,11 @@ require_once dirname(__FILE__) . '/../bootstrap/functional.php';
 
 $t = new lime_test(21);
 
-$categories = Doctrine::getTable('SortableArticleCategory')->findAll();
+$categories = \Doctrine_Core::getTable('SortableArticleCategory')->findAll();
 
 $t->info('Create Sortable Sample Set');
 
-Doctrine::getTable('SortableArticleUniqueBy')
+\Doctrine_Core::getTable('SortableArticleUniqueBy')
     ->createQuery()->delete()->execute();
 
 $a1 = new SortableArticleUniqueBy();
@@ -102,7 +102,7 @@ $d4->name = 'ArticleUniqueBy To Delete 4';
 $d4->Category = $categories[2];
 $d4->save();
 
-$collection = Doctrine::getTable('SortableArticleUniqueBy')
+$collection = \Doctrine_Core::getTable('SortableArticleUniqueBy')
     ->createQuery()
     ->where('category_id = ?', $categories[2]['id'])
     ->execute();

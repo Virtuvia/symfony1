@@ -6,7 +6,7 @@ $t = new lime_test(25);
 
 $t->info('Create Sortable Sample Set');
 
-Doctrine::getTable('SortableArticle')
+\Doctrine_Core::getTable('SortableArticle')
     ->createQuery()->delete()->execute();
 
 $a1 = new SortableArticle();

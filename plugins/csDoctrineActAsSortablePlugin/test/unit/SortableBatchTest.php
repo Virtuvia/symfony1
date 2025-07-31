@@ -4,11 +4,11 @@ require_once dirname(__FILE__) . '/../bootstrap/functional.php';
 
 $t = new lime_test(5);
 
-$categories = Doctrine::getTable('SortableArticleCategory')->findAll();
+$categories = \Doctrine_Core::getTable('SortableArticleCategory')->findAll();
 
 $t->info('Create Sortable Sample Set');
 
-Doctrine::getTable('SortableArticle')
+\Doctrine_Core::getTable('SortableArticle')
     ->createQuery()->delete()->execute();
 
 $a1 = new SortableArticleUniqueBy();
@@ -38,7 +38,7 @@ $a5->save();
 
 $t->info('Fetch articles and delete them like in batchDelete');
 
-$articles = Doctrine::getTable('SortableArticleUniqueBy')
+$articles = \Doctrine_Core::getTable('SortableArticleUniqueBy')
     ->createQuery()->execute();
 
 try {

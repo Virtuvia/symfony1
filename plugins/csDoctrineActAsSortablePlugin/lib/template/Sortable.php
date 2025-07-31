@@ -249,7 +249,7 @@ class Doctrine_Template_Sortable extends Doctrine_Template
         $conn->beginTransaction();
 
         foreach ($order as $position => $id) {
-            $newObject = Doctrine::getTable($class)->findOneById($id);
+            $newObject = \Doctrine_Core::getTable($class)->findOneById($id);
 
             if ($newObject->get($this->_options['name']) != $position + 1) {
                 $newObject->moveToPosition($position + 1);

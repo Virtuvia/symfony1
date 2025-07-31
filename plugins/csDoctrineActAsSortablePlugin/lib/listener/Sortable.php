@@ -100,7 +100,7 @@ class Doctrine_Template_Listener_Sortable extends Doctrine_Record_Listener
             $query->andWhere($identifier . ' = ?', $object->get($identifier));
         }
 
-        $position = $query->fetchOne([], Doctrine::HYDRATE_ARRAY);
+        $position = $query->fetchOne([], \Doctrine_Core::HYDRATE_ARRAY);
         $object->set($fieldName, $position[$fieldName], false);
     }
 

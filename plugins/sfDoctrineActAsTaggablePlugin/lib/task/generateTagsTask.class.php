@@ -49,7 +49,7 @@ EOF;
 
             foreach ($modelClasses as $class) {
                 try {
-                    $models = Doctrine::getTable($class)->createQuery()->execute();
+                    $models = \Doctrine_Core::getTable($class)->createQuery()->execute();
 
                     foreach ($models as $model) {
                         $modelTags = [];
