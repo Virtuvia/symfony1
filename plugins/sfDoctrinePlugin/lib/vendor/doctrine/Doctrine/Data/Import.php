@@ -237,6 +237,10 @@ class Doctrine_Data_Import extends Doctrine_Data
                     $obj->set($key, $this->_getImportedObject($value, $obj, $key, $rowKey));
                 }
             } elseif (method_exists($obj, 'set' . Doctrine_Inflector::classify($key))) {
+                if ($obj->getTable()->getTypeOf($key) !== false) {
+                    $value = $obj->getTable()->convertToPhpValue($key, $value);
+                }
+
                 $func = 'set' . Doctrine_Inflector::classify($key);
                 $obj->$func($value);
             } elseif ($obj->getTable()->hasField($key)) {
