@@ -57,7 +57,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
     /**
      * @var Doctrine_Connection $conn                   Doctrine_Connection object that created this table
      */
-    readonly protected Doctrine_Connection $_conn;
+    protected readonly Doctrine_Connection $_conn;
 
     /**
      * @var array<array-key, Doctrine_Record> $identityMap                          first level cache
