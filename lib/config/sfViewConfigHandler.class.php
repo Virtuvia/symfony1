@@ -208,11 +208,11 @@ EOF;
         $data = [];
 
         foreach ($this->mergeConfigValue('http_metas', $viewName) as $httpequiv => $content) {
-            $data[] = sprintf("  \$response->addHttpMeta('%s', '%s', false);", $httpequiv, str_replace('\'', '\\\'', $content));
+            $data[] = sprintf("  \$response->addHttpMeta('%s', '%s', false);", $httpequiv, str_replace('\'', '\\\'', $content ?? ''));
         }
 
         foreach ($this->mergeConfigValue('metas', $viewName) as $name => $content) {
-            $data[] = sprintf("  \$response->addMeta('%s', '%s', false, false);", $name, str_replace('\'', '\\\'', preg_replace('/&amp;(?=\w+;)/', '&', htmlspecialchars($content, ENT_QUOTES, sfConfig::get('sf_charset')))));
+            $data[] = sprintf("  \$response->addMeta('%s', '%s', false, false);", $name, str_replace('\'', '\\\'', preg_replace('/&amp;(?=\w+;)/', '&', htmlspecialchars($content ?? '', ENT_QUOTES, sfConfig::get('sf_charset')))));
         }
 
         return implode("\n", $data) . "\n";
