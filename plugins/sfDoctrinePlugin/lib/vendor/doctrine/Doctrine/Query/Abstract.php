@@ -230,6 +230,16 @@ abstract class Doctrine_Query_Abstract
     ];
 
     /**
+     * @var array $_parsers                 an array of parser objects, each DQL query part has its own parser
+     */
+    protected $_parsers = [];
+
+    /**
+     * @var array $_pendingJoinConditions    an array containing pending joins
+     */
+    protected $_pendingJoinConditions = [];
+
+    /**
      * @var bool
      */
     protected $_isLimitSubqueryUsed = false;

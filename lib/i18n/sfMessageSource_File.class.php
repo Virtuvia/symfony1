@@ -30,6 +30,8 @@
  */
 abstract class sfMessageSource_File extends sfMessageSource
 {
+    protected $dataExt = '';
+
     /**
      * Separator between culture name and source.
      * @var string

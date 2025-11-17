@@ -156,16 +156,6 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
     protected $_pendingFields = [];
 
     /**
-     * @var array $_parsers                 an array of parser objects, each DQL query part has its own parser
-     */
-    protected $_parsers = [];
-
-    /**
-     * @var array $_pendingJoinConditions    an array containing pending joins
-     */
-    protected $_pendingJoinConditions = [];
-
-    /**
      * @var array
      */
     protected $_expressionMap = [];

@@ -19,6 +19,11 @@
 class sfDoctrineGenerateModuleTask extends sfDoctrineBaseTask
 {
     /**
+     * @var array<string, mixed>
+     */
+    protected array $constants = [];
+
+    /**
      * @see sfTask
      */
     protected function configure()

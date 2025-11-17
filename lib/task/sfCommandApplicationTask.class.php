@@ -18,6 +18,7 @@
  */
 abstract class sfCommandApplicationTask extends sfTask
 {
+    protected $configuration = null;
     protected $mailer = null;
     protected $routing = null;
     protected $commandApplication = null;
