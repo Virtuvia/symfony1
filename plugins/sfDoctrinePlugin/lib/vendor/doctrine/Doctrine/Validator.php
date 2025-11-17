@@ -135,7 +135,7 @@ class Doctrine_Validator
             return mb_strlen($string, 'utf8');
         }
 
-        return strlen(utf8_decode($string));
+        return strlen(mb_convert_encoding($string, 'ISO-8859-1'));
     }
 
     /**
