@@ -75,7 +75,6 @@ check(class_exists('XSLTProcessor'), 'XSL module is installed', 'Install and ena
 check(function_exists('token_get_all'), 'The token_get_all() function is available', 'Install and enable the Tokenizer extension (highly recommended)', false);
 check(function_exists('mb_strlen'), 'The mb_strlen() function is available', 'Install and enable the mbstring extension', false);
 check(function_exists('iconv'), 'The iconv() function is available', 'Install and enable the iconv extension', false);
-check(function_exists('utf8_decode'), 'The utf8_decode() is available', 'Install and enable the XML extension', false);
 check(function_exists('posix_isatty'), 'The posix_isatty() is available', 'Install and enable the php_posix extension (used to colorized the CLI output)', false);
 
 $accelerator =

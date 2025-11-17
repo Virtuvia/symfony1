@@ -131,11 +131,7 @@ class Doctrine_Validator
             return 0;
         }
 
-        if (function_exists('mb_strlen')) {
-            return mb_strlen($string, 'utf8');
-        }
-
-        return strlen(utf8_decode($string));
+        return mb_strlen($string, 'utf8');
     }
 
     /**

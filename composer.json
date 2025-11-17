@@ -7,6 +7,7 @@
         "ext-apcu": "*",
         "ext-intl": "*",
         "ext-xml": "*",
+        "ext-mbstring": "*",
         "symfony/yaml": "^5.4",
         "symfony/form": "^5.4"
     },
