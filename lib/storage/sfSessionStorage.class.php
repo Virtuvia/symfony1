@@ -72,18 +72,20 @@ class sfSessionStorage extends sfStorage
 
         session_name($sessionName);
 
-        if (!(bool) ini_get('session.use_cookies') && $sessionId = $this->options['session_id']) {
-            session_id($sessionId);
+        if (!(bool) ini_get('session.use_cookies')) {
+            if ($sessionId = $this->options['session_id']) {
+                session_id($sessionId);
+            }
+        } else {
+            session_set_cookie_params([
+                'lifetime' => $this->options['session_cookie_lifetime'],
+                'path' => $this->options['session_cookie_path'],
+                'domain' => $this->options['session_cookie_domain'],
+                'secure' => $this->options['session_cookie_secure'],
+                'httponly' => $this->options['session_cookie_httponly'],
+                'samesite' => $this->options['session_cookie_samesite'],
+            ]);
         }
-
-        session_set_cookie_params([
-            'lifetime' => $this->options['session_cookie_lifetime'],
-            'path' => $this->options['session_cookie_path'],
-            'domain' => $this->options['session_cookie_domain'],
-            'secure' => $this->options['session_cookie_secure'],
-            'httponly' => $this->options['session_cookie_httponly'],
-            'samesite' => $this->options['session_cookie_samesite'],
-        ]);
 
         if (null !== $this->options['session_cache_limiter']) {
             session_cache_limiter($this->options['session_cache_limiter']);
