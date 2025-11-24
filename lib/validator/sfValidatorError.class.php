@@ -99,7 +99,7 @@ class sfValidatorError extends Exception
                 continue;
             }
 
-            $arguments["%$key%"] = $value === null ? '' : htmlspecialchars($value, ENT_QUOTES, sfValidatorBase::getCharset());
+            $arguments["%$key%"] = is_string($value) ? htmlspecialchars($value, ENT_QUOTES, sfValidatorBase::getCharset()) : $value;
         }
 
         return $arguments;
