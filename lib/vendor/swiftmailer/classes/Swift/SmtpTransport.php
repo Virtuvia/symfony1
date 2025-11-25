@@ -27,7 +27,7 @@ class Swift_SmtpTransport extends Swift_Transport_EsmtpTransport
         $security = null)
     {
         call_user_func_array(
-            [$this, 'Swift_Transport_EsmtpTransport::__construct'],
+            parent::__construct(...),
             Swift_DependencyContainer::getInstance()
               ->createDependenciesFor('transport.smtp'),
         );

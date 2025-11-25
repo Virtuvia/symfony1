@@ -28,7 +28,7 @@ class Swift_MimePart extends Swift_Mime_MimePart
         $charset = null)
     {
         call_user_func_array(
-            [$this, 'Swift_Mime_MimePart::__construct'],
+            parent::__construct(...),
             Swift_DependencyContainer::getInstance()
               ->createDependenciesFor('mime.part'),
         );
