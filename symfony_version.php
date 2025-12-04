@@ -1,3 +1,3 @@
 <?php
 
-define('SYMFONY_VERSION', '1.4.20.53');
+define('SYMFONY_VERSION', '1.4.20.54');
