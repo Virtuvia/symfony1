@@ -1464,6 +1464,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      */
     public function assignIdentifier($id = false)
     {
+        assert($id !== false, 'never called with false, or without a parameter.');
+
         if ($id === false) {
             $this->_id       = [];
             $this->_data     = $this->cleanData($this->_data);
