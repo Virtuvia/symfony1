@@ -251,6 +251,8 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
             if ($this->isTree()) {
                 $this->getTree()->setUp();
             }
+
+            assert(count($this->recordFields) === $this->recordFieldCount);
         } else {
             if (! isset($this->_options['tableName'])) {
                 $this->setTableName(Doctrine_Inflector::tableize($this->_options['name']));
@@ -402,8 +404,6 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
             $this->getTree()->setTableDefinition();
         }
 
-        $this->recordFieldCount = count($this->recordFields);
-
         if (! isset($this->_options['tableName'])) {
             $this->setTableName(Doctrine_Inflector::tableize($class->getName()));
         }
@@ -460,7 +460,6 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
                     $this->_identifier = $name;
                     $this->_identifierType = Doctrine_Core::IDENTIFIER_AUTOINC;
                 }
-                $this->recordFieldCount++;
                 break;
             case 1:
                 foreach ($this->_identifier as $pk) {
@@ -1255,6 +1254,10 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
             if (! array_key_exists($key, $options) || is_null($options[$key])) {
                 $options[$key] = $value;
             }
+        }
+
+        if (!$generated && !array_key_exists($name, $this->_columns)) {
+            $this->recordFieldCount++;
         }
 
         if ($prepend) {
