@@ -349,10 +349,13 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
 
         foreach ($this->getTable()->getRecordFieldNames() as $fieldName) {
             if (isset($tmp[$fieldName])) {
+                // keep incoming record data
                 $data[$fieldName] = $tmp[$fieldName];
             } elseif (array_key_exists($fieldName, $tmp)) {
+                // keep nulls from incoming record data
                 $data[$fieldName] = null;
-            } elseif (!isset($this->_data[$fieldName])) {
+            } elseif (!array_key_exists($fieldName, $this->_data)) {
+                // treat any locally uninitialized fields as proxy
                 $data[$fieldName] = self::$_null;
             }
             unset($tmp[$fieldName]);
