@@ -1186,14 +1186,14 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
             $this->_columnNames = array_merge([$fieldName => $name], $this->_columnNames);
             $this->_fieldNames = array_merge([$name => $fieldName], $this->_fieldNames);
 
-            if (!$generated) {
+            if (!$generated && !in_array($fieldName, $this->recordFields)) {
                 array_unshift($this->recordFields, $fieldName);
             }
         } else {
             $this->_columnNames[$fieldName] = $name;
             $this->_fieldNames[$name] = $fieldName;
 
-            if (!$generated) {
+            if (!$generated && !in_array($fieldName, $this->recordFields)) {
                 $this->recordFields[] = $fieldName;
             }
         }
