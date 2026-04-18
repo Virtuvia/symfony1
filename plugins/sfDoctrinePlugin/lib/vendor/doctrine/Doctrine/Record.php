@@ -1489,6 +1489,13 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             $this->_state = Doctrine_Record::STATE_CLEAN;
             $this->_resetModified();
         }
+
+        // reset all _data to be real nulls like it was refreshed from database
+        foreach ($this->_data as $fieldName => $value) {
+            if ($value === self::$_null) {
+                $this->_data[$fieldName] = null;
+            }
+        }
     }
 
     /**
