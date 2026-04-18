@@ -1476,6 +1476,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             $this->_state    = Doctrine_Record::STATE_CLEAN;
             $this->_resetModified();
         } else {
+            assert($this->_id === [], '_id should be uninitialized.');
+
             if (is_array($id)) {
                 foreach ($id as $fieldName => $value) {
                     $this->_id[$fieldName] = $value;
