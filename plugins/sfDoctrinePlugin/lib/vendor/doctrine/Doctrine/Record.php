@@ -1849,6 +1849,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             $this->_table->removeRecord($this);
             $this->_data = [];
             $this->_id = [];
+            $this->_values = [];
 
             if ($deep) {
                 foreach ($this->_references as $name => $reference) {
