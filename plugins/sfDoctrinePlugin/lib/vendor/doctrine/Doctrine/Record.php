@@ -1519,7 +1519,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * @return int
      * @todo Better name?
      */
-    final public function getIncremented()
+    public function getIncremented()
     {
         $id = current($this->_id);
         if ($id === false) {
