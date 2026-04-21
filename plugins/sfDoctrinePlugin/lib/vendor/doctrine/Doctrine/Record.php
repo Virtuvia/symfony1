@@ -1057,8 +1057,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
                     if ($value !== self::$_null &&  ! empty($foreignFieldName) && $foreignFieldName != $value->getTable()->getIdentifier()) {
                         $this->set($localFieldName, $value->internalGetData($foreignFieldName, false), false);
                     } else {
-                        // FIX: Ticket #1280 fits in this situation
-                        $this->set($localFieldName, $value, false);
+                        // store significant null to prevent reloading from database before next save
+                        $this->set($localFieldName, $value instanceof Doctrine_Null ? null : $value, false);
                     }
                 } elseif ($value !== self::$_null) {
                     // We should only be able to reach $foreignFieldName if we have a Doctrine_Record on hands
