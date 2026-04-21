@@ -1439,6 +1439,9 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             unset($data[$id]);
         }
 
+        // skip copying Doctrine_Null values
+        $data = array_filter($data, fn ($value) => !$value instanceof Doctrine_Null);
+
         $ret = $this->_table->create($data);
         $ret->_modified = [];
 
