@@ -911,8 +911,12 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     protected function _set($fieldName, $value, $load = true)
     {
         if (array_key_exists($fieldName, $this->_values)) {
+            assert(!$value instanceof Doctrine_Null, 'Doctrine_Null is only used internally.');
+
             $this->_values[$fieldName] = $value;
         } elseif (array_key_exists($fieldName, $this->_data)) {
+            assert(!$value instanceof Doctrine_Null, 'Doctrine_Null is only used internally.');
+
             if (!$this->_table->isRecordFieldName($fieldName)) {
                 throw new \Doctrine_Record_UnknownPropertyException(sprintf('"%s" is not a valid Record Field.', $fieldName));
             }
