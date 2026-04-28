@@ -46,14 +46,8 @@ class Doctrine_Relation_LocalKey extends Doctrine_Relation
         $localFieldName = $record->getTable()->getFieldName($this->definition['local']);
         $id = $record->get($localFieldName);
 
-        if (is_null($id) || ! $this->definition['table']->getAttribute(Doctrine_Core::ATTR_LOAD_REFERENCES)) {
+        if (is_null($id)) {
             $related = $this->getTable()->create();
-
-            // Ticket #1131 Patch.
-            if (! is_null($id)) {
-                $related->assignIdentifier($id);
-                $related->state(Doctrine_Record::STATE_PROXY);
-            }
         } else {
             $dql  = 'FROM ' . $this->getTable()->getComponentName()
                  . ' WHERE ' . $this->getCondition() . $this->getOrderBy(null, false);
