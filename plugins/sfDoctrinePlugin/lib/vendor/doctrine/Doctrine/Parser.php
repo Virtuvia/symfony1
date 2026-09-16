@@ -65,9 +65,7 @@ abstract class Doctrine_Parser
      */
     public static function getParser(string $type): static
     {
-        $class = 'Doctrine_Parser_' . ucfirst($type);
-
-        return new $class();
+        return Doctrine_Manager::getInstance()->createParser($type);
     }
 
     /**

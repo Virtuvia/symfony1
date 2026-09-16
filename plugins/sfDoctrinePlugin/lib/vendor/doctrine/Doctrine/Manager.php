@@ -114,6 +114,11 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
     private Closure $recordBuilderFactory;
 
     /**
+     * @var array<string, class-string<Doctrine_Parser>>
+     */
+    private array $parserClassMap = [];
+
+    /**
      * constructor
      *
      * this is private constructor (use getInstance to get an instance of this class)
@@ -250,6 +255,38 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
     public function setRecordBuilderFactory(Closure $factory): void
     {
         $this->recordBuilderFactory = $factory;
+    }
+
+    /**
+     * @param class-string<Doctrine_Parser> $className
+     */
+    public function registerParser(string $type, string $className): void
+    {
+        if (!is_subclass_of($className, Doctrine_Parser::class)) {
+            throw new Doctrine_Exception(sprintf('Class "%s" must extend "%s".', $className, Doctrine_Parser::class));
+        }
+
+        $this->parserClassMap[strtolower($type)] = $className;
+    }
+
+    /**
+     * @return class-string<Doctrine_Parser>
+     */
+    public function getParserClass(string $type): string
+    {
+        $type = strtolower($type);
+        if (isset($this->parserClassMap[$type])) {
+            return $this->parserClassMap[$type];
+        }
+
+        return 'Doctrine_Parser_' . ucfirst($type);
+    }
+
+    public function createParser(string $type): Doctrine_Parser
+    {
+        $className = $this->getParserClass($type);
+
+        return new $className();
     }
 
     /**
